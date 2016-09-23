@@ -51,9 +51,9 @@ def both_ends(s):
 # Hint: s.replace(stra, strb) returns a version of string s
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
-    for c in:
-
-    return
+    char = s[0]
+    result = char + s[1:].replace(char,'*')
+    return result
 
 
 # D. MixUp
@@ -64,8 +64,8 @@ def fix_start(s):
 #   'dog', 'dinner' -> 'dig donner'
 # Assume a and b are length 2 or more.
 def mix_up(a, b):
-    # +++your code here+++
-    return
+    return b[0:2]+a[2:]+" "+a[0:2]+b[2:]
+
 
 
 # Provided simple test() function used in main() to print
@@ -89,36 +89,15 @@ def main():
     print(both_ends('spring'))
     print(both_ends('Hello'))
     print(both_ends('a'))
+    print(fix_start('babble'))
+    print(fix_start('aardvark'))
+    print(fix_start('google'))
 
-    # Each line calls donuts, compares its result to the expected for that call.
-    test(donuts(4), 'Number of donuts: 4')
-    test(donuts(9), 'Number of donuts: 9')
-    test(donuts(10), 'Number of donuts: many')
-    test(donuts(99), 'Number of donuts: many')
+    print(mix_up('mix', 'pod'))
+    print(mix_up('dog', 'dinner'))
+    print(mix_up('gnash', 'sport'))
+    print(mix_up('pezzy', 'firm'))
 
-    print
-    print
-    'both_ends'
-    test(both_ends('spring'), 'spng')
-    test(both_ends('Hello'), 'Helo')
-    test(both_ends('a'), '')
-    test(both_ends('xyz'), 'xyyz')
-
-    print
-    print
-    'fix_start'
-    test(fix_start('babble'), 'ba**le')
-    test(fix_start('aardvark'), 'a*rdv*rk')
-    test(fix_start('google'), 'goo*le')
-    test(fix_start('donut'), 'donut')
-
-    print
-    print
-    'mix_up'
-    test(mix_up('mix', 'pod'), 'pox mid')
-    test(mix_up('dog', 'dinner'), 'dig donner')
-    test(mix_up('gnash', 'sport'), 'spash gnort')
-    test(mix_up('pezzy', 'firm'), 'fizzy perm')
 
 
 # Standard boilerplate to call the main() function.
