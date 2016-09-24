@@ -2,7 +2,7 @@
 """
 Created on Wed May  4 17:37:03 2016
 
-@author: SIO BAS
+@author: pascal
 """
 
 def test(a, n=2):
