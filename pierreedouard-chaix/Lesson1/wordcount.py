@@ -39,6 +39,34 @@ print_words() and print_top().
 
 import sys
 
+def print_words(filename):
+    print(helper(filename, "count"))
+    
+def print_top(filename):
+    print(helper(filename, "topcount"))
+    
+def helper(filename, typetraitement):
+    text = open(filename, 'rU')
+    res = {} 
+    for line in text:
+        linesplit = line.split()
+        for word in linesplit:
+            if res.has_key(word.lower()):
+                res[word.lower()] = res[word.lower()] + 1
+            else:
+                res[word.lower()] = 1
+    resstring = ""
+    if(typetraitement == "count"):
+        for key in sorted(res.keys()):
+            resstring = resstring + key + " " + str(res[key]) + "\n"
+    elif(typetraitement == "topcount"):
+        i = 1
+        for key, value in sorted(res.iteritems(), key=lambda (k, v): (v, k), reverse = True):
+            if(i<=20):
+                resstring = resstring + key + " " + str(value) + "\n"
+                i = i+1
+    return resstring
+
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
@@ -56,6 +84,7 @@ def main():
 
   option = sys.argv[1]
   filename = sys.argv[2]
+
   if option == '--count':
     print_words(filename)
   elif option == '--topcount':
