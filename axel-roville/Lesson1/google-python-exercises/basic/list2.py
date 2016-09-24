@@ -34,9 +34,20 @@ def linear_merge(list1, list2):
             return result + list2
         if len(list2) == 0:
             return result + list1
+        result.append(list1.pop(0) if list1[0] < list2[0] else list2.pop(0))
 
-        l1_0, l2_0 = list1[0], list2[0]
-        result.append(list1.pop(0) if l1_0 < l2_0 else list2.pop(0))
+def alternate_linear_merge(list1, list2):
+    result = []
+    while True:
+        if len(list1) == 0:
+            result.reverse()
+            return list2 + result
+        if len(list2) == 0:
+            result.reverse()
+            return list1 + result
+
+        max1, max2 = list1[-1], list2[-1]
+        result.append(list1.pop(-1) if max1 > max2 else list2.pop(-1))
 
 # Note: the solution above is kind of cute, but unforunately list.pop(0)
 # is not constant time with the standard python list implementation, so
@@ -67,11 +78,11 @@ def main():
     print()
     print('linear_merge')
     test(linear_merge(['aa', 'xx', 'zz'], ['bb', 'cc']),
-    ['aa', 'bb', 'cc', 'xx', 'zz'])
+        ['aa', 'bb', 'cc', 'xx', 'zz'])
     test(linear_merge(['aa', 'xx'], ['bb', 'cc', 'zz']),
-    ['aa', 'bb', 'cc', 'xx', 'zz'])
+        ['aa', 'bb', 'cc', 'xx', 'zz'])
     test(linear_merge(['aa', 'aa'], ['aa', 'bb', 'bb']),
-    ['aa', 'aa', 'aa', 'bb', 'bb'])
+        ['aa', 'aa', 'aa', 'bb', 'bb'])
 
 
 if __name__ == '__main__':
