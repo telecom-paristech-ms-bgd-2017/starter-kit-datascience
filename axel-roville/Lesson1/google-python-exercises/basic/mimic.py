@@ -50,23 +50,28 @@ def mimic_dict(filename):
     table = str.maketrans({key: None for key in string.punctuation})
     words = open(filename, 'r').read().translate(table).split()
 
-    result = {'': words[0]}
+    result = {'': words[0].lower()}
 
     for i in range(len(words) - 1):
         w = words[i].lower()
-
         if not result.get(w):
             result[w] = []
-
         result[w].append(words[i + 1].lower())
 
-    # print_dico(result)
     return result
 
 def print_mimic(mimic_dict, word):
     """Given mimic dict and start word, prints 200 random words."""
-    # +++your code here+++
-    return
+    words = []
+    for _ in range(200):
+        if not mimic_dict.get(word):
+            word = mimic_dict[""]
+
+        words.append(word)
+        word = random.choice(mimic_dict[word])
+
+    words.remove('')
+    print(' '.join(words))
 
 # Utility function
 def print_dico(dico):
