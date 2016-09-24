@@ -47,22 +47,33 @@ import string
 
 def mimic_dict(filename):
     """Returns mimic dict mapping each word to list of words which follow it."""
-    result = {}
-
-    f = open(filename, 'r')
-
-    result = {}
     table = str.maketrans({key: None for key in string.punctuation})
-    for w in f.read().translate(table).split():
-        result [w.lower()] = result.get(w.lower(), 0) + 1
+    words = open(filename, 'r').read().translate(table).split()
 
+    result = {'': words[0]}
+
+    for i in range(len(words) - 1):
+        w = words[i].lower()
+
+        if not result.get(w):
+            result[w] = []
+
+        result[w].append(words[i + 1].lower())
+
+    # print_dico(result)
     return result
-
 
 def print_mimic(mimic_dict, word):
     """Given mimic dict and start word, prints 200 random words."""
     # +++your code here+++
     return
+
+# Utility function
+def print_dico(dico):
+    for word, list_followers in dico.items():
+        print(word)
+        for follower in sorted(list_followers):
+            print("\t" + follower)
 
 
 # Provided main(), calls mimic_dict() and mimic()
@@ -73,7 +84,7 @@ def main():
 
     dict = mimic_dict(sys.argv[1])
     print_mimic(dict, '')
-    
+
 
 if __name__ == '__main__':
     main()

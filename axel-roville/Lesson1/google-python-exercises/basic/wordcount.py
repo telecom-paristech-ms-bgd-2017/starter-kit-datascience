@@ -61,7 +61,7 @@ def file_dict(filename):
     result = {}
     table = str.maketrans({key: None for key in string.punctuation})
     for w in f.read().translate(table).split():
-        result [w.lower()] = result.get(w.lower(), 0) + 1
+        result[w.lower()] = result.get(w.lower(), 0) + 1
 
     return result
 

@@ -1,0 +1,3 @@
+# Ignoring solutions
+basic/solution/*.py
+babynames/solution/babynames.py
