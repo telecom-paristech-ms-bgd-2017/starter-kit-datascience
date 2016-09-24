@@ -38,12 +38,35 @@ print_words() and print_top().
 """
 
 import sys
+import operator
 
-# +++your code here+++
+
+def print_words(filename):
+    print_dico(file_dict(filename).items())
+
+def print_top(filename):
+    sort_options = {'key': operator.itemgetter(1), 'reverse': True}
+    print_dico(sorted(file_dict(filename).items(), **sort_options)[:20])
+
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
+
+## Utility functions:
+def file_dict(filename):
+    f = open(filename, 'r')
+
+    result = {}
+    for line in f:
+        for w in line.split():
+            result [w.lower()] = result.get(w.lower(), 0) + 1
+
+    return result
+
+def print_dico(dico_items):
+    for word, count in dico_items:
+        print(word + ": " + str(count))
 
 ###
 
