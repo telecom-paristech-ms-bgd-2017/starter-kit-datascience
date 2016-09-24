@@ -1,3 +1,5 @@
 # Ignoring solutions
-basic/solution/*.py
+basic/solution/*
 babynames/solution/babynames.py
+copyspecial/solution/*
+logpuzzle/solution/*
