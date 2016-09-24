@@ -39,10 +39,12 @@ print_words() and print_top().
 
 import sys
 import operator
+import string
 
 
 def print_words(filename):
-    print_dico(file_dict(filename).items())
+    sort_options = {'key': operator.itemgetter(0)}
+    print_dico(sorted(file_dict(filename).items(), **sort_options))
 
 def print_top(filename):
     sort_options = {'key': operator.itemgetter(1), 'reverse': True}
@@ -58,8 +60,9 @@ def file_dict(filename):
     f = open(filename, 'r')
 
     result = {}
+    table = string.maketrans("","")
     for line in f:
-        for w in line.split():
+        for w in line.translate(table, string.punctuation).split():
             result [w.lower()] = result.get(w.lower(), 0) + 1
 
     return result
