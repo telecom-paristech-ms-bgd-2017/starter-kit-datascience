@@ -52,7 +52,6 @@ def download_images(img_urls, dest_dir):
     Creates the directory if necessary.
     """
     for url in img_urls:
-        print(url)
         urllib.request.urlretrieve(url, dest_dir + filename_from_url(url))
 
 
