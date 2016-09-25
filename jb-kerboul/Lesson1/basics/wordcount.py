@@ -38,7 +38,6 @@ print_words() and print_top().
 """
 
 import sys
-import operator
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -46,35 +45,36 @@ import operator
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
-# Prints all the words (and respective counts) from the specified file,
-# sorted in descending order of counts
-def print_words(filename, number=None):
-    # iterates over count_words dictionary while tracking index
-    for i, (word, count) in enumerate(count_words(filename)):
-        # check if number of lines to print is defined and whether requested
-        # number of lines has been printed
-        if (number == None or i < number):
-            # print word count as per specified format
-            print("%s %d" % (word, count))
 
-# Prints the top 20 most common words from the specified file, sorted in
-# descending order of counts
-def print_top(filename):
-    print_words(filename, 20)
+def createDict(fileName):
+    dico = dict()
+    fId = open(fileName, 'r+')
+    for line in fId:
+        spStr = line.lower().split()
+        for ii in spStr:
+            if not(ii in dico):
+                dico[ii] = 0
+            dico[ii] += 1
+    fId.close()
+    return dico
 
-# Reads words from specified file and returns word counts sorted in
-# descending order
-def count_words(filename):
-    word_counts = {}  # creates empty word counts dictionary structure
-    file = open(filename, 'rU')  # opens the file
-    for line in file:  # iterates over the lines of the file
-        # iterates over the words of the line, converted to lower case
-        for word in line.lower().split():
-            word_counts[word] = 1 if not (word in word_counts) else (
-                word_counts[word] + 1)  # increments count for the word
-    file.close()  # closes file
-    # returns word counts, sorted in descending order
-    return sorted(word_counts.items(), key=operator.itemgetter(1), reverse=True)
+
+def print_words(fileName):
+    dico = createDict(fileName)
+    sortKeys = sorted(dico)
+    for item in sortKeys:
+        print(item + ' : ' + str(dico[item]))
+
+
+def print_top(fileName):
+    dico = createDict(fileName)
+    keyList = list(dico.keys())
+    valuesByKey = [dico[ii] for ii in dico]
+    sortInd = sorted(range(len(valuesByKey)), key=lambda k: valuesByKey[k],
+                     reverse=True)
+
+    for item in sortInd[:20]:
+        print(keyList[item] + ' : ' + str(dico[keyList[item]]))
 
 ###
 
@@ -98,4 +98,4 @@ def main():
         sys.exit(1)
 
 if __name__ == '__main__':
-    main()
+  main()
