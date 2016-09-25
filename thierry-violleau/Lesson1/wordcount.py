@@ -52,7 +52,7 @@ def print_words(filename, number=None):
     # iterates over count_words dictionary while tracking index
     for i, (word, count) in enumerate(count_words(filename)):
         # check if number of lines to print is defined and whether requested
-        # number of lines have been printed
+        # number of lines has been printed
         if (number == None or i < number):
             # print word count as per specified format
             print("%s %d" % (word, count))
