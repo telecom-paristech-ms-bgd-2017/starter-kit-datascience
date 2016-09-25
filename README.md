@@ -4,13 +4,13 @@ This repository was created in order to gather work and exercises for the studen
 
 To add your work to the repository:
  - clone it on your machine 
-    > git clone https://github.com/telecom-paristech-ms-bgd-2017/starter-kit-datascience.git
- - locally, create a folder "<firstname>-<name>"
-    > cd starter-kit-datascience && mkdir luke-skywalker && cd luke-skywalker
+    - > git clone https://github.com/telecom-paristech-ms-bgd-2017/starter-kit-datascience.git
+ - locally, create a folder "firstname-name"
+    - > cd starter-kit-datascience && mkdir luke-skywalker && cd luke-skywalker
  - add any files to this folder
-    > touch hello_world.py && echo "print('Hello, world!') > hello_world.py
+    - > touch hello_world.py && echo "print('Hello, world!') > hello_world.py
  - commit your changes
-    > git commit -m "Adding file hello_world.py to my repository"
+    - > git commit -m "Adding file hello_world.py to my repository"
  - when you are satisfied with your work, pull the changes from the GitHub server, and push yours to the shared repository
-    > git pull
-    > git push
+    - > git pull
+    - > git push
