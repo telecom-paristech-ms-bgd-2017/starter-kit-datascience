@@ -1,4 +1,3 @@
-#!/usr/bin/python -tt
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
@@ -38,12 +37,37 @@ print_words() and print_top().
 """
 
 import sys
+import operator
+import string
 
-# +++your code here+++
+
+def print_words(filename):
+    sort_options = {'key': operator.itemgetter(0)}
+    print_dico(sorted(file_dict(filename).items(), **sort_options))
+
+def print_top(filename):
+    sort_options = {'key': operator.itemgetter(1), 'reverse': True}
+    print_dico(sorted(file_dict(filename).items(), **sort_options)[:20])
+
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
+
+## Utility functions:
+def file_dict(filename):
+    f = open(filename, 'r')
+
+    result = {}
+    table = str.maketrans({key: None for key in string.punctuation})
+    for w in f.read().translate(table).split():
+        result[w.lower()] = result.get(w.lower(), 0) + 1
+
+    return result
+
+def print_dico(dico_items):
+    for word, count in dico_items:
+        print(word + ": " + str(count))
 
 ###
 
@@ -51,7 +75,7 @@ import sys
 # calls the print_words() and print_top() functions which you must define.
 def main():
   if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
+    print('usage: python wordcount.py {--count | --topcount} file')
     sys.exit(1)
 
   option = sys.argv[1]
@@ -61,7 +85,7 @@ def main():
   elif option == '--topcount':
     print_top(filename)
   else:
-    print 'unknown option: ' + option
+    print('unknown option: ' + option)
     sys.exit(1)
 
 if __name__ == '__main__':
