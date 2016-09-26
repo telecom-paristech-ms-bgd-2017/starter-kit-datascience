@@ -9,6 +9,8 @@ To add your work to the repository:
     - > cd starter-kit-datascience && mkdir luke-skywalker && cd luke-skywalker
  - add any files to this folder
     - > touch hello_world.py && echo "print('Hello, world!') > hello_world.py
+ - add to index your changes
+    - > git add hello_world.py
  - commit your changes
     - > git commit -m "Adding file hello_world.py to my repository"
  - when you are satisfied with your work, pull the changes from the GitHub server, and push yours to the shared repository
