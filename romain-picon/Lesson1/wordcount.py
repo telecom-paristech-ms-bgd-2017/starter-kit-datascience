@@ -38,43 +38,72 @@ print_words() and print_top().
 """
 
 import sys
+import string
 
+def print_words(filename):
+    dict = {}
+
+    dict = get_words(filename)
+
+    for key in sorted(dict.keys()):
+        print key, dict[key]
+
+    return
+
+def print_top(filename, number):
+    dict = {}
+
+    if (number <= 0):
+        number = 20
+
+    dict = get_words(filename)
+
+    # Pompage de l'internet
+    for key in sorted(dict, key=dict.get, reverse=True):
+        print key, dict[key]
+        number = number - 1
+        if(number <= 0):
+            break
+
+    return
+
+def get_words(filename):
+
+    replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
+
+    # Open the file
+    f = open(filename, 'rU')
+
+    # Init the place where we will colection the words
+    dict = {}
+    for line in f:   ## iterates over the lines of the file
+        # print line,    ## trailing , so print does not add an end-of-line cha
+        line = line.strip()
+        line = line.rstrip('\n')
+        line = line.translate(replace_punctuation)
+        line = line.lower()
+        words_in_line = line.split()
+        # At this stage we have all the word in the line
+        print repr(words_in_line)
+        # We add them to the dict
+        for word in words_in_line:
+            if word in dict:
+                dict[word] += 1
+            else:
+                dict[word] = 1
+
+    f.close()
+
+    return dict
+
+
+# +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
-# private functions
-
-def _count_words(filename):
-    wc = {}
-    with open(filename, 'r') as fn:
-        for line in fn:
-            for word in line.lower().split():
-                wc[word] = wc.get(word, 0) + 1
-        return wc
-
-def _sort_words_by_alpha(word_count):
-    return sorted(word_count.items(), key=lambda x: x[0])
-
-def _sort_words_by_occ(word_count):
-    return sorted(word_count.items(), key=lambda x: x[1], reverse=True)
-
-def _show_words(items):
-    for word, count in items:
-        print word, count
-
-# public functions
-
-def print_words(filename):
-    wc = _count_words(filename)
-    items = _sort_words_by_alpha(wc)
-    _show_words(items)
-
-def print_top(filename):
-    wc = _count_words(filename)
-    items = _sort_words_by_occ(wc)
-    _show_words(items[:20])
+###
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
@@ -88,7 +117,7 @@ def main():
   if option == '--count':
     print_words(filename)
   elif option == '--topcount':
-    print_top(filename)
+    print_top(filename, 100)
   else:
     print 'unknown option: ' + option
     sys.exit(1)
