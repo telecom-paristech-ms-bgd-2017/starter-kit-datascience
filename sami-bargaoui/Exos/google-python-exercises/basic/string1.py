@@ -40,11 +40,11 @@ def donuts(count):
 def both_ends(s):
 	if (len(s) > 2):
 		first = s[0:2]
-		last = s[len(s) - 2:len(s)]
+		last = s[-2:]
 		s = first + last
 		if (len(s) <= 2):
 			s=""
-			return s
+	return s
 
 
 # C. fix_start
@@ -57,8 +57,13 @@ def both_ends(s):
 # Hint: s.replace(stra, strb) returns a version of string s
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
-  # +++your code here+++
-  return
+	liste = list(s)
+	compt = 1
+	while (compt < len(s)):
+		if liste[compt] == liste[0]:
+			liste[compt] = '*'
+		compt += 1
+	return ''.join(liste)
 
 
 # D. MixUp
