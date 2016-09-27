@@ -37,7 +37,7 @@ def not_bad(s):
     pos1 = s.find('not')
     pos2 = s.find('bad')
     if ((pos1 != -1 and pos2 != -1) and pos1 < pos2):
-        return s.replace(s[pos1:pos2+3],'good')
+        return s.replace(s[pos1:pos2 + 3], 'good')
     return s
 
 
@@ -54,7 +54,7 @@ def front_back(a, b):
 
     mid1 = int(math.ceil(len(a) / 2.))
     mid2 = int(math.ceil(len(b) / 2.))
-    return a[:mid1]+b[:mid2]+a[mid1:]+b[mid2:]
+    return a[:mid1] + b[:mid2] + a[mid1:] + b[mid2:]
 
 
 # Simple provided test() function used in main() to print
