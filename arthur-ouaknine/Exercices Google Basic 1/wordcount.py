@@ -39,13 +39,16 @@ print_words() and print_top().
 
 import sys
 import operator
+import collections
 
 def buildDict(filename):
     dictionnary = {}
-    file = filename.split("\n")
+    file = open(filename,"r")
+    #file = filename.split("\n")
     for line in file:
-        words = line.split(" ")
+        words = line.split()
         for word in words:
+            word = word.lower()
             if word in dictionnary:
                 dictionnary[word] += 1
             else:
@@ -54,20 +57,20 @@ def buildDict(filename):
 
 def print_words(filename):
     dico = buildDict(filename)
-    for key in dico.keys():
-        print(str(key) + " " + str(dico[key]))
+    wordsSorted = collections.OrderedDict(sorted(dico.items()))
+    for key,value in wordsSorted.items():
+        print(key,value)
 
 
 
 def print_top(filename):
     dico = buildDict(filename)
-    sorted(dico.items(), key=operator.itemgetter(1))
+    dicoSorted = sorted(dico.items(), key=operator.itemgetter(1), reverse=True) #transforme en liste !
+
     cpt = 1
-    for key,value in dico.items():
-        if cpt == 20:
-            break
-        else :
-            print(str(key)+" "+str(value))
+    while cpt <= 20:
+        print(dicoSorted[cpt][0],dicoSorted[cpt][-1])
+        cpt += 1
             
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -80,15 +83,12 @@ def print_top(filename):
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
+  option = input("count or topcount : ")
+  filename = input("File name : ")
+  if option == 'count':
     print_words(filename)
-  elif option == '--topcount':
+  elif option == 'topcount':
     print_top(filename)
   else:
     print('unknown option: ' + option)
@@ -99,4 +99,4 @@ if __name__ == '__main__':
 
 
 
-txt = "We are not what we should be \n We are not what we need to be \n But at least we are not what we used to be \n  -- Football Coach "
+#txt = "We are not what we should be \n We are not what we need to be \n But at least we are not what we used to be \n  -- Football Coach "
