@@ -39,7 +39,7 @@ print_words() and print_top().
 import string
 import sys
 
-def print_words(filename):
+def countWord(filename):
     f = open(filename, 'rU')
     s = ''
     dico = {}
@@ -47,7 +47,7 @@ def print_words(filename):
         s +=line
     f.close()
     exclude = set(string.punctuation)
-    cleaned = ''.join(ch for ch in s if ch not in exclude).lower().replace('\n', ' ').replace('\r', '')
+    cleaned = ''.join(ch for ch in s if ch not in exclude).lower().replace('\n', ' ').replace('\r', '').replace('\xc3\xa0','')
     s = cleaned.split(" ")
     s = [i for i in s if i != '']
     for word in s:
@@ -55,29 +55,41 @@ def print_words(filename):
             dico[word] = 1
         else :
             dico[word] += 1
-    for word in dico.keys():
-        print(word +" "+str(dico[word]))
+    return dico
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
+def print_words(dico):
+    for word in dico.keys():
+        print(word +" "+str(dico[word]))
+def get_c(wordAndCount):
+    return wordAndCount[1]
+
+def print_top(dico):
+    counts = sorted(dico.items(),key = get_c, reverse = True)
+    for count in counts[:20]:
+        print(count[0], count[1])
+
 ###
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  # if len(sys.argv) != 3:
-  #   print ('usage: ./wordcount.py {--count | --topcount} file')
-  #   sys.exit(1)
+  if len(sys.argv) != 3:
+     print ('usage: ./wordcount.py {--count | --topcount} file')
+     sys.exit(1)
 
-  option = '--count'
-  filename = 'recapkit.txt'
+  option = sys.argv[1]
+  filename = sys.argv[2]
   if option == '--count':
-    print_words(filename)
+    dico = countWord(filename)
+    print_words(dico)
   elif option == '--topcount':
-    print_top(filename)
+    dico = countWord(filename)
+    print_top(dico)
   else:
     print('unknown option: ' + option)
     sys.exit(1)
