@@ -70,7 +70,7 @@ def print_words(filename):
   word_count = word_count_dict(filename)
   words = sorted(word_count.keys())
   for word in words:
-    print word, word_count[word]
+    print(word, word_count[word])
 
 
 def get_count(word_count_tuple):
@@ -88,7 +88,7 @@ def print_top(filename):
 
   # Print the first 20
   for item in items[:20]:
-    print item[0], item[1]
+    print(item[0], item[1])
 
 ##### LAB(end solution)
 
@@ -97,7 +97,7 @@ def print_top(filename):
 # calls the print_words() and print_top() functions which you must define.
 def main():
   if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
+    print('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
 
   option = sys.argv[1]
@@ -107,7 +107,7 @@ def main():
   elif option == '--topcount':
     print_top(filename)
   else:
-    print 'unknown option: ' + option
+    print('unknown option: ' + option)
     sys.exit(1)
 
 if __name__ == '__main__':
