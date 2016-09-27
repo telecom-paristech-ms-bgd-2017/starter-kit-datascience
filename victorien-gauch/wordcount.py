@@ -38,6 +38,7 @@ print_words() and print_top().
 """
 
 import sys
+import operator
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -46,18 +47,33 @@ import sys
 # Then print_words() and print_top() can just call the utility function.
 
 ###
-def print_words(filename):
-  
+
+def word_count(filename):
   content = readFile(filename)
   wordMap = {}
 
   for word in content:
-    if word not in wordMap:
-      wordMap[word] = 0
+    word = word.lower()
+    if not word in wordMap:
+      wordMap[word] = 1
     wordMap[word] += 1
-  
-  return 
 
+  return wordMap
+
+def print_words(filename):
+  
+  wordMap = word_count(filename)
+  sortedMap = sorted(wordMap.keys())
+  for w in sortedMap:
+    print w, wordMap[w]
+
+def print_top(filename):
+  wordMap = word_count(filename)
+
+  words = sorted(wordMap.items(), key = operator.itemgetter(1),reverse=True)
+
+  for word in words[:20]:
+    print word[0], word[1]
 
 
 def readFile(filename):
@@ -65,6 +81,7 @@ def readFile(filename):
   
   with open(filename, 'r') as f:
     for line in f:
+      line = line.split()
       for word in line:
         a.append(word.lower())
   return a
