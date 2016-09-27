@@ -21,11 +21,22 @@
 # and last chars of the string are the same.
 # Note: python does not have a ++ operator, but += works.
 def match_ends(words):
-  result = []
-  for word in words:
-      if len(word)>=2 and word[0]==word[-1]:
-          result.append(word)
-  return len(result)
+  # +++your code here+++
+    i=0
+    count = 0
+    while i < len(words) or len(words) == 0 or len(words) == 1 :
+        print  (" word : " + words[i])
+        s = words[i]
+        print ( "s : " + s )
+        if len(s) > 1 :
+            firsts = s[0]
+            lasts = s[-1]
+            if firsts == lasts :
+                count = count +1
+       # else :`
+       #     count = count
+        i=i+1
+    return count
 
 
 # B. front_x
@@ -36,13 +47,30 @@ def match_ends(words):
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
 def front_x(words):
-  x_list = [word for word in words if word[0]=='x']
-  x_list.sort()
-  sort_list = [word for word in words if word[0]!='x']
-  sort_list.sort()
-  return x_list + sort_list
+  # +++your code here+++
+#create list words begining with x
+    i=0
+    x_list = []
+    notx_list = []
+    while i < len(words) or len(words) == 0 or len(words) == 1 :
+        print  (" word : " + words[i])
+        s = words[i]
+        print ( "s : " + s )
+        if len(s) > 0 :
+            if s[0] == "x" :
+                x_list.append(s)
+            else :
+                notx_list.append(s)
+        else :
+            notx_list.append(s)
+        i=i+1
+#create list words without 'x' first  
+    return sorted(x_list) + sorted(notx_list)
 
-
+def last(t):
+    return t[-1]
+def first(t):
+    return t[0]
 
 # C. sort_last
 # Given a list of non-empty tuples, return a list sorted in increasing
@@ -50,46 +78,51 @@ def front_x(words):
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
-def sort_last(tuples):
-  result = [ t for t in tuples]
-  result.sort(key = lambda x:x[-1])
-  return result
-
+def sort_last(tuples,r):
+  # +++your code here+++
+# comment faire pour transmettre le rang de tri ?
+    if r == -1 :
+        return sorted(tuples,key=last)
+    else :
+        return sorted(tuples,key=first)
 
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
 def test(got, expected):
   if got == expected:
-    prefix = ' OK '
+      prefix = ' OK '
   else:
-    prefix = '  X '
-  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
+      prefix = '  KO '
+  print ('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
 
 
 # Calls the above functions with interesting inputs.
 def main():
-  print 'match_ends'
+  print('match_ends')
   test(match_ends(['aba', 'xyz', 'aa', 'x', 'bbb']), 3)
   test(match_ends(['', 'x', 'xy', 'xyx', 'xx']), 2)
   test(match_ends(['aaa', 'be', 'abc', 'hello']), 1)
 
   print
-  print 'front_x'
+  print ('front_x')
   test(front_x(['bbb', 'ccc', 'axx', 'xzz', 'xaa']),
        ['xaa', 'xzz', 'axx', 'bbb', 'ccc'])
   test(front_x(['ccc', 'bbb', 'aaa', 'xcc', 'xaa']),
        ['xaa', 'xcc', 'aaa', 'bbb', 'ccc'])
   test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
        ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
-
-
+  test(front_x(['mix', 'x', 'apple', 'xanadu', 'aardvark']),
+       ['x', 'xanadu', 'aardvark', 'apple', 'mix'])
+  test(front_x(['mix', '', 'apple', 'xanadu', 'aardvark']),
+       ['xanadu', '', 'aardvark', 'apple', 'mix'])
+       
   print
-  print 'sort_last'
-  test(sort_last([(1, 3), (3, 2), (2, 1)]),
+  print ('sort_last')
+  test(sort_last([(1, 3), (3, 2), (2, 1)], -1),
        [(2, 1), (3, 2), (1, 3)])
-  test(sort_last([(2, 3), (1, 2), (3, 1)]),
+  test(sort_last([(2, 3), (1, 2), (3, 1)], -1),
        [(3, 1), (1, 2), (2, 3)])
-  test(sort_last([(1, 7), (1, 3), (3, 4, 5), (2, 2)]),
+  test(sort_last([(1, 7), (1, 3), (3, 4, 5), (2, 2)], -1),
        [(2, 2), (1, 3), (3, 4, 5), (1, 7)])
 
 

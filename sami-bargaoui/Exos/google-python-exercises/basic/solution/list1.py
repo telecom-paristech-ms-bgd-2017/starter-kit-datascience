@@ -21,11 +21,16 @@
 # and last chars of the string are the same.
 # Note: python does not have a ++ operator, but += works.
 def match_ends(words):
-  result = []
+  # +++your code here+++
+  # LAB(begin solution)
+  count = 0
   for word in words:
-      if len(word)>=2 and word[0]==word[-1]:
-          result.append(word)
-  return len(result)
+    if len(word) >= 2 and word[0] == word[-1]:
+      count = count + 1
+  return count
+  # LAB(replace solution)
+  # return
+  # LAB(end solution)
 
 
 # B. front_x
@@ -36,13 +41,27 @@ def match_ends(words):
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
 def front_x(words):
-  x_list = [word for word in words if word[0]=='x']
-  x_list.sort()
-  sort_list = [word for word in words if word[0]!='x']
-  sort_list.sort()
-  return x_list + sort_list
+  # +++your code here+++
+  # LAB(begin solution)
+  # Put each word into the x_list or the other_list.
+  x_list = []
+  other_list = []
+  for w in words:
+    if w.startswith('x'):
+      x_list.append(w)
+    else:
+      other_list.append(w)
+  return sorted(x_list) + sorted(other_list)
+  # LAB(replace solution)
+  # return
+  # LAB(end solution)
 
 
+# LAB(begin solution)
+# Extract the last element from a tuple -- used for custom sorting below.
+def last(a):
+  return a[-1]
+# LAB(end solution)
 
 # C. sort_last
 # Given a list of non-empty tuples, return a list sorted in increasing
@@ -51,9 +70,12 @@ def front_x(words):
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
 def sort_last(tuples):
-  result = [ t for t in tuples]
-  result.sort(key = lambda x:x[-1])
-  return result
+  # +++your code here+++
+  # LAB(begin solution)
+  return sorted(tuples, key=last)
+  # LAB(replace solution)
+  # return
+  # LAB(end solution)
 
 
 # Simple provided test() function used in main() to print
@@ -82,7 +104,7 @@ def main():
   test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
        ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
-
+       
   print
   print 'sort_last'
   test(sort_last([(1, 3), (3, 2), (2, 1)]),

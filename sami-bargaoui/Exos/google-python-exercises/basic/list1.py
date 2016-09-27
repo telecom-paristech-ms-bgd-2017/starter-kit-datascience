@@ -20,12 +20,15 @@
 # strings where the string length is 2 or more and the first
 # and last chars of the string are the same.
 # Note: python does not have a ++ operator, but += works.
+
+
 def match_ends(words):
-  result = []
+  count =0
   for word in words:
-      if len(word)>=2 and word[0]==word[-1]:
-          result.append(word)
-  return len(result)
+        if len(word) >= 2 and word[0] == word[-1]:
+            count += 1
+	return count
+  return
 
 
 # B. front_x
@@ -35,12 +38,20 @@ def match_ends(words):
 # ['xanadu', 'xyz', 'aardvark', 'apple', 'mix']
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
+
+
 def front_x(words):
-  x_list = [word for word in words if word[0]=='x']
-  x_list.sort()
-  sort_list = [word for word in words if word[0]!='x']
-  sort_list.sort()
-  return x_list + sort_list
+	liste1 = []
+	liste2 = []
+	for word in words:
+		if word[0:1] == 'x':
+			liste1.append(word)
+		else:
+			liste2.append(word)
+	liste1.sort()
+	liste2.sort()
+	return liste1 + liste2
+	return
 
 
 
@@ -50,10 +61,15 @@ def front_x(words):
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
+
+
+def last(word):
+	return word[-1]
+
+
 def sort_last(tuples):
-  result = [ t for t in tuples]
-  result.sort(key = lambda x:x[-1])
-  return result
+	return sorted(tuples, key= last)
+ 
 
 
 # Simple provided test() function used in main() to print
@@ -82,7 +98,7 @@ def main():
   test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
        ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
-
+       
   print
   print 'sort_last'
   test(sort_last([(1, 3), (3, 2), (2, 1)]),
