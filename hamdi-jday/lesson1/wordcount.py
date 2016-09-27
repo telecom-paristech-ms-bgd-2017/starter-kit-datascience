@@ -54,21 +54,17 @@ def helper(filename):
         result[word.lower()] = result.get(word.lower(),0) + 1
     #print(result)
     return(result)
-    
-    
 ###
 def print_words(filename):
     for word in sorted(helper(filename), key=helper(filename).get, reverse=True):
-        print word, ' ', helper(filename)[word] 
-    
+        print word, ' ', helper(filename)[word]
 def print_top(filename):
     for word in sorted(helper(filename), key=helper(filename).get, reverse=True)[:20]:
-        print word, ' ', helper(filename)[word]     
+        print word, ' ', helper(filename)[word]
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  
   if len(sys.argv) != 3:
     print('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
@@ -76,7 +72,7 @@ def main():
   option = sys.argv[1]
   filename = sys.argv[2]
   if option == '--count':
-    print_words(filename) 
+    print_words(filename)
   elif option == '--topcount':
     print_top(filename)
   else:
