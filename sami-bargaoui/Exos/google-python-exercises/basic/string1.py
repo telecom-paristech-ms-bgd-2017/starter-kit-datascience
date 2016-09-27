@@ -26,9 +26,9 @@
 def donuts(count):
   
   if (count < 10):
-	  return ('Number of Donuts : ') + str (count)
+	  return ('Number of donuts: ') + str (count)
   else :
-	  return ('Number of Donuts : Many')
+	  return ('Number of donuts: many')
   return
 
 
@@ -38,12 +38,12 @@ def donuts(count):
 # so 'spring' yields 'spng'. However, if the string length
 # is less than 2, return instead the empty string.
 def both_ends(s):
-	if (len(s) > 2):
+	if (len(s) >= 2):
 		first = s[0:2]
 		last = s[-2:]
 		s = first + last
-		if (len(s) <= 2):
-			s=""
+	if (len(s) < 2):
+		s=""
 	return s
 
 
@@ -74,8 +74,16 @@ def fix_start(s):
 #   'dog', 'dinner' -> 'dig donner'
 # Assume a and b are length 2 or more.
 def mix_up(a, b):
-  # +++your code here+++
-  return
+  
+  liste1 = list(a)
+  liste2 = list(b)
+  tab = [liste1[0], liste1[1], liste2[0], liste2[1]]
+  liste1[0] = tab[2]
+  liste1[1] = tab[3]
+  liste2[0] = tab[0]
+  liste2[1] = tab[1]
+  
+  return ''.join(liste1) + ' ' + ''.join(liste2)
 
 
 # Provided simple test() function used in main() to print
