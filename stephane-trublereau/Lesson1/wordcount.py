@@ -38,7 +38,7 @@ print_words() and print_top().
 """
 
 import sys
-
+import operator
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
@@ -47,37 +47,55 @@ import sys
 
 def dictionnaire(filename):
     input_file = open(filename, 'r')
-    dict = {}
+    dictionnaire = dict()
     for line in input_file:
         words = line.split()
         for word in words :
             word = word.lower()
-            if word in dict :
-                dict[word] = dict[word] + 1
+            if word in dictionnaire :
+                dictionnaire[word] = dictionnaire[word] + 1
             else:
-                dict[word] = 1
-    input_file.close()            
-    return dict
+                dictionnaire[word] = 1
+    input_file.close()  
+# retourne list(word/count)          
+    return dictionnaire
 ###
 def print_top(filename):
-    return
-###
+     words = dictionnaire(filename)   
+     print ( words )
+     words_tries = sorted(words.items(), key=operator.itemgetter(1), reverse=True)
+     print(words_tries)
+     i=0
+     for (word, count) in words_tries:
+         if ( i  <  20 ) :
+             print (" word : " + word + " nombre : " + str(count))
+         else :
+             break
+         i=i+1
+        
+### fonction qui retourne la liste de
 def print_words(filename):
+## récuoération des mots et leurs comptages à partir du fichier nommé filename
+## transmis en entrée     
     words = dictionnaire(filename)
+## trie sur le nom de la list des mots    
     words_tries = sorted(words.keys())
+    
     for word in words_tries :
-        print (word + ' , ' + words[word] )
+        print (word + ' , ' + str(words[word]) )
  #  
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print ('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
+#  if len(sys.argv) != 3:
+#    print ('usage: ./wordcount.py {--count | --topcount} file')
+#    sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
+#  option = sys.argv[1]
+  option = '--topcount'
+  ##filename = sys.argv[2]
+  filename = 'small.txt'
   if option == '--count':
     print_words(filename)
   elif option == '--topcount':
