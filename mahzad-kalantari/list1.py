@@ -27,13 +27,13 @@
 # Note: python does not have a ++ operator, but += works.
 def match_ends(words):
  compteur=0
- for mot in words:  
-   if words[0]== words[-1] and len(word)>=2:
+ for mot in words:
+   if len(mot)>=2 and mot[0]==mot[-1]:
      compteur+=1
  return compteur
-  
-  
-  
+
+
+
 
 # B. front_x
 # Given a list of strings, return a list with the strings
@@ -43,9 +43,21 @@ def match_ends(words):
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
 def front_x(words):
-  # +++your code here+++
-  return
+  tab_x=[]
+  tab_mot=[]
+  for m in words:
+      if m[0]=='x':
+          tab_x.append(m)
+      else:
+          tab_mot.append(m)
+  return sorted(tab_x) + sorted(tab_mot)
 
+
+# LAB(begin solution)
+# Extract the last element from a tuple -- used for custom sorting below.
+def last(a):
+  return a[-1]
+# LAB(end solution)
 
 
 # C. sort_last
@@ -55,8 +67,7 @@ def front_x(words):
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
 def sort_last(tuples):
-  # +++your code here+++
-  return
+    return sorted(tuples, key=last)
 
 
 # Simple provided test() function used in main() to print
@@ -85,7 +96,7 @@ def main():
   test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
        ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
-       
+
   print
   print ('sort_last')
   test(sort_last([(1, 3), (3, 2), (2, 1)]),
