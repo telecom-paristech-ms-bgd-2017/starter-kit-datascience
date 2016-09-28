@@ -9,4 +9,10 @@ basic/*.txt
 babynames/*.html
 copyspecial/*.txt
 copyspecial/*.jpg
-logpuzzle/*.google.com
+logpuzzle/puzzle_img
+
+# Ignoring IDE generated files
+.idea/
+*.iml
+LICENSE.txt
+NOTICE.txt
