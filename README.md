@@ -17,7 +17,7 @@ To add your work to the repository:
     - > git pull
     - > git push
 
-# Wihout war of pushes (only for advanced user)
+# Without war of pushes (only for advanced user)
 
 To avoid the war of pushes on master branch, create your own branch. You know this issue, you pulled but another user pushed before you just at this moment:
 
@@ -54,7 +54,7 @@ To see your current branch:
 $ git status
 ~~~
 
-# Wihout password  
+# Without password  
 
 To avoid typing your password for 2 hours without creating a private/public key pair:
 
