@@ -38,71 +38,78 @@ print_words() and print_top().
 """
 
 import sys
-import operator
+
+
+def words_count(filename):
+    #fileName = r"C:\Users\adam\Desktop\python\basic\small.txt"
+    r = open(filename, 'r')
+    words = r.read().split()
+    word = {}
+    l = 1
+    for w in words:
+        if (w.lower() in word.keys()):
+            word[w.lower()] = word[w.lower()] + 1
+        else:
+
+            word[w.lower()] = 1
+    return word
+
+def print_words (filename):
+
+    word_s = (words_count(filename))
+    word_s_keys = sorted(word_s.keys())
+    for i in word_s_keys:
+        print(i,word_s[i])
+
+
+
+
+
+
+
+
+def print_top(filename):
+
+    words= (words_count(filename))
+
+
+    items = sorted(words.keys(),key= lambda  x : words[x], reverse=True)
+
+    for item in items[:2]:
+        print(item)
+
+
+
+
+
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
-def dictionnaire(filename):
-    input_file = open(filename, 'r')
-    dictionnaire = dict()
-    for line in input_file:
-        words = line.split()
-        for word in words :
-            word = word.lower()
-            if word in dictionnaire :
-                dictionnaire[word] = dictionnaire[word] + 1
-            else:
-                dictionnaire[word] = 1
-    input_file.close()  
-# retourne list(word/count)          
-    return dictionnaire
 ###
-def print_top(filename):
-     words = dictionnaire(filename)   
-##   print ( words )
-     words_tries = sorted(words.items(), key=operator.itemgetter(1), reverse=True)
-#    print(words_tries)
-     i=0
-     for (word, count) in words_tries:
-         if ( i  <  20 ) :
-             print (" word : " + word + " nombre : " + str(count))
-         else :
-             break
-         i=i+1
-        
-### fonction qui retourne la liste de
-def print_words(filename):
-## récuoération des mots et leurs comptages à partir du fichier nommé filename
-## transmis en entrée     
-    words = dictionnaire(filename)
-## trie sur le nom de la list des mots    
-    words_tries = sorted(words.keys())
-    
-    for word in words_tries :
-        print (word + ' , ' + str(words[word]) )
-#  
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print ('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
+    if len(sys.argv) != 3:
+        print('usage: ./wordcount.py {--count | --topcount} file')
+        sys.exit(1)
 
-  option = sys.argv[1]
-#  option = '--count'
-  filename = sys.argv[2]
-#  filename = 'alice.txt'
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print ('unknown option: ' + option)
-    sys.exit(1)
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+        sys.exit(0)
+    elif option == '--topcount':
+     print_top(filename)
+    else:
+        print('unknown option: ' + option)
+        sys.exit(1)
+
+
+
 
 if __name__ == '__main__':
-  main()
+    main()
