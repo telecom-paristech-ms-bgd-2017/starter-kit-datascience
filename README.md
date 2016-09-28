@@ -16,3 +16,54 @@ To add your work to the repository:
  - when you are satisfied with your work, pull the changes from the GitHub server, and push yours to the shared repository
     - > git pull
     - > git push
+
+# Wihout war of pushes (only for advanced user)
+
+To avoid the war of pushes on master branch, create your own branch. You know this issue, you pulled but another user pushed before you just at this moment:
+
+Create your branch from master:
+
+~~~
+$ git checkout -b <firstname>-<lastname>
+~~~
+
+Push your branch:
+
+~~~
+$ git push --set-upstream origin <firstname>-<lastname>
+~~~
+
+Now you can do your normal workflow on your branch (only, see below!): work, git add, git commit, [git pull], git push.
+
+After your work, you can merge your branch into master:
+
+~~~
+$ git checkout master && git merge <firstname>-<lastname>
+~~~
+
+That is to say, you go to master, then you merge \<firstname\>-\<lastname\>. If you can't go, create a stash see https://git-scm.com/docs/git-stash.
+
+> /!\ Here you merge \<firstname\>-\<lastname\> into master, above all don't merge master into \<firstname\>-\<lastname\>. 
+> And if you work directly on web interface of Github, pay attention to be on your branch and don't on master.
+> In summary, \<firstname\>-\<lastname\> should be included in master branch, but your branch should be never having
+> modifications from master.
+
+To see your current branch:
+
+~~~
+$ git status
+~~~
+
+# Wihout password  
+
+To avoid typing your password for 2 hours without creating a private/public key pair:
+
+~~~
+git config --local credential.helper 'cache --timeout 7200'
+~~~
+
+You can use --global instead of --local to do that for all of your git repositories, here only for the current repository.
+
+
+
+
