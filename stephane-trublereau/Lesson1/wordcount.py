@@ -62,9 +62,9 @@ def dictionnaire(filename):
 ###
 def print_top(filename):
      words = dictionnaire(filename)   
-     print ( words )
+##   print ( words )
      words_tries = sorted(words.items(), key=operator.itemgetter(1), reverse=True)
-     print(words_tries)
+#    print(words_tries)
      i=0
      for (word, count) in words_tries:
          if ( i  <  20 ) :
@@ -83,19 +83,19 @@ def print_words(filename):
     
     for word in words_tries :
         print (word + ' , ' + str(words[word]) )
- #  
+#  
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-#  if len(sys.argv) != 3:
-#    print ('usage: ./wordcount.py {--count | --topcount} file')
-#    sys.exit(1)
+  if len(sys.argv) != 3:
+    print ('usage: ./wordcount.py {--count | --topcount} file')
+    sys.exit(1)
 
-#  option = sys.argv[1]
-  option = '--topcount'
-  ##filename = sys.argv[2]
-  filename = 'small.txt'
+  option = sys.argv[1]
+#  option = '--count'
+  filename = sys.argv[2]
+#  filename = 'alice.txt'
   if option == '--count':
     print_words(filename)
   elif option == '--topcount':
