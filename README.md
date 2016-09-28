@@ -1,4 +1,4 @@
-# starter-kit-datascience
+# Starter Kit Datascience
 
 This repository was created in order to gather work and exercises for the students of the "Kit Datascience" class of Télécom ParisTech's Big Data Mastère Spécialisé.
 
