@@ -38,7 +38,18 @@ def match_ends(words):
 # before combining them.
 def front_x(words):
   # +++your code here+++
-  return
+  listeX = []
+  listeSansX = []
+  for word in words:
+    #print("word=", word , "word[0]=", word[0])
+    if word[0]=="x":
+      listeX.append(word)
+    else:
+      listeSansX.append(word)
+  listeX.sort()
+  listeSansX.sort()
+  #return listeResult
+  return (listeX +listeSansX)
 
 
 
