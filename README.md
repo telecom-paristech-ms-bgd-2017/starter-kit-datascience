@@ -21,6 +21,8 @@ To add your work to the repository:
 
 To avoid the war of pushes on master branch, create your own branch. You know this issue, you pulled but another user pushed before you just at this moment:
 
+> Of course, you can also make several commits in local, and push rarely to avoid this problem of priority. But create one branch is a good practice.
+
 Create your branch from master:
 
 ~~~
@@ -47,6 +49,14 @@ That is to say, you go to master, then you merge \<firstname\>-\<lastname\>. If 
 > And if you work directly on web interface of Github, pay attention to be on your branch and don't on master.
 > In summary, \<firstname\>-\<lastname\> should be included in master branch, but your branch should be never having
 > modifications from master.
+
+Then push master:
+
+~~~
+$ git push
+~~~
+
+> It is always the war of pushes here, but only for the merge. And the git network graph will more beautiful than before. In addition your commits will be consecutive.
 
 To see your current branch:
 

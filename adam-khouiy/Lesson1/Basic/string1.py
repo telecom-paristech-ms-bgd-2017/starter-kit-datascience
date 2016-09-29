@@ -23,14 +23,13 @@
 # instead of the actual count.
 # So donuts(5) returns 'Number of donuts: 5'
 # and donuts(23) returns 'Number of donuts: many'
-
-# ------- WHY DOES THE TEST FAILS ?
 def donuts(count):
-  if count < 10 :
-    result = 'Number of donuts: %s' % count
-  else :
-    result = 'Number of donuts: many'
-  return result
+    # todo: +++your code here+++
+    a = "many"
+    if (count < 10):
+        a = str(count)
+
+    return "Number of donuts: " + a
 
 
 # B. both_ends
@@ -39,11 +38,13 @@ def donuts(count):
 # so 'spring' yields 'spng'. However, if the string length
 # is less than 2, return instead the empty string.
 def both_ends(s):
-  if len(s) < 2 :
-    result = ""
-  else :
-    result = s[:2] + s[-2:]
-  return result
+    # todo:++++your code here+++
+
+    if (len(s) > 2):
+        s = s[0:2] + s[len(s) - 2:]
+    else:
+        s = ''
+    return s
 
 
 # C. fix_start
@@ -56,8 +57,23 @@ def both_ends(s):
 # Hint: s.replace(stra, strb) returns a version of string s
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
-  result = s.replace(s[0], '*')
-  return result
+    # +++your code here+++
+    di = {}
+    l=0
+    a = list(s)
+    for i in s:
+
+        if (i not in di.keys()):
+
+            di.setdefault(i, 0)
+            l=l+1
+        else:
+
+            a[l] ="*"
+            l=l+1
+
+
+    return "".join(a)
 
 
 # D. MixUp
@@ -68,61 +84,56 @@ def fix_start(s):
 #   'dog', 'dinner' -> 'dig donner'
 # Assume a and b are length 2 or more.
 def mix_up(a, b):
-  if len(a)>1 and len(b)>1 :
-    if len(a)>1 :
-      resultA = b[:1] + a[2:]
-    else :
-      resultA = b[:1]
-    if len(b)>1 :
-      resultB = a[:1] + b[2:]
-    else :
-      resultB = a[:1]
-  return resultA + " " + resultB
+    # +++your code here+++
+    la = list(a)
+    lb = list (b)
+    lb[0],la[0] = la[0],lb[0]
+    lb[1], la[1] = la[1], lb[1]
+
+
+    return "".join(la) +" "+"".join(lb)
 
 
 # Provided simple test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
 def test(got, expected):
-  if got == expected:
-    prefix = ' OK '
-  else:
-    prefix = '  X '
-  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
+    if got == expected:
+        prefix = ' OK '
+    else:
+        prefix = '  X '
+    print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
 
 
 # Provided main() calls the above functions with interesting inputs,
 # using test() to check if each result is correct or not.
 def main():
-  print 'donuts'
-  # Each line calls donuts, compares its result to the expected for that call.
-  test(donuts(4), 'Number of donuts: 4')
-  test(donuts(9), 'Number of donuts: 9')
-  test(donuts(10), 'Number of donuts: many')
-  test(donuts(99), 'Number of donuts: many')
+    # Each line calls donuts, compares its result to the expected for that call.
+    test(donuts(4), 'Number of donuts: 4')
+    test(donuts(9), 'Number of donuts: 9')
+    test(donuts(10), 'Number of donuts: many')
+    test(donuts(99), 'Number of donuts: many')
 
-  print
-  print 'both_ends'
-  test(both_ends('spring'), 'spng')
-  test(both_ends('Hello'), 'Helo')
-  test(both_ends('a'), '')
-  test(both_ends('xyz'), 'xyyz')
+    # print 'both_ends'
+    print('both_ends')
+    test(both_ends('spring'), 'spng')
+    test(both_ends('Hello'), 'Helo')
+    test(both_ends('a'), '')
+    test(both_ends('xyz'), 'xyyz')
 
-  
-  print
-  print 'fix_start'
-  test(fix_start('babble'), 'ba**le')
-  test(fix_start('aardvark'), 'a*rdv*rk')
-  test(fix_start('google'), 'goo*le')
-  test(fix_start('donut'), 'donut')
+    # print
+    print('fix_start')
+    test(fix_start('babble'), 'ba**le')
+    test(fix_start('aardvark'), 'a*rdv*rk')
+    test(fix_start('google'), 'goo*le')
+    test(fix_start('donut'), 'donut')
 
-  print
-  print 'mix_up'
-  test(mix_up('mix', 'pod'), 'pox mid')
-  test(mix_up('dog', 'dinner'), 'dig donner')
-  test(mix_up('gnash', 'sport'), 'spash gnort')
-  test(mix_up('pezzy', 'firm'), 'fizzy perm')
+    print('mix_up')
+    test(mix_up('mix', 'pod'), 'pox mid')
+    test(mix_up('dog', 'dinner'), 'dig donner')
+    test(mix_up('gnash', 'sport'), 'spash gnort')
+    test(mix_up('pezzy', 'firm'), 'fizzy perm')
 
 
 # Standard boilerplate to call the main() function.
 if __name__ == '__main__':
-  main()
+    main()
