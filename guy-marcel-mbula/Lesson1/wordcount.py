@@ -38,39 +38,47 @@ print_words() and print_top().
 """
 
 import sys
+import os
 import operator
 
-def helper_utility(filename):
-	dict = {}
-	f = open(filename,'r')
-	for line in f:
-		words = line.split(' ')
-		for word in words:
-			if word in dict:
-				dict[word] += 1
-			else:
-				dict[word] = 1
-	return dict
+def print_words(filename) :
+  dict = {}
+  i = 1
+  with open(filename,'r') as file:
+    for f in file:
+      for word in f.split():
+        if word.lower() not in dict:
+          dict[word.lower()] = i
+        else:
+          dict[word.lower()] = i + 1
 
-def print_words(filename):
-	dict = {}
-	dict = helper_utility(filename)
-	for word in dict:
-		print(word  + ' ' + dict[word])
-	return
+  for key in sorted(dict.keys()):
+    print(key, dict[key])
+
 
 def print_top(filename):
-	dict = {}
-	i=1
-	dict = helper_utility(filename)
-	for word in sorted(dict, key=itemgetter(1)):
-		print(word + ' ' + dict[word])
-		i+=1
-		if i == 20:
-			break
-	return
+  dicto={}
+  temp=[]
+  i=1
+  with open(filename,'r') as file:
+    for f in file:
+      for word in f.split():
+        if word.lower() not in dict:
+          dicto[word.lower()] = i
+        else:
+          dicto[word.lower()] = i + 1
+  sorted_value = sorted(dicto.items(), key=operator.itemgetter(1))
+  print(sorted_value[:19])
 
 
+
+
+
+
+
+
+
+# +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
@@ -82,7 +90,7 @@ def print_top(filename):
 # calls the print_words() and print_top() functions which you must define.
 def main():
   if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
+    print ('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
 
   option = sys.argv[1]
@@ -92,7 +100,7 @@ def main():
   elif option == '--topcount':
     print_top(filename)
   else:
-    print('unknown option: ' + option)
+    print ('unknown option: ') + option
     sys.exit(1)
 
 if __name__ == '__main__':
