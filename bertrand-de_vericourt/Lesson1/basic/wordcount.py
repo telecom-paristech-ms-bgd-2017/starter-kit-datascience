@@ -38,8 +38,37 @@ print_words() and print_top().
 """
 
 import sys
+import operator
 
-# +++your code here+++
+def helper_utility(filename):
+	dict = {}
+	f = open(filename,'r')
+	for line in f:
+		words = line.split(' ')
+		for word in words:
+			if word in dict:
+				dict[word] += 1
+			else:
+				dict[word] = 1
+	return dict
+
+def print_words(filename):
+	dict = {}
+	dict = helper_utility(filename)
+	for word in dict:
+		print(word  + ' ' + dict[word])
+
+def print_top(filename):
+	dict = {}
+	i=1
+	dict = helper_utility(filename)
+	for word in sorted(dict, key=itemgetter(1)):
+		print(word + ' ' + dict[word])
+		i+=1
+		if i == 20:
+			break
+
+
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
