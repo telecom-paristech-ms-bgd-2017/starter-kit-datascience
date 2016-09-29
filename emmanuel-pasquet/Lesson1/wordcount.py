@@ -38,57 +38,66 @@ print_words() and print_top().
 """
 
 import sys
-import re
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
+def mkList(textfile):
+    f = open(textfile, 'r')
+    textWords = []
+    #  strings = str(f.split(' '))
+    for line in f:
+        strings = line.split()
+        for strng in strings:
+            strng = strng.lower()
+            textWords.append(strng)
+    f.close()
+    return textWords
+    
+def mkDict(textfile):
+    dict = {}
+    strings = mkList(textfile)
+    for word in strings:
+       #if word == '' or word == ' ':
+       #    continue
+       if word not in dict:
+           dict[word] = 1
+       elif word in dict:
+           dict[word] += 1
+       else:
+           continue
+    return dict
 
-
-# remove poctuation
-def cleanwords(strings):
-    result = []
-    for value in strings:
-        value = value.strip()
-        value = re.sub('[#()!?:+-/.\[\]\./.=0123456789]',' ',value)
-        result.append(value)
-    return result
-
-
-def helper(filename):
-    data = open(filename,'r').read().replace('\n','').split(' ')
-    result = dict()
-    for word in cleanwords(data):
-        result[word.lower()] = result.get(word.lower(),0) + 1
-    #print(result)
-    return(result)
-
-
+def print_words(textfile):
+    """prints each word of the textfile with its according number of occurrences"""
+    dict = mkDict(textfile)
+    sortedDict = sorted(dict.keys())
+    for word in sortedDict:
+        print word, dict[word]
+    
+def print_top(textfile):
+    dict = mkDict(textfile)
+    print(sorted(dict))
+    
 ###
-def print_words(filename):
-    for word in sorted(helper(filename), key=helper(filename).get, reverse=True):
-        print(word, ' ', helper(filename)[word])
-def print_top(filename):
-    for word in sorted(helper(filename), key=helper(filename).get, reverse=True)[:20]:
-        print(word, ' ', helper(filename)[word])
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
+#  if len(sys.argv) != 3:
+#    print 'usage: ./wordcount.py {--count | --topcount} file'
+ #   sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
+  option = '--count'    #sys.argv[1]
+  filename = '/Users/bobstomach/Downloads/google-python-exercises/basic/small.txt'     #sys.argv[2]
   if option == '--count':
     print_words(filename)
   elif option == '--topcount':
     print_top(filename)
   else:
-    print('unknown option: ' + option)
+    print 'unknown option: ' + option
     sys.exit(1)
 
 if __name__ == '__main__':
