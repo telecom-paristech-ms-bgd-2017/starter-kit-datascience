@@ -43,10 +43,23 @@ def match_ends(words):
 # ['xanadu', 'xyz', 'aardvark', 'apple', 'mix']
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
-def front_x(words):
-  # +++your code here+++
-  return
 
+def front_x(words):
+  # je cree deux liste une contenant les string commencant par x :res_x et l'autre non
+# je trie ces listes sur elles meme et je concatene les deux : result
+   res_x=[]
+   res_ssx=[]
+   for i in range(len(words)):
+       test=words[i]
+       if test[0] == 'x' : 
+           res_x.append(test)
+       else:
+           res_ssx.append(test)
+   res_x=sorted(res_x)  
+   res_ssx=sorted(res_ssx)
+   result=res_x+res_ssx
+   
+   return result
 
 
 # C. sort_last
@@ -55,10 +68,35 @@ def front_x(words):
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
+"""
+abandon de cette solution
+je n arrive pas a recreer le dictionnaire
 def sort_last(tuples):
+    
   # +++your code here+++
-  return
+    dico={}
+    dico_trie={}
+    dico_tri2={}
+    print(tuples)
+    for i in range(len(tuples)):
+        print(tuples[i][-1])
+        dico[tuples[i]]=tuples[i][-1]
+    print(dico)
+    dico_trie=sorted(dico.values()) 
+    dico_tri2=list(dico_trie.keys())
+ #   dico_trie=sorted(dico.values())   
+  #  print(dico_trie)
+  #  for j in range(len(dico_trie)):
+  #      dico_trie2[j]=dico_trie.keys(j)
+  #  print(dico_trie2)
+    print(dico_trie)
+    return
+    
+    
+"""
 
+def sort_last(tuples):
+    return sorted(tuples, key = lambda t: t[-1])
 
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
