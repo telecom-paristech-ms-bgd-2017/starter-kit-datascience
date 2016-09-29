@@ -60,8 +60,11 @@ def count_words(file_lines):
     return res
 
 
-def display_words(words):
-    for w in words:
+def display_words(words, top_words_only = 0):
+    filtered_words = words
+    if top_words_only>0:
+        filtered_words = words[0:20]
+    for w in filtered_words:
         print(w[0] + " " + str(w[1]))
 
 
@@ -73,21 +76,14 @@ def print_words(filename):
 
 def print_top(filename):
     words = count_words(read_file(filename)).items()
-    sorted_words = sorted(words, key=lambda tup: tup[1], reversed=True)
-    display_words(sorted_words)
+    sorted_words = sorted(words, key=lambda tup: tup[1], reverse=True)
+    display_words(sorted_words, 20)
 
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 
-
 def main():
-    filename = "textfilesample.txt"
-    print_words(filename)
-    print_top(filename)
-
-
-def main_2():
     if len(sys.argv) != 3:
         print('usage: ./wordcount.py {--count | --topcount} file')
         sys.exit(1)
@@ -102,6 +98,12 @@ def main_2():
     else:
         print('unknown option: ' + option)
     sys.exit(1)
+
+
+def main_2():
+    filename = "textfilesample.txt"
+    print_words(filename)
+    print_top(filename)
 
 
 if __name__ == '__main__':

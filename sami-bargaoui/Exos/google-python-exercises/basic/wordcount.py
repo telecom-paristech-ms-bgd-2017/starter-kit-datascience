@@ -49,6 +49,34 @@ import sys
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
+
+def creerDict(filename):
+    f = open(filename, 'rU')
+    words = f.read().split()
+    count = {}
+
+    for word in words:
+        word = word.lower()
+        if word not in count:
+            count[word] = 1
+        else:
+            count[word] += 1
+	f.close()
+	return count
+
+def print_words(filename):
+	dict = creerDict(filename)
+	for word in sorted(dict.keys()):
+		print word, dict[word]
+
+def print_top(filename):
+    count = creerDict(filename)
+    i = 0
+    items = sorted(count.iteritems(), key=lambda (k,v) : (v,k) , reverse=True)
+    for item in items[:20]:
+	    print item[0] + ': ' + str(item[1]) + ' fois '
+	    i+=1
+		
 def main():
   if len(sys.argv) != 3:
     print 'usage: ./wordcount.py {--count | --topcount} file'
