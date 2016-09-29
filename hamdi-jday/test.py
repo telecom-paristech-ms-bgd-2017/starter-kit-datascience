@@ -13,7 +13,5 @@ for n in range(2,10):
             break
     else:
         print(n, ' est premier')
-        
-        
 squares = [x**2 for x in range(10)]
 print(squares)

@@ -82,7 +82,7 @@ def main():
   test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
        ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
-       
+
   print
   print 'sort_last'
   test(sort_last([(1, 3), (3, 2), (2, 1)]),
