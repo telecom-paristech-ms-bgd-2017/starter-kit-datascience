@@ -55,8 +55,8 @@ def both_ends(s):
 # Hint: s.replace(stra, strb) returns a version of string s
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
-  result = s.replace(s[0], '*')
-  return result
+  troncated = s[1:].replace(s[0], '*')
+  return s[0] + troncated
 
 
 # D. MixUp
@@ -69,11 +69,11 @@ def fix_start(s):
 def mix_up(a, b):
   if len(a)>1 and len(b)>1 :
     if len(a)>1 :
-      resultA = b[:1] + a[2:]
+      resultA = b[:2] + a[2:]
     else :
       resultA = b[:1]
     if len(b)>1 :
-      resultB = a[:1] + b[2:]
+      resultB = a[:2] + b[2:]
     else :
       resultB = a[:1]
   return resultA + " " + resultB
