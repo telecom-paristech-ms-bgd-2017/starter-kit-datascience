@@ -1,56 +1,12 @@
-#!/usr/bin/python -tt
-# Copyright 2010 Google Inc.
-# Licensed under the Apache License, Version 2.0
-# http://www.apache.org/licenses/LICENSE-2.0
 
-# Google's Python Class
-# http://code.google.com/edu/languages/google-python-class/
-
-# Basic string exercises
-# Fill in the code for the functions below. main() is already set up
-# to call the functions with a few different inputs,
-# printing 'OK' when each function is correct.
-# The starter code for each function includes a 'return'
-# which is just a placeholder for your code.
-# It's ok if you do not complete all the functions, and there
-# are some additional functions to try in string2.py.
-
-
-# A. donuts
-# Given an int count of a number of donuts, return a string
-# of the form 'Number of donuts: <count>', where <count> is the number
-# passed in. However, if the count is 10 or more, then use the word 'many'
-# instead of the actual count.
-# So donuts(5) returns 'Number of donuts: 5'
-# and donuts(23) returns 'Number of donuts: many'
-def donuts(count):
-  # +++your code here+++
-  # LAB(begin solution)
-  if count < 10:
-    return 'Number of donuts: ' + str(count)
-  else:
-    return 'Number of donuts: many'
-  # LAB(replace solution)
-  # return
-  # LAB(end solution)
-
-
-# B. both_ends
-# Given a string s, return a string made of the first 2
-# and the last 2 chars of the original string,
 # so 'spring' yields 'spng'. However, if the string length
 # is less than 2, return instead the empty string.
 def both_ends(s):
   # +++your code here+++
-  # LAB(begin solution)
-  if len(s) < 2:
-    return ''
-  first2 = s[0:2]
-  last2 = s[-2:]
-  return first2 + last2
-  # LAB(replace solution)
-  # return
-  # LAB(end solution)
+if len(s)>=2:
+    return s[0:2] + s[-2:]
+else:
+  return ""
 
 
 # C. fix_start
@@ -64,14 +20,9 @@ def both_ends(s):
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
   # +++your code here+++
-  # LAB(begin solution)
-  front = s[0]
-  back = s[1:]
-  fixed_back = back.replace(front, '*')
-  return front + fixed_back
-  # LAB(replace solution)
-  # return
-  # LAB(end solution)
+first_char=s[0]
+
+  return first_car + s[1:].replace(first_char,"*")
 
 
 # D. MixUp
@@ -83,13 +34,10 @@ def fix_start(s):
 # Assume a and b are length 2 or more.
 def mix_up(a, b):
   # +++your code here+++
-  # LAB(begin solution)
-  a_swapped = b[:2] + a[2:]
-  b_swapped = a[:2] + b[2:]
-  return a_swapped + ' ' + b_swapped
-  # LAB(replace solution)
-  # return
-  # LAB(end solution)
+temp1=a[0:2]
+temp2=b[0:2]
+
+  return temp2 + a[2:] +"" +temp1 +b[2:]
 
 
 # Provided simple test() function used in main() to print
@@ -99,7 +47,7 @@ def test(got, expected):
     prefix = ' OK '
   else:
     prefix = '  X '
-  print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
+  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
 
 
 # Provided main() calls the above functions with interesting inputs,

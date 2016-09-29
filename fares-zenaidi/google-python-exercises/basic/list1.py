@@ -2,7 +2,6 @@
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
-
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
 
@@ -14,7 +13,6 @@
 # which is just a placeholder for your code.
 # It's ok if you do not complete all the functions, and there
 # are some additional functions to try in list2.py.
-
 # A. match_ends
 # Given a list of strings, return the count of the number of
 # strings where the string length is 2 or more and the first
@@ -23,13 +21,8 @@
 
 
 def match_ends(words):
-    # +++your code here+++
-    n = 0
-    for el in words:
-        if len(el) >= 2:
-            if el[0] == el[-1]:
-                n += 1
-    return n
+    list_sat = [word for word in words if len(word) >= 2 and word[0] == word[-1]]
+    return len(list_sat)
 
 
 # B. front_x
@@ -40,8 +33,9 @@ def match_ends(words):
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
 def front_x(words):
-    # +++your code here+++
-    return sorted(words, key=lambda x: (x[0] != 'x', x))
+    strings_x = [s for s in words if s[0] == 'x']
+    strings_nox = [s for s in words if s[0] != 'x']
+    return sorted(strings_x) + sorted(strings_nox)
 
 
 # C. sort_last
@@ -50,9 +44,12 @@ def front_x(words):
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
+def custom_key(tuple):
+    return tuple[-1]
+
+
 def sort_last(tuples):
-    # +++your code here+++
-    return sorted(tuples, key=lambda x: (x[-1]))
+    return sorted(tuples, key= custom_key)
 
 
 # Simple provided test() function used in main() to print
@@ -75,21 +72,20 @@ def main():
     print
     print('front_x')
     test(front_x(['bbb', 'ccc', 'axx', 'xzz', 'xaa']),
-         ['xaa', 'xzz', 'axx', 'bbb', 'ccc'])
+                 ['xaa', 'xzz', 'axx', 'bbb', 'ccc'])
     test(front_x(['ccc', 'bbb', 'aaa', 'xcc', 'xaa']),
-         ['xaa', 'xcc', 'aaa', 'bbb', 'ccc'])
+                 ['xaa', 'xcc', 'aaa', 'bbb', 'ccc'])
     test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
-         ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
+                 ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
     print
     print('sort_last')
     test(sort_last([(1, 3), (3, 2), (2, 1)]),
-         [(2, 1), (3, 2), (1, 3)])
+                   [(2, 1), (3, 2), (1, 3)])
     test(sort_last([(2, 3), (1, 2), (3, 1)]),
-         [(3, 1), (1, 2), (2, 3)])
+                   [(3, 1), (1, 2), (2, 3)])
     test(sort_last([(1, 7), (1, 3), (3, 4, 5), (2, 2)]),
-         [(2, 2), (1, 3), (3, 4, 5), (1, 7)])
-
+                   [(2, 2), (1, 3), (3, 4, 5), (1, 7)])
 
 if __name__ == '__main__':
     main()

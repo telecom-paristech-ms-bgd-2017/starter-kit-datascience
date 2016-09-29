@@ -17,8 +17,6 @@ Once you have that working, you're ready for class -- you can edit
 and run Python code; now you just need to learn Python!
 """
 
-# Modified by @Wes
-
 import sys
 
 
@@ -29,7 +27,8 @@ def main():
         name = sys.argv[1]
     else:
         name = 'World'
-    print('Howdy ' + name)
+    print 'Hello', name
+
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
