@@ -17,9 +17,11 @@ To add your work to the repository:
     - > git pull
     - > git push
 
-# Wihout war of pushes (only for advanced user)
+# Without war of pushes (only for advanced user)
 
 To avoid the war of pushes on master branch, create your own branch. You know this issue, you pulled but another user pushed before you just at this moment:
+
+> Of course, you can also make several commits in local, and push rarely to avoid this problem of priority. But create one branch is a good practice.
 
 Create your branch from master:
 
@@ -48,13 +50,21 @@ That is to say, you go to master, then you merge \<firstname\>-\<lastname\>. If 
 > In summary, \<firstname\>-\<lastname\> should be included in master branch, but your branch should be never having
 > modifications from master.
 
+Then push master:
+
+~~~
+$ git push
+~~~
+
+> It is always the war of pushes here, but only for the merge. And the git network graph will more beautiful than before. In addition your commits will be consecutive.
+
 To see your current branch:
 
 ~~~
 $ git status
 ~~~
 
-# Wihout password  
+# Without password  
 
 To avoid typing your password for 2 hours without creating a private/public key pair:
 
