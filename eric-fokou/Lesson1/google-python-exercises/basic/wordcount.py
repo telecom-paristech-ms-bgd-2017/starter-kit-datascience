@@ -37,38 +37,8 @@ print_words() and print_top().
 
 """
 
-import io, re
-
-def get_words(filename):
-    f = io.open(filename, 'r', encoding='utf-8')
-    words = {}
-    for line in f:
-        for w in re.findall(r"[\w']+", line.strip().lower()):
-            if words.has_key(w):
-                words[w] += 1
-            else:
-                words[w] = 1
-    return words
-            
-
-def print_words(filename):
-    words = get_words(filename)
-    for w in sorted(words):
-        print w + ' {}'.format(words[w])
-
-
-def print_top(filename):
-    words = get_words(filename)
-    count = 0
-    for w in sorted(sorted(words), key=words.get, reverse=True):
-        print w + ' {}'.format(words[w])
-        count += 1
-        if (count > 20):
-            break
-    
-
-
 import sys
+
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -81,19 +51,20 @@ import sys
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
-    sys.exit(1)
+    if len(sys.argv) != 3:
+        print 'usage: ./wordcount.py {--count | --topcount} file'
+        sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print 'unknown option: ' + option
-    sys.exit(1)
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print 'unknown option: ' + option
+        sys.exit(1)
+
 
 if __name__ == '__main__':
-  main()
+    main()

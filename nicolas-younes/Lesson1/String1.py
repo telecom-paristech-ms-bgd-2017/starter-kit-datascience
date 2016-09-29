@@ -39,7 +39,7 @@ def test(got, expected):
 
 def main():
     print("\n")
-    'donuts'
+    'donuts '
     # Each line calls donuts, compares its result to the expected for that call.
     test(donuts(4), 'Number of donuts: 4')
     test(donuts(9), 'Number of donuts: 9')

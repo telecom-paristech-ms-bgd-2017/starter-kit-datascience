@@ -1,0 +1,244 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Sep 27 17:15:02 2016
+
+@author: lepicaut
+"""
+
+import math
+import numpy as np
+#######################
+#list1.py
+#######################
+
+
+######################
+# A. match_ends
+print('\n')
+
+words = ('abba','ibbi','bebe','obbo')
+def match_ends(words):
+    c = 0
+    for i in words:
+        if len(i)>=2 and i[0]==i[-1]:
+            c=c+1
+    print("le résultat =",c)
+    return
+match_ends(words)
+print('\n')
+
+######################
+# B. front_x
+
+words = ('mix', 'xyz', 'apple', 'xanadu', 'aardvark')
+x1_list = []
+x2_list = []  
+
+def xx(words):
+    for i in words:
+        if i.startswith('x'):
+            x1_list.append(i)
+    else:
+      x2_list.append(i)
+    print("liste avec x =",x1_list)
+    print("liste sans x =",x2_list)
+    return
+
+xx(words)
+print('\n')
+
+######################
+# C. sort_last
+
+l = [(1, 7), (1, 3), (3, 4, 5), (2, 2)]
+
+def tri(l):
+    l[len(l)-1]
+    print("tri récursif de l =", l)
+    return
+
+tri(l)
+print('\n')
+
+######################
+# def test(got, expected):
+print("en 2015 : qui est le meilleur vendeur chez ToucanTOCO ???")
+print('\n')
+
+CA_kilian = 0
+CA_charles = 0
+
+def t(CA_charles,CA_killian):
+    if CA_charles > CA_killian:
+        print("le test est nominal : CHARLES EST LE BOSS")
+        print("-> Charles a gagné la plus grosse affaire de", CA_charles, "Euros")
+    else:
+        print("le test est rejeté")
+        
+t(20000,30000)
+t(1000000,30000)
+t(30000,30000)
+
+print('\n')       
+
+######################
+
+
+
+#######################
+#string1.py
+#######################
+
+######################
+# A. donuts
+
+c = range(15)
+d1 = []
+
+def donuts(c):
+ for i in c:
+   if i < 10:
+     d1.append(i)
+     print(d1) 
+   
+   else:
+      print("trop")  
+      
+donuts(c)
+print('\n')   
+
+######################
+#B. both_ends
+
+a = 'charleskillian'
+
+def conca(x):
+    if len(x)<2:
+        return''
+    mot1 = x[0:2]
+    mot2 = x[-2:]
+    r=mot1+mot2
+    print(r)
+    return r
+conca(a)
+print('\n')
+
+######################
+#C. fix_start
+
+
+
+               
+######################
+#math.py
+#######################             
+              
+######################
+# suite arythmétique
+
+ # que vaut 1000 euros à 1.025% ds 10 ans
+import matplotlib.pyplot as plt
+u = 100
+r = 1.5/100
+n = range(11)
+l = []
+
+
+def f(x):
+    for i in n:
+        g = u*((1+r)**i)
+        l.append(g)
+            
+f(n)
+print('\n')
+print(l)
+
+plt.title("mon capital place a 10 ans")
+plt.xlabel("i")
+plt.ylabel("g")
+plt.plot(l)             
+
+# model augmentation de mon salaire sur 3 ans
+import matplotlib.pyplot as plt
+u = 2000
+r = 1+(2/100)
+n = range(11)
+l = []
+
+
+def f(x):
+    for i in n:
+        g = u*(r)**i
+        l.append(g)
+f(n)
+print('\n')
+print(l)
+
+plt.title("mon salaire dans 10 ans avec inflation")
+plt.xlabel("annees")
+plt.ylabel("salaire augmente")
+plt.plot(l)             
+
+########## TP MDI720_S1_28sept16 #######
+# Q1 : puissance 2
+# Écrire une fonction nextpower qui calcule la première puissance de 2
+# supérieure ou égale à un nombre n (on veillera à ce que le type de sortie
+# soit un int, tester cela avec type par exemple).
+a = 4
+def p(x,n):
+    if n>0:
+        return x * p(x,n-1)
+    else : return 1
+p(a,2)
+print('\n')
+
+######################
+# 2) À partir du mot contenant toutes les lettres de l’alphabet, 
+# générer par une opération de slicing la chaîne de caractère
+# cfilorux et, de deux façons différentes, la chaîne de caractère vxz.
+
+a = 'abcdefghijklmopqrstvuwxyz'
+def conca(x):
+    if len(x)<2:
+        return''
+    mot1 = x[0:2]
+    mot2 = x[-2:]
+    r=mot1+mot2
+    print(r)
+    return r
+conca(a)
+print('\n')
+
+######################
+# Afficher le nombre ⇡ avec 9 décimales après la virgule.
+print("arrondi %.9f" %math.pi)
+
+# Compter le nombre d’occurrences de chaque caractère dans
+# la chaîne de caractères
+s="HelLo WorLd!!"
+a = 'hello world'
+l= ['r', 'w', 'l', ' ', 'h', 'e', 'o', 'd']
+print ("comp pour:", "r", "=", l.count('r'))
+print('\n')
+
+s_new = "HelLo WorLd!!"
+params = {}
+
+for letter in s_new:
+    print(letter)
+    if letter not in params:
+        params[letter] = 1
+    else:
+        params[letter] += 1
+print('\n')
+
+######################
+# formule de wallis avec numpy
+def wallis1(n):
+    result = 2.
+    for k in range(1, n + 1, 1):
+        result *= 4. * k ** 2 / (4. * k ** 2. - 1.)
+    return result
+
+print(wallis1(50))
+
