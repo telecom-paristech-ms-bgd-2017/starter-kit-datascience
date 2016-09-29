@@ -6,8 +6,9 @@
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
 
-import sys
 import re
+import sys
+
 
 """Baby Names exercise
 
@@ -42,10 +43,20 @@ def extract_names(filename):
   """
   # +++your code here+++
 
-  r = open(filename, 'r')
-  words = r.read().split()
+  red = open(filename, 'r')
+  words = red.read().split('\n')
+  l_word =[]
+  l_entete =[]
 
-  return words
+  for word in words:
+      if re.search('<h3 .+>.+(\d{4}).*</h3>', word) is not None:
+          l_entete+= re.split(r'<h3 .+>.+(\d{4}).*</h3>',word)
+
+      if re.search(r'<td>(.+?)</td>', word) is not None:
+          l_word += re.split(r'<td>(.*?)</td>',word)[1:]
+
+
+  return l_entete [1:2] + l_word
 
 
 def main():
@@ -74,4 +85,6 @@ def main():
   # or write it to a summary file
   
 if __name__ == '__main__':
+  import os
   main()
+  print(extract_names(os.path.realpath(r"C:\\Users\adam\\Desktop\\python\\babynames\\baby1998.html")))
