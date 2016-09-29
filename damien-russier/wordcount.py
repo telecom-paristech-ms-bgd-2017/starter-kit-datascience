@@ -65,7 +65,6 @@ def print_top(filename):
         count += 1
         if (count > 20):
             break
-    
 
 
 import sys

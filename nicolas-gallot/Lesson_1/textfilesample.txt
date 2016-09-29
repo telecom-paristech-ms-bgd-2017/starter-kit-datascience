@@ -1,0 +1,3 @@
+This is a text file sample for the wordcount exercise. It just contains text that have absolutely no meaning.
+There is some content in English because it's cool to speak English.
+Il y a aussi du contenu en Francais, car après tout on est en France non?
