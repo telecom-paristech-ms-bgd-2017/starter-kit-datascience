@@ -49,8 +49,18 @@ def length_words(array):
 
 #write fizbuzz programm
 def fizbuzz():
-
-  return
+    i = 0
+    while i <= 100:
+        if i%3 == 0:
+            if i%5 == 0:
+                print("fizzbuzz")
+            else:
+                print("fizz")
+        else:
+            print("buzz")
+        i = i + 1
+        print("\n")
+    return
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
