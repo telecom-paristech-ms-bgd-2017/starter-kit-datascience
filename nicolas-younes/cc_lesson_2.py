@@ -44,6 +44,12 @@ def last2(string):
 # integers representing the lengths of the correponding words.
 def length_words(array):
     result = []
+    result = list(map(lambda x: len(x), array))
+    return result
+
+
+def length_words2(array):
+    result = []
     for s in array:
         result.append(len(s))
     return result
