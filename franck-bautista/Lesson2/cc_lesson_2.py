@@ -4,55 +4,73 @@ import unittest
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
 
-def string_times(string, n):
-    return string*n
+def string_times(string, n):    
+    return n*string
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
-def array_front9(nums):
-    maxLen=min([4, len(nums)])  
-    is9=any([ii == 9 for ii in nums[:maxLen]])
-    return is9
+
+
+def array_front9(nums):    
+    for i in nums[:4]:
+        if i == 9:
+            return True
+    return False
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    strtoFind=string[-2:]
-    count=sum([string[y : y + 2]==strtoFind for y in range(len(string)-2)])
-    return count 
+    target = string[-2:]
+    res  = 0
+    for i in range(len(string)-4):
+        if (string[i:i+2]==target):
+            res = res + 1
+    return res
 
 
-#Write a program that maps a list of words into a list of
-#integers representing the lengths of the correponding words.
-def length_words(array):
-    listLen=[len(ii) for ii in array]    
-    return listLen
-#write fizbuzz programm
-def fizbuzz():
-    
-  return
+# Write a program that maps a list of words into a list of
+# integers representing the lengths of the correponding words.
+def length_words(array):    
+#    res = list()    
+#    for word in array:            
+#        res.append(len(word))
+    res = map(lambda x: len(x), array)        
+    return res
 
-#Write a function that takes a number and returns a list of its digits.
+
+
+# write fizbuzz programm
+def fizbuzz(n):
+  if (n % 15 == 0): 
+    return 'fizbuzz'
+  elif (n%5 ==0):      
+    return 'fizz'
+  elif (n%3==0):
+      return 'buzz'
+  return ""
+
+# Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    nSTr=str(number)
-    listDigit=[int(ii) for ii in nSTr]   
-    return listDigit
+  res = list(str(number))  
+#  res2 = []
+#  for lettre in list(res):
+#      res2.append(int(lettre))        
+  return map(lambda x: int(x), res) 
+  
+# Write function that translates a text to Pig Latin and back.
+# English is translated to Pig Latin by taking the first letter of every word,
+# moving it to the end of the word and adding 'ay'
+def pigLatin(text):  
+  words = text.split(" ")  
+  for nb,word in enumerate(words):      
+    if (nb>0):
+          res = res + " " + word[1:2] + word[2:] + word[0:1].lower() + 'ay'  
+    else:
+          res =  words[0][1:2].upper() + (words[0][2:]) + words[0][0:1].lower() + 'ay'
+  return res
 
-#Write function that translates a text to Pig Latin and back.
-#English is translated to Pig Latin by taking the first letter of every word,
-#moving it to the end of the word and adding 'ay'
-def pigLatin(tutu):
-    lText=tutu.lower().strip().split()
-    newstr=''
-    for ii in lText:
-        newWor=ii[1:] + ii[0] + 'ay '
-        if len(newstr)==0:
-            newWor = newWor.capitalize()
-        newstr = newstr + newWor
-    return newstr.rstrip()
- 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
 
