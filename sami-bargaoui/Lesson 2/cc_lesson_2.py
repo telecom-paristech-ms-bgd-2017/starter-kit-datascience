@@ -77,7 +77,11 @@ def number2digits(number):
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-    return ' '.join([word[1:] + word[0] + 'ay' for word in text.split(' ')])
+    words = text.split()
+    Sentence=""
+    for word in words:
+        Sentence = Sentence + word[1:] + word[0].lower() + "ay "
+    return Sentence[:-1].capitalize()
 
 
 # Here's our "unit tests".
@@ -107,7 +111,7 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(number2digits(4985098) , [4,9,8,5,0,9,8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("the quick brown fox") , "hetay uickqay rownbay oxfay")
+        self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
 
 
 
