@@ -65,6 +65,7 @@ def liste_mots(filename):
                     countWord[mot.lower()] = 1
     return countWord
 
+
 def print_words(filename):
     countWord = liste_mots(filename)
 
@@ -75,7 +76,6 @@ def print_words(filename):
 
 
 def print_top(filename):
-
     countWord = liste_mots(filename)
 
     motsTriesParNombreApparitions = sorted(countWord.items(), key=lambda col: col[1], reverse=True)
@@ -84,7 +84,7 @@ def print_top(filename):
     for mot in motsTriesParNombreApparitions:
         print(mot[0] + " ! " + str(mot[1]))
         i += 1
-        if(i > 5):
+        if (i > 5):
             break
 
 
