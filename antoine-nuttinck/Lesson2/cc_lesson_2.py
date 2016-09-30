@@ -1,9 +1,9 @@
 import unittest
 import sys
 
-
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
+
 
 def string_times(string, n):
     if n < 0:
@@ -47,7 +47,15 @@ def length_words(array):
 
 
 def fizbuzz():
-    return
+    for x in range(1, 100):
+        if x % 15 == 0:
+            print("fizbuzz\n")
+        elif x % 3 == 0:
+            print("fiz\n")
+        elif x % 5 == 0:
+            print("buzz\n")
+        else:
+            print(x, "\n")
 
 
 # Write a function that takes a number and returns a list of its digits.
@@ -66,9 +74,8 @@ def pigLatin(text):
     if not isinstance(text, str):
         return "Error : The arguement is not a string !"
     for wd in text.split(" "):
-        trad += wd[1:] + wd[0].lower() + "ay "
-    trad = trad[0].upper() + trad[1:-1].lower()
-    return trad
+        trad += wd[1:] + wd[0] + "ay "
+    return trad.lower().strip(" ").capitalize()
 
 # Here's our "unit tests".
 
@@ -106,6 +113,7 @@ class Lesson1Tests(unittest.TestCase):
 
 def main():
     unittest.main()
+    fizbuzz()
 
 if __name__ == '__main__':
     main()
