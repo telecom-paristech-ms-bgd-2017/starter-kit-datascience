@@ -11,7 +11,7 @@ def string_times(string, n):
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
     for i, num in enumerate(nums):
-        if i == 3:
+        if i == 4:
             return False
         if num == 9:
             return True
@@ -25,7 +25,7 @@ def last2(string):
     res = 0
     last = string[-2:]
     for k in range(len(string[:-2])):
-        if last == string[k:k+2]:
+        if last == string[k:k + 2]:
             res += 1
     return res
 
@@ -33,10 +33,7 @@ def last2(string):
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the correponding words.
 def length_words(words):
-    l = []
-    for word in words:
-        l.append(len(word))
-    return l
+    return map(len, words)
 
 
 # write fizbuzz programm
@@ -61,7 +58,7 @@ def pigLatin(text):
     pig = ''
     words = text.split()
     for word in words:
-        pig += word[1:].lower() + word[0].lower() +'ay' + ' '
+        pig += word[1:].lower() + word[0].lower() + 'ay' + ' '
     return pig[0].upper() + pig[1:-1]
 
 
@@ -69,6 +66,7 @@ def pigLatin(text):
 class Lesson1Tests(unittest.TestCase):
     def testArrayFront9(self):
         self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
+        self.assertEqual(array_front9([1, 2, 3, 9, 4]), True)
         self.assertEqual(array_front9([1, 2, 3, 4, 9]), False)
         self.assertEqual(array_front9([1, 2, 3, 4, 5]), False)
 
