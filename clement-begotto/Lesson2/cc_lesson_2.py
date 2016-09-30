@@ -5,6 +5,12 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
+    if not isinstance(n, int):
+        return 'bad argument' + n
+    if not isinstance(string, str):
+        return 'bad argument' + string
+    if n < 0:
+        return 'n is negative'
     return n * string
 
 # Given an array of ints, return True if one of the first 4 elements
@@ -22,17 +28,18 @@ def array_front9(nums):
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
+    last = string[-2:]
     count = 0
-    for i in range(len(string) - 1):
-        if string[i:i+1] in string:
-            count += 1
+    for i in range(len(string)-1):
+        if string[i:i+1] == last:
+            count +=1
     return count
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    return [ len(word) for word in array]
+    return [len(word) for word in array]
 
 #write fizbuzz programm
 def fizbuzz():
@@ -46,7 +53,7 @@ def fizbuzz():
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    return [ digital for digit in str(number) ]
+    return [digital for digit in str(number)]
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
