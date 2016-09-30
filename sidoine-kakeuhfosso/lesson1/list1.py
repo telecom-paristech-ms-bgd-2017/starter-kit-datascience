@@ -21,12 +21,13 @@
 # and last chars of the string are the same.
 # Note: python does not have a ++ operator, but += works.
 def match_ends(words):
-    count = 0
-    for w in words:         #look at each string of the list
-        if len(w) >=2:      #check the length is 2 or more
-            if w[0] == w[len(w)-1]:#check if the 1st & last chars are the same
-                count += 1  #count them
-    return count
+  # +++your code here+++
+  cpt = 0
+  for string in words:
+        if len(string)>=2:
+            if string[0]==string[len(string)-1]:
+                cpt = cpt + 1
+  return cpt
 
 
 # B. front_x
@@ -37,14 +38,17 @@ def match_ends(words):
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
 def front_x(words):
-    l1 = []             #build up the l1 list"
-    l2 = []             #build up the l2 list"
-    for w in words:     #look at each element of the words list"
-        if w[0] == 'x': #check if the element starts with char 'x'"
-            l1.append(w)#add the element in the l1 list"
-        else:
-            l2.append(w)#else add the element in the l2 list"
-    return sorted(l1) + sorted(l2)      #returns the concatenation of l1 & l2 sorted"
+  # +++your code here+++
+  smot=[]
+  for i in range(len(words)):
+      mot = words[i]
+      if mot[0]=='x':
+          smot.append(mot)
+  for i in range(len(smot)):
+      words.remove(smot[i])
+  return sorted(smot)+sorted(words)
+
+
 
 # C. sort_last
 # Given a list of non-empty tuples, return a list sorted in increasing
@@ -52,11 +56,16 @@ def front_x(words):
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
-def my_Fn(tuples):
-    return tuples[-1]   #return the las element from the tuple
+# +++your code here+++
 
+#fonction qui retourne le deuxieme element de chaque tuple pour la passer a key
+def getkey(tup):
+     return tup[1]
+     
 def sort_last(tuples):
-    return sorted(tuples, key=my_Fn) #sort the tuple according to each last element
+
+  return sorted(tuples, key=getkey)                             
+
 
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
@@ -65,18 +74,18 @@ def test(got, expected):
     prefix = ' OK '
   else:
     prefix = '  X '
-  print ('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
+  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
 
 
 # Calls the above functions with interesting inputs.
 def main():
-  print ('match_ends')
+  print 'match_ends'
   test(match_ends(['aba', 'xyz', 'aa', 'x', 'bbb']), 3)
   test(match_ends(['', 'x', 'xy', 'xyx', 'xx']), 2)
   test(match_ends(['aaa', 'be', 'abc', 'hello']), 1)
 
   print
-  print ('front_x')
+  print 'front_x'
   test(front_x(['bbb', 'ccc', 'axx', 'xzz', 'xaa']),
        ['xaa', 'xzz', 'axx', 'bbb', 'ccc'])
   test(front_x(['ccc', 'bbb', 'aaa', 'xcc', 'xaa']),
@@ -86,7 +95,7 @@ def main():
 
 
   print
-  print ('sort_last')
+  print 'sort_last'
   test(sort_last([(1, 3), (3, 2), (2, 1)]),
        [(2, 1), (3, 2), (1, 3)])
   test(sort_last([(2, 3), (1, 2), (3, 1)]),
