@@ -10,37 +10,25 @@ def string_times(string, n):
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    maxLen=3    
-    if len(nums)<4    :
-        maxLen=len(nums)   
-    for ii in range(maxLen):
-        if nums[ii]==9:
-            return true
-    return False
+    maxLen=min([4, len(nums)])  
+    is9=any([ii == 9 for ii in nums[:maxLen]])
+    return is9
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    str=string[-2:]
-    count=0
-    for ii in range(0,len(string)-2,2):
-        if str==(string[ii:ii+1]):
-            count+=1
-        end
-    return count
+    strtoFind=string[-2:]
+    count=sum([string[y : y + 2]==strtoFind for y in range(len(string)-2)])
+    return count 
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    listLen=[]
-    for ii in array:
-            listLen.append[len(ii)]
-            
+    listLen=[len(ii) for ii in array]    
     return listLen
-
 #write fizbuzz programm
 def fizbuzz():
     
@@ -49,22 +37,21 @@ def fizbuzz():
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
     nSTr=str(number)
-    listDigit=[]
-    for ii  in nSTr:
-        listDigit.append[ii]
-        
+    listDigit=[int(ii) for ii in nSTr]   
     return listDigit
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
-def pigLatin(text):
-    lText=list(text)
+def pigLatin(tutu):
+    lText=tutu.lower().strip().split()
     newstr=''
     for ii in lText:
-        newWor=ii[len(ii)] + ii[1:-2] + ii[O] + 'ay'
-        newstr= newstr + newWor
-    return newstr
+        newWor=ii[1:] + ii[0] + 'ay '
+        if len(newstr)==0:
+            newWor = newWor.capitalize()
+        newstr = newstr + newWor
+    return newstr.rstrip()
  
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
