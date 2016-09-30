@@ -50,21 +50,8 @@ def dico_mots(filename):
         mots = ligne.split()
         for mot in mots:
             mot = mot.lower()
-            re.sub(r"^[0-9]$", "", mot)
+            mot = re.sub('([^a-z])', '', mot)
             
-            
-            mot = mot.replace(".", "")
-            mot = mot.replace(",", "")
-            mot = mot.replace(";", "")            
-            mot = mot.replace(":", "")            
-            mot = mot.replace("!", "")
-            mot = mot.replace("?", "")            
-            mot = mot.replace('(', "")            
-            mot = mot.replace(")", "")            
-            mot = mot.replace("'", "")  
-            mot = mot.replace("`", "")                      
-            mot = mot.replace("--", "")     
-            mot = mot.replace('"', "")            
             if mot in dico_res:
                 dico_res[mot] = dico_res[mot] + 1
             else:
@@ -105,8 +92,8 @@ def print_top(filename):
         if nbmots >= 19:
             break
 # Test sur fihchier
-# print_words("alice.txt")
-# print_top("alice.txt")
+#print_words("alice.txt")
+#print_top("alice.txt")
 
 
 def main():

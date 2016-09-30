@@ -45,47 +45,47 @@ import sys
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
+def store(filename):
+  f = open(filename, 'rU')
+  dico = {}
+  for line in f:
+    for word in line.lower().split():
+      if word not in dico:
+        dico[word] = 1
+      else:
+        dico[word] += 1
+  f.close()
+  return dico
+###
 
 def print_words(filename):
-    dico = {}
-    with open(filename) as f:
-        content = f.readlines()
-        for line in content:
-            for word in line.split():
-                if dico.get(word.lower()) is not None:
-                    dico[word.lower()] += 1
-                else:
-                    dico[word.lower()] = 1
-    sorted(dico)
-    print(dico)
-    return dico
-
+  words = store(filename)
+  keys = sorted(words.keys())
+  for key in keys:
+    print(key, words[key])
 
 def print_top(filename):
-    dict_sorted = {}
-    dict_sorted = sorted(print_words(filename).items(), key=lambda x: x[1], reverse=True)[:20]
-    print(dict_sorted)
-    return dict_sorted
+  words = store(filename)
+  items = sorted(words.items(), key=lambda a: a[1], reverse=True)
+  for item in items[:20]:
+    print(item[0], item[1])
 
-###
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-
-
 def main():
-    if len(sys.argv) != 3:
-        print('usage: ./wordcount.py {--count | --topcount} file')
-        sys.exit(1)
+  if len(sys.argv) != 3:
+    print('usage: ./wordcount.py {--count | --topcount} file')
+    sys.exit(1)
 
-    option = sys.argv[1]
-    filename = sys.argv[2]
-    if option == '--count':
-        print_words(filename)
-    elif option == '--topcount':
-        print_top(filename)
-    else:
-        print('unknown option: ' + option)
-        sys.exit(1)
+  option = sys.argv[1]
+  filename = sys.argv[2]
+  if option == '--count':
+    print_words(filename)
+  elif option == '--topcount':
+    print_top(filename)
+  else:
+    print('unknown option: ' + option)
+    sys.exit(1)
 
 if __name__ == '__main__':
-    main()
+  main()

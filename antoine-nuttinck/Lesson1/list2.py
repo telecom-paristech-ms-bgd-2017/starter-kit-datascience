@@ -15,24 +15,32 @@
 
 
 def remove_adjacent(nums):
-    # +++your code here+++
-    new_nums = []
-    tmp = 0
-    if len(nums) >= 2:
-        for el in nums:
-            if el != tmp:
-                new_nums.append(el)
-            tmp = el
-    return new_nums
+    i = 1
+    for x in nums[:-1]:
+        if x == nums[i]:
+            nums.remove(x)
+        else:
+            i += 1
+    return nums
 
 
 # E. Given two lists sorted in increasing order, create and return a merged
 # list of all the elements in sorted order. You may modify the passed in lists.
 # Ideally, the solution should work in "linear" time, making a single
 # pass of both lists.
+
+
 def linear_merge(list1, list2):
-    # +++your code here+++
-    return sorted(list1 + list2)
+    i = 0
+    j = 0
+    while i < len(list1) and j < len(list2):
+        if list1[i] < list2[j]:
+            i += 1
+        else:
+            list1.insert(i, list2[j])
+            j += 1
+    list1 += list2[j:]
+    return list1
 
 # Note: the solution above is kind of cute, but unforunately list.pop(0)
 # is not constant time with the standard python list implementation, so
@@ -46,29 +54,29 @@ def linear_merge(list1, list2):
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
 def test(got, expected):
-  if got == expected:
-    prefix = ' OK '
-  else:
-    prefix = '  X '
-  print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
+    if got == expected:
+        prefix = ' OK '
+    else:
+        prefix = '  X '
+    print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
 
 
 # Calls the above functions with interesting inputs.
 def main():
-  print('remove_adjacent')
-  test(remove_adjacent([1, 2, 2, 3]), [1, 2, 3])
-  test(remove_adjacent([2, 2, 3, 3, 3]), [2, 3])
-  test(remove_adjacent([]), [])
+    print('remove_adjacent')
+    test(remove_adjacent([1, 2, 2, 3]), [1, 2, 3])
+    test(remove_adjacent([2, 2, 3, 3, 3]), [2, 3])
+    test(remove_adjacent([]), [])
 
-  print
-  print('linear_merge')
-  test(linear_merge(['aa', 'xx', 'zz'], ['bb', 'cc']),
-       ['aa', 'bb', 'cc', 'xx', 'zz'])
-  test(linear_merge(['aa', 'xx'], ['bb', 'cc', 'zz']),
-       ['aa', 'bb', 'cc', 'xx', 'zz'])
-  test(linear_merge(['aa', 'aa'], ['aa', 'bb', 'bb']),
-       ['aa', 'aa', 'aa', 'bb', 'bb'])
+    print()
+    print('linear_merge')
+    test(linear_merge(['aa', 'xx', 'zz'], ['bb', 'cc']),
+         ['aa', 'bb', 'cc', 'xx', 'zz'])
+    test(linear_merge(['aa', 'xx'], ['bb', 'cc', 'zz']),
+         ['aa', 'bb', 'cc', 'xx', 'zz'])
+    test(linear_merge(['aa', 'aa'], ['aa', 'bb', 'bb']),
+         ['aa', 'aa', 'aa', 'bb', 'bb'])
 
 
 if __name__ == '__main__':
-  main()
+    main()

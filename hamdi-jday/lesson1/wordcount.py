@@ -52,17 +52,17 @@ def cleanwords(strings):
     result = []
     for value in strings:
         value = value.strip()
-        value = re.sub('[#()!?:+-/.\[\]\./.=0123456789]',' ',value)
+        value = re.sub('[#()!?:+-/.\[\]\./.=0123456789]', ' ', value)
         result.append(value)
     return result
 
 
 def helper(filename):
-    data = open(filename,'r').read().replace('\n','').split(' ')
+    data = open(filename, 'r').read().replace('\n', '').split(' ')
     result = dict()
     for word in cleanwords(data):
-        result[word.lower()] = result.get(word.lower(),0) + 1
-    #print(result)
+        result[word.lower()] = result.get(word.lower(), 0) + 1
+    # print(result)
     return(result)
 
 
@@ -70,26 +70,31 @@ def helper(filename):
 def print_words(filename):
     for word in sorted(helper(filename), key=helper(filename).get, reverse=True):
         print(word, ' ', helper(filename)[word])
+
+
 def print_top(filename):
     for word in sorted(helper(filename), key=helper(filename).get, reverse=True)[:20]:
         print(word, ' ', helper(filename)[word])
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-def main():
-  if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print('unknown option: ' + option)
-    sys.exit(1)
+
+def main():
+    if len(sys.argv) != 3:
+        print('usage: ./wordcount.py {--count | --topcount} file')
+        sys.exit(1)
+
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print('unknown option: ' + option)
+        sys.exit(1)
+
 
 if __name__ == '__main__':
-  main()
+    main()

@@ -6,10 +6,10 @@ Created on Sun Sep 25 08:57:24 2016
 """
 
 
-for n in range(2,10):
-    for i in range(2,n):
-        if n%i == 0:
-            print(n, '= ', i , ' * ' , n/i)
+for n in range(2, 10):
+    for i in range(2, n):
+        if n % i == 0:
+            print(n, ' = ', i, ' * ', n / i)
             break
     else:
         print(n, ' est premier')
