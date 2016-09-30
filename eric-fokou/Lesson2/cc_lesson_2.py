@@ -48,7 +48,19 @@ def length_words(array):
 
 # write fizbuzz programm
 def fizbuzz():
-    return
+    for x in xrange(1, 10):
+
+        fizz = not x % 3
+        buzz = not x % 5
+
+    if fizz and buzz:
+        print "FizzBuzz"
+    elif fizz:
+        print "Fizz"
+    elif buzz:
+        print "Buzz"
+    else:
+        print x
 
 
 # Write a function that takes a number and returns a list of its digits.
@@ -110,6 +122,9 @@ class Lesson1Tests(unittest.TestCase):
     def testPigLatin(self):
         self.assertEqual(
             pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")
+
+    def testfizbuzz(self):
+        return
 
 
 def main():
