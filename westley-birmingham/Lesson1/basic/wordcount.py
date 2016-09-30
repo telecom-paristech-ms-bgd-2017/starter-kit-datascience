@@ -57,14 +57,14 @@ def print_words(filename):
                 else:
                     dico[word.lower()] = 1
     sorted(dico)
-    # print(dico)
+    print(dico)
     return dico
 
 
 def print_top(filename):
     dict_sorted = {}
     dict_sorted = sorted(print_words(filename).items(), key=lambda x: x[1], reverse=True)[:20]
-    # print(dict_sorted)
+    print(dict_sorted)
     return dict_sorted
 
 ###
