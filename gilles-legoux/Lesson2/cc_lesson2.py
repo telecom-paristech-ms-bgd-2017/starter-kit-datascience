@@ -10,9 +10,7 @@ def string_times(string, n):
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    for i, num in enumerate(nums):
-        if i == 4:
-            return False
+    for num in nums[:4]:
         if num == 9:
             return True
     return False
@@ -58,8 +56,8 @@ def pigLatin(text):
     pig = ''
     words = text.split()
     for word in words:
-        pig += word[1:].lower() + word[0].lower() + 'ay' + ' '
-    return pig[0].upper() + pig[1:-1]
+        pig += word[1:] + word[0] + 'ay' + ' '
+    return pig[:-1].capitalize()
 
 
 # Here's our "unit tests".
