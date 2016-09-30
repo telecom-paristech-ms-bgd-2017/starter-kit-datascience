@@ -86,10 +86,11 @@ class Lesson1Tests(unittest.TestCase):
     def testPigLatin(self):
         self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
 
-fizbuzz()
 
-# def main():
-#     unittest.main()
-#
-# if __name__ == '__main__':
-#     main()
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()
+
+fizbuzz()
