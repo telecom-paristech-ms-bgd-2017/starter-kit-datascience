@@ -23,12 +23,15 @@
 
 
 def match_ends(words):
-    result = []
-    for word in words:
-        if len(word) >= 2 and word[0] == word[-1]:
-            result.append(word)
-    return len(result)
+    nbw = 0
+    for w in words:
+        if len(w) > 1 and w[0] == w[-1]:
+            nbw += 1
+    return nbw
 
+
+def match_ends1(words):
+    return len([w for w in words if len(w) > 1 and w[0] == w[-1]])
 
 # B. front_x
 # Given a list of strings, return a list with the strings
@@ -37,12 +40,17 @@ def match_ends(words):
 # ['xanadu', 'xyz', 'aardvark', 'apple', 'mix']
 # Hint: this can be done by making 2 lists and sorting each of them
 # before combining them.
+
+
 def front_x(words):
-    x_list = [word for word in words if word[0] == 'x']
-    x_list.sort()
-    sort_list = [word for word in words if word[0] != 'x']
-    sort_list.sort()
-    return x_list + sort_list
+    xList = []
+    oList = []
+    for w in words:
+        if w[0] == "x":
+            xList.append(w)
+        else:
+            oList.append(w)
+    return sorted(xList) + sorted(oList)
 
 
 # C. sort_last
@@ -52,13 +60,13 @@ def front_x(words):
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use a custom key= function to extract the last element form each tuple.
 def sort_last(tuples):
-    result = [t for t in tuples]
-    result.sort(key=lambda x: x[-1])
-    return result
+    return sorted(tuples, key=lambda t: t[1])
 
 
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
+
+
 def test(got, expected):
     if got == expected:
         prefix = ' OK '
@@ -66,15 +74,16 @@ def test(got, expected):
         prefix = '  X '
     print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
 
-
 # Calls the above functions with interesting inputs.
+
+
 def main():
     print('match_ends')
     test(match_ends(['aba', 'xyz', 'aa', 'x', 'bbb']), 3)
     test(match_ends(['', 'x', 'xy', 'xyx', 'xx']), 2)
     test(match_ends(['aaa', 'be', 'abc', 'hello']), 1)
 
-    print
+    print()
     print('front_x')
     test(front_x(['bbb', 'ccc', 'axx', 'xzz', 'xaa']),
          ['xaa', 'xzz', 'axx', 'bbb', 'ccc'])
@@ -83,7 +92,7 @@ def main():
     test(front_x(['mix', 'xyz', 'apple', 'xanadu', 'aardvark']),
          ['xanadu', 'xyz', 'aardvark', 'apple', 'mix'])
 
-    print
+    print()
     print('sort_last')
     test(sort_last([(1, 3), (3, 2), (2, 1)]),
          [(2, 1), (3, 2), (1, 3)])
@@ -91,7 +100,6 @@ def main():
          [(3, 1), (1, 2), (2, 3)])
     test(sort_last([(1, 7), (1, 3), (3, 4, 5), (2, 2)]),
          [(2, 2), (1, 3), (3, 4, 5), (1, 7)])
-
 
 if __name__ == '__main__':
     main()

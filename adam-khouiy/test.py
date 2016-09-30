@@ -121,11 +121,22 @@ def print_top_s(filename):
     print (item[0], item[1])
 
 
-if __name__ == '__main__':
 
+def method1(list,search_age):
+    for age in list.values():
+            if int(age) == int(search_age):
+                    return list.keys()
+
+
+
+
+if __name__ == '__main__':
+    import re
     fileName = r"C:\Users\adam\Desktop\python\basic\small.txt"
 
     #print_words(fileName)
 
     #print_top(fileName)
     print_top_s(fileName)
+
+    print( re.search(r'\b\d+', 'he33llo 42 I\'m a 32 string 30'))

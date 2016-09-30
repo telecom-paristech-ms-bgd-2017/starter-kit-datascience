@@ -23,13 +23,15 @@
 # instead of the actual count.
 # So donuts(5) returns 'Number of donuts: 5'
 # and donuts(23) returns 'Number of donuts: many'
-
 def donuts(count):
-  if count < 10 :
-    result = 'Number of donuts: %s' % count
-  else :
-    result = 'Number of donuts: many'
-  return result
+  # +++your code here+++
+    if count<10 :
+        #str ='Number of donuts: %d'%count ==>is concatenation of string
+        #str = 'Number of donuts: {0}'.format(count) is str.format attribute version
+        return 'Number of donuts: %d'%count
+        #return count
+    else : return "Number of donuts: many"
+
 
 
 # B. both_ends
@@ -38,11 +40,12 @@ def donuts(count):
 # so 'spring' yields 'spng'. However, if the string length
 # is less than 2, return instead the empty string.
 def both_ends(s):
-  if len(s) < 2 :
-    result = ""
-  else :
-    result = s[:2] + s[-2:]
-  return result
+  # +++your code here+++
+    if len(s)<2:
+        return ''
+    else:
+        #s= s[:2]+s[-2:]
+        return s[:2]+s[-2:]
 
 
 # C. fix_start
@@ -55,8 +58,10 @@ def both_ends(s):
 # Hint: s.replace(stra, strb) returns a version of string s
 # where all instances of stra have been replaced by strb.
 def fix_start(s):
-  troncated = s[1:].replace(s[0], '*')
-  return s[0] + troncated
+  # +++your code here+++
+  s1 = s[1:]
+  s1 = s1.replace(s[0],'*')
+  return s[0]+s1
 
 
 # D. MixUp
@@ -67,16 +72,10 @@ def fix_start(s):
 #   'dog', 'dinner' -> 'dig donner'
 # Assume a and b are length 2 or more.
 def mix_up(a, b):
-  if len(a)>1 and len(b)>1 :
-    if len(a)>1 :
-      resultA = b[:2] + a[2:]
-    else :
-      resultA = b[:1]
-    if len(b)>1 :
-      resultB = a[:2] + b[2:]
-    else :
-      resultB = a[:1]
-  return resultA + " " + resultB
+  # +++your code here+++
+  c=b[:2]+a[2:]
+  b=a[:2]+b[2:]
+  return c+' '+b
 
 
 # Provided simple test() function used in main() to print
@@ -86,13 +85,13 @@ def test(got, expected):
     prefix = ' OK '
   else:
     prefix = '  X '
-  print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
+  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
 
 
 # Provided main() calls the above functions with interesting inputs,
 # using test() to check if each result is correct or not.
 def main():
-  print('donuts')
+  print 'donuts'
   # Each line calls donuts, compares its result to the expected for that call.
   test(donuts(4), 'Number of donuts: 4')
   test(donuts(9), 'Number of donuts: 9')
@@ -100,22 +99,22 @@ def main():
   test(donuts(99), 'Number of donuts: many')
 
   print
-  print('both_ends')
+  print 'both_ends'
   test(both_ends('spring'), 'spng')
   test(both_ends('Hello'), 'Helo')
   test(both_ends('a'), '')
   test(both_ends('xyz'), 'xyyz')
 
-  
+
   print
-  print('fix_start')
+  print 'fix_start'
   test(fix_start('babble'), 'ba**le')
   test(fix_start('aardvark'), 'a*rdv*rk')
   test(fix_start('google'), 'goo*le')
   test(fix_start('donut'), 'donut')
 
   print
-  print('mix_up')
+  print 'mix_up'
   test(mix_up('mix', 'pod'), 'pox mid')
   test(mix_up('dog', 'dinner'), 'dig donner')
   test(mix_up('gnash', 'sport'), 'spash gnort')
