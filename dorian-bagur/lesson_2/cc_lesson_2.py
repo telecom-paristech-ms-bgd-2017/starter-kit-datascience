@@ -30,11 +30,9 @@ def array_front9(nums):
 def last2(string):
     ch = string[-2:]
     count = 0
-    for k, c in enumerate(string):
-        if k + 1 < len(string) - 2:
-            cc = c + string[k + 1]
-            if cc == ch:
-                count += 1
+    for k, c in enumerate(string[:-4]):
+        if c + string[k + 1] == ch:
+            count += 1
     return count
 
 

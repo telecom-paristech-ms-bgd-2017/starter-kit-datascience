@@ -16,14 +16,15 @@ print string_times("chaine",3)
 # in the array is a 9. The array length may be less than 4.
 
 def array_front9(nums):
-    if len(nums) > 4:
-        return 
+    if len(nums) < 4:
+        return False
     else :
-        for i in range(0,4):
+        for i in range(0,3):
             if nums[i] == 9:
                 return True
-        return False
-    return
+    return False
+
+
 
 
 # Given a string, return the count of the number of times
@@ -49,8 +50,7 @@ def last2(string):
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    map (lambda x:len(array),['test','chaine'])
-    return
+    return [len(mot) for mot in array]
 
 #write fizbuzz programm
 def fizzbuzz():
@@ -70,13 +70,15 @@ def fizzbuzz():
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-  return
+    return [int(i) for i in str(number)]
+
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-  return
+    return ' '.join([word[1:] + word[0] + 'ay' for word in text.split(' ')])
+
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -105,7 +107,7 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(number2digits(4985098) , [4,9,8,5,0,9,8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
+        self.assertEqual(pigLatin("the quick brown fox") , "hetay uickqay rownbay oxfay")
 
 
 
