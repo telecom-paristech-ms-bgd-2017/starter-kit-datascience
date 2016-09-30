@@ -96,7 +96,6 @@ class Lesson1Tests(unittest.TestCase):
 
 def main():
     unittest.main()
-    print last2('hixxhi')
 
 
 if __name__ == '__main__':
