@@ -17,7 +17,7 @@ print string_times("chaine",3)
 
 def array_front9(nums):
     if len(nums) > 4:
-        return ("Erreur")
+        return 
     else :
         for i in range(0,4):
             if nums[i] == 9:
@@ -30,18 +30,18 @@ def array_front9(nums):
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    tab = []
-    len = length(string)
+    tab = {}
+    n = len(string)
     if len < 2:
         return 0
     else :
         for i in range(n):
-            mot = mot[i:i+2]
-            if tab in tab.keys:
-                tab[mot]+=tab+1
+            mot = string[i:i+2]
+            if mot in tab.keys():
+                tab[mot]+=1
             else :
                 tab[mot]=0
-        return tab[mot[len-2:len]]
+        return tab[string[n-2:n]]
 
     #return
 
@@ -49,6 +49,7 @@ def last2(string):
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
+    map (lambda x:len(array),['test','chaine'])
     return
 
 #write fizbuzz programm
