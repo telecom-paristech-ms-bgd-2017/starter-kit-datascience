@@ -5,40 +5,86 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return
+    if type(n) is not int:
+        return "Not an integer"
+    elif n < 0 :
+        return "Not a positive integer"
+
+    result = string
+    for i in range (1,n):
+        result += string
+    return result
+
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-
-  return
+    for i in range(0,4):
+        if nums[i] == 9:
+            return True
+    return False
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    return
+    pattern = string[-2:]
+    count = 0
 
+    for i in range(0,len(string)-2):
+        tmp = string[i:i+2]
+        if tmp == pattern:
+            count += 1
+    return count
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    return
+    subarray = []
+    for word in array:
+        subarray.append(len(word))
+    return subarray
 
 #write fizbuzz programm
-def fizbuzz():
+def fizbuzz(n):
+  for i in range(0,n):
+    if (i % 15) == 0:
+        print("Fizbuzz")
+    elif (i % 3) == 0:
+        print("Fiz")
+    elif (i % 5) == 0:
+        print("buzz")
   return
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-  return
+    string = str(number)
+    array = []
+    for integer in string:
+        array.append(int(integer))
+    return array
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-  return
+  translate = ""
+  words = text.split(" ")
+
+  first = words[0]
+  first = first.lower()
+
+  translate += first[1].upper() + first[2:] + first[0] + "ay"
+
+  for i in range(1,len(words)):
+        word = words[i]
+        tmp = " "
+        tmp += word[1:] + word[0].lower()
+        tmp += "ay"
+        translate += tmp
+
+  return translate
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
