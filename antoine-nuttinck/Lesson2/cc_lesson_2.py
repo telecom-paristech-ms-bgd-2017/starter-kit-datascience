@@ -47,7 +47,7 @@ def length_words(array):
 
 
 def fizbuzz():
-    for x in range(1, 100):
+    for x in range(1, 101):
         if x % 15 == 0:
             print("fizbuzz\n")
         elif x % 3 == 0:
@@ -112,8 +112,8 @@ class Lesson1Tests(unittest.TestCase):
 
 
 def main():
-    unittest.main()
     fizbuzz()
+    unittest.main()
 
 if __name__ == '__main__':
     main()
