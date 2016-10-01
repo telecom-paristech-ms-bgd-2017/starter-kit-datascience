@@ -35,6 +35,11 @@ def last2(string):
 def length_words(array):
     dico = [len(word) for word in array]
     return dico
+<<<<<<< HEAD
+=======
+    #Autre solution dessous avec un map
+    # return list(map(lambda x:len(x),array))
+>>>>>>> addeb81... exos lecon 2
 
 
 # write fizbuzz programm
