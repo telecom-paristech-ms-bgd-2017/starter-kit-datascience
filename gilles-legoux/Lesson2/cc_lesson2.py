@@ -45,10 +45,9 @@ def fizz_buzz(n):
         return 'FizzBuzz'
     if n % 3 == 0:
         return 'Fizz'
-    elif n % 5 == 0:
+    if n % 5 == 0:
         return 'Buzz'
-    else:
-        return n
+    return n
 
 
 # Write a function that takes a number and returns a list of its digits.
