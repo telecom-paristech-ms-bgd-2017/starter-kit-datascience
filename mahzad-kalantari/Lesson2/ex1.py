@@ -33,11 +33,15 @@ def last2(string):
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-def length_words(array):
+def length_words_1(array):
     list_of_word_number=[]
     for a in array:
         list_of_word_number.append(len(a))
     return list_of_word_number
+
+def length_words(array):
+    return [len(x) for x in array]
+
 
 #write fizbuzz programm
 #Écrire un programme qui affiche les nombres de 1 à 199.
@@ -62,11 +66,17 @@ def fizbuzz():
 
 
 #Write a function that takes a number and returns a list of its digits.
-def number2digits(number):
+def number2digits_1(number):
     list_of_digit=[]
     for num in str(number):
         list_of_digit.append(int(num))
     return list_of_digit
+
+def number2digits(number):
+    return [int(num) for num in str(number)]
+
+
+
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
