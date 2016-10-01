@@ -11,61 +11,67 @@ def string_times(string, n):
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    for num in nums[:4]:
-        if num == 9:
-            return True
-    return False
-
+    bol =False
+    for i in nums[:3]:
+        if (i == 9):
+            bol =True
+    return bol
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    last = string[-2:]
-    i = 0
-    for index, lettre in enumerate(string):
-        if index != 0:
-            if (string[index - 1] + string[index] == last):
-                i += 1
-    return i - 1
+
+    return len([n for n in range(len(string [:-2])) if string.find(string[-2:], n) == n])
 
 
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the correponding words.
 def length_words(array):
-    dico = [len(word) for word in array]
-    return dico
-    # Autre solution dessous avec un map
-    # return list(map(lambda x:len(x),array))
+    len_word = []
+    for word in array:
+        len_word.append(len(word))
+
+    return len_word
 
 
 # write fizbuzz programm
-def fizbuzz():
-    for i in range(1,200):
-        if i%15 == 0:
-            print("FizzBuz")
-        elif i%3 == 0:
-            print ("Fizz")
-        elif i%5 == 0:
-            print("Buzz")
-        else:
-            print(i)
+def fizbuzz(chiffre):
+    string = ""
+    if chiffre % 3 and not chiffre % 5:
+        string = "fiz"
+    elif chiffre % 5 and not chiffre % 3:
+        string = "buzz"
+    elif chiffre % 3 and chiffre % 5:
+        string = "fizbuzz"
+    return string
 
 
 # Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    return list(map(lambda char:int(char),str(number)))
+    return [int(d) for d in str(number)]
 
 
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-    text_traduit=""
-    for word in text.split(" "):
-        word_traduit = word[1:] + word[0] + "ay"
-        text_traduit += word_traduit.lower() + " "
-    return text_traduit.strip(" ").capitalize()
+    list = text.split()
+    ret_lis = []
+    i =0
+    for word in list:
+        i = i+1
+        if i==1:
+           word = word[1:2].upper()+word[2:len(word)]+word[0:1].lower() + "ay"
+           ret_lis.append(word)
+        else :
+            word = word[1:len(word)] + word[0:1].lower() + "ay"
+            ret_lis.append(word)
+        if i<len(list):
+            ret_lis.append(" ")
+
+    return "".join(ret_lis)
+
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -95,10 +101,6 @@ class Lesson1Tests(unittest.TestCase):
     def testPigLatin(self):
         self.assertEqual(pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")
 
-    def testFizzBuss(self):
-        fizbuzz()
-
-
 
 def main():
     unittest.main()
@@ -106,5 +108,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

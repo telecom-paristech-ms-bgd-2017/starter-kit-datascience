@@ -3,55 +3,100 @@ import unittest
 
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
-
 def string_times(string, n):
-    return string*n
+    if not isinstance(n , int):     #if n n'est pas un entier
+        return "bad argument"
+    if not isinstance(string , str):    #if string n'est pas une chaine de caractères
+        return "bad argument"  * string
+       
+    return string * n
+
+
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    is9=any([ii == 9 for ii in nums[:min([4, len(nums)])]])
-    return is9
+    return_value = False
+    if(len(nums) >= 4):
+        for num in nums[0:3]:
+            if num == 9:
+                return_value = True
+            else:
+                return_value = False
+    return return_value
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    count=sum([string[y : y + 2]==string[-2:] for y in range(len(string)-2)])
-    return count 
+    count = 0
+    size = len(string) - 2      #on enlève les 2 derniers caractères de la chaine
+    if len(string) > 4:
+        for i in range(0, size - 1):    #par rappor à C, python tient compte du size-ième terme même si on part de 0
+            if string[i:(i + 2)] == string[-2:]:
+                count += 1
+    return count
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-def length_words(array): 
-    return [len(ii) for ii in array]
+def length_words(array):
+    int_array = []
+    # contenu de map
+    # à tout variable word, on associe la fonction 'len'
+    # f:x inclus dans array, on asscie f(x) = list(len(x)).
+    int_array = list(map(lambda word: len(word), array))
+    return int_array 
+
+
 #write fizbuzz programm
-def fizbuzz():    
-    f = lambda x: 'fizz' if x%3==0 else ''
-    b = lambda x: 'buzz' if x%5==0 else ''
-    n = lambda x: str(x) if x%5!=0 and x%3!=0 else ''
-    test = [f(ii)+b(ii)+n(ii) for ii in range(1,101)]    
-    return ' '.join(test)
-    
+def fizbuzz():
+  while True:
+    try:
+        value = int(input("Give me a number : "))
+    except ValueError:
+        print('Could you at least give me an actual number?')
+        continue
+
+    if value % 3 == 0 and value % 5 == 0:
+     print('fizbuzz')
+    elif value % 3 == 0:
+     print('fizz')
+    elif value % 5 == 0:
+     print('buzz')
+    else:
+      print ('is not fizbuzz')
+      break
+
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    nSTr=str(number)
-    return [int(ii) for ii in nSTr]
+    l_of_digits = []
+    for char in str(number):
+        l_of_digits.append(int(char))
+    return l_of_digits
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
+def make_pig(word):
+    new_word = word[1:len(word)] + (word[:1]).lower() + 'ay'
+    return new_word
+
 def pigLatin(text):
     
-    c = (lambda x: x[1:] + x[0]+'ay' if x[0].islower()
-    else x[1:].capitalize() + x[0].lower() + 'ay')  
-    
-    newstr=[c(ii) for ii in text.strip().split()]
-    return ' '.join(newstr).rstrip()
- 
+    new_text = ''
+    split_text_list = text.split()    
+    list_after_make_pig = list(map(lambda word: make_pig(word), split_text_list))
+    for pig_word in list_after_make_pig:
+        new_text += pig_word + ' '
+
+    return new_text[0:1].upper() + new_text[1:len(new_text)-1]
+
+
+
 # Here's our "unit tests".
-class Lesson1Tests(unittest.TestCase):
+class Lesson1Tests(unittest.TestCase): #heritage => chercher unittest python
 
     def testArrayFront9(self):
         self.assertEqual(array_front9([1, 2, 9, 3, 4]) , True)
@@ -83,6 +128,8 @@ class Lesson1Tests(unittest.TestCase):
 
 def main():
     unittest.main()
+    #fizbuzz()
+    
 
 if __name__ == '__main__':
     main()
