@@ -39,7 +39,6 @@ print_words() and print_top().
 
 import sys
 
-
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
@@ -47,62 +46,69 @@ import sys
 # Then print_words() and print_top() can just call the utility function.
 
 ###
+def show_words(result):
+    for t in result:
+        print(t[0] , t[1])
+
+def count_words(filename):
+    
+    result = []
+    _tuple = ()
+    words = []
+    cpt = 0
+    
+    with open(filename, 'r') as f:  
+        words_init = f.read().split()
+        print("nombre total de mots ", len(words_init))
+        
+        #conversion in lower string
+        for word in words_init:    
+            words.append(word.lower())
+    
+        words.sort()
+        
+        for i in range(0, len(words)):
+            _tuple = (words[i], )
+            while (words[cpt] != words[i]) and (cpt < len(words)) :
+                cpt = cpt + 1
+            _tuple += (cpt, ) 
+            result.append(_tuple)        
+            i = cpt      
+            cpt = 0
+    f.close()
+    
+    return result
+    
+    
+def print_words(filename):
+    
+    show_words(count_words(filename))
+
+###
+def print_top(filename):
+    
+    result = count_words(filename)
+    show_words(result[:20])     # les 20 premiers
+
+
+
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-
-
-def liste_mots(filename):
-    countWord = {}
-
-    with open(filename, "r") as fichier:
-        for line in fichier:
-            listeMots = line.strip().split(" ")
-            for mot in listeMots:
-                if mot.lower() in countWord:
-                    countWord[mot.lower()] += 1
-                else:
-                    countWord[mot.lower()] = 1
-    return countWord
-
-
-def print_words(filename):
-    countWord = liste_mots(filename)
-
-    motsTries = sorted(countWord.items(), key=lambda col: col[0])
-
-    for mot in motsTries:
-        print(mot[0] + " ! " + str(mot[1]))
-
-
-def print_top(filename):
-    countWord = liste_mots(filename)
-
-    motsTriesParNombreApparitions = sorted(countWord.items(), key=lambda col: col[1], reverse=True)
-
-    i = 0
-    for mot in motsTriesParNombreApparitions:
-        print(mot[0] + " ! " + str(mot[1]))
-        i += 1
-        if (i > 5):
-            break
-
-#test modif
 def main():
-    if len(sys.argv) != 3:
-        print('usage: ./wordcount.py {--count | --topcount} file')
-        sys.exit(1)
+  if len(sys.argv) != 3:
+    print("usage: ./wordcount.py {--count | --topcount} file")
+    sys.exit(1)
 
-    option = sys.argv[1]
-    filename = sys.argv[2]
-    if option == '--count':
-        print_words(filename)
-    elif option == '--topcount':
-        print_top(filename)
-    else:
-        print('unknown option: ' + option)
-        sys.exit(1)
-
+  option = sys.argv[1]
+  filename = sys.argv[2]
+  if option == '--count':
+    print_words(filename)
+  elif option == '--topcount':
+    print_top(filename)
+  else:
+    print("unknown option: " + option)
+    sys.exit(1)
 
 if __name__ == '__main__':
-    main()
+  main()
