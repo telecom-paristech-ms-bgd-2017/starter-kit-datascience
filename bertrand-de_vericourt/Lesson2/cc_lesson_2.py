@@ -69,8 +69,7 @@ def pigLatin(text):
     textPigLatin = ' '
     textList = text.lower().split(' ')
     textList = list(map(lambda word: word[1:] + word[0] + 'ay', textList))
-    print('resultat est: ' + textList[0][0].upper())
-    return textPigLatin.join(textList)
+    return textPigLatin.join(textList).replace(textList[0][0], textList[0][0].upper())
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
