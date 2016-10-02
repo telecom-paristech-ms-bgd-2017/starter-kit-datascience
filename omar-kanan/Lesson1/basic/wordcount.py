@@ -40,9 +40,10 @@ print_words() and print_top().
 import sys
 import collections
 
+
 def print_words(filename):
     count = count_words(filename)
-    
+
     sorted_list = sorted(count.keys())
     for word in sorted_list:
         print(word + ' ' + str(count.get(word)))
@@ -50,41 +51,42 @@ def print_words(filename):
 
 def print_top(filename):
     count = count_words(filename)
-    
+
     top_list = sorted(count, key=count.get, reverse=True)[:20]
     for word in top_list:
         print(word + ' ' + str(count.get(word)))
-            
-            
-            
+
+
 def count_words(filename):
     with open(filename, mode='r') as file:
         words = file.read()
     words = words.split()
-    
+
     count = collections.defaultdict(int)
     for word in words:
         count[word.lower()] += 1
-                
+
     return count
 ###
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-def main():
-  if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print('unknown option: ' + option)
-    sys.exit(1)
+
+def main():
+    if len(sys.argv) != 3:
+        print('usage: ./wordcount.py {--count | --topcount} file')
+        sys.exit(1)
+
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print('unknown option: ' + option)
+        sys.exit(1)
 
 if __name__ == '__main__':
-  main()
+    main()
