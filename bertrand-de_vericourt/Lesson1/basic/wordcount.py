@@ -40,19 +40,13 @@ print_words() and print_top().
 import sys
 import operator
 
-def getKey(item):
-  return item[-1]
-
 def helper_utility(filename):
 	dict = {}
 	f = open(filename,'r')
 	for line in f:
-		words = line.split(' ')
+		words = line.lower().split()
 		for word in words:
-			if word in dict:
-				dict[word] += 1
-			else:
-				dict[word] = 1
+			dict[word] = dict.get(word, 0) + 1
 	return dict
 
 def print_words(filename):
@@ -66,9 +60,9 @@ def print_top(filename):
 	dict = {}
 	i=1
 	dict = helper_utility(filename)
-	dict = sorted(dict.item(), key=getKey)
+	dict = sorted(dict.items(), key=lambda item:item[1], reverse=True)
 	for word in dict:
-		print(word + ' ' + dict[word] + '\n')
+		print(str(word[0]) + ' ' + str(word[1]))
 		i+=1
 		if i == 20:
 			break
@@ -85,7 +79,7 @@ print_top('./alice.txt')
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-"""def main():
+def main():
   if len(sys.argv) != 3:
     print('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
@@ -101,4 +95,4 @@ print_top('./alice.txt')
     sys.exit(1)
 
 if __name__ == '__main__':
-  main()"""
+  main()

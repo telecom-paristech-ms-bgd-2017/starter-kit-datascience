@@ -4,89 +4,81 @@ import unittest
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
 
-def string_times(motorigine, n):
-    if n == 1:
-        return motorigine
-    else:
-        return motorigine + string_times(motorigine, n - 1)
-
+def string_times(string, n):
+    return string * n
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
+
+
 def array_front9(nums):
-    top_9 = 0
-    count = 0
-    if len(nums) >= 4:
-        for num in nums:
-            count += 1
-            if num == 9 and count <= 4:
-                top_9 = 1
-    else:
-        top_9 = 0
-    if top_9 == 1:
-        return True
-    else:
-        return False
+    r = False
+    for i in range(len(nums)):
+        if (i <= 3) and (nums[i] == 9):
+            r = True
+            break
+    return r
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
-def last2(mot):
-    last2car = mot[-2:]
-    newmot = mot[0:len(mot) - 2]
-    ct = 0
-    for c in range(0, len(newmot)):
-        if newmot[int(c): int(c + 2)] == last2car:
-            ct += 1
-    return ct
+# combien de fois se repetent les deux derniers caracteres d'un mot dans le reste du mot
+def last2(string):
+    pattern = string[-2:]
+    # print(pattern)
+    res = 0
+    for i in range(len(string[:-2])):
+        # print(string[i:i + 2])
+        if string[i:i + 2] == pattern:
+            res = res + 1
+    return res
 
 
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the correponding words.
-def length_words(listemots):
-    listeretour = list(map(lambda x: len(x), listemots))
-    return listeretour
+# map + lambda
 
+def length_words(array):
+    r = []
+    for word in array:
+        r.append(len(word))
+    return r
 
 # write fizbuzz programm
-def fizbuzz(nbmax):
 
-    for c in range(0,nbmax):
-        fizz = not c % 3
-        buzz = not c % 5
-        if fizz and buzz:
-            print("Fizzbuzz")
-        elif fizz:
-            print("Fizz")
-        elif buzz:
-            print("Buzz")
-        else:
-            print(c)
+
+def fizbuzz(n):
+    for i in range(1, n):
+        print("Fizz"[i % 3 * 4:] + "Buzz"[i % 5 * 4:])
     return
-
-
 # Write a function that takes a number and returns a list of its digits.
-def number2digits(number):
-    indice = 1
-    listdigit = []
-    for digit in str(number):
-        listdigit.append(int(digit))
-    return listdigit
 
+
+def number2digits(number):
+    res = [int(lettre) for lettre in str(number)]
+    return res
 
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
-def pigLatin(text):
-    pigword =''
-    for word in text.split(' '):
-        pigword  = pigword + word[1:] + word[0:1] + "ay "
-    return  pigword.rstrip()
 
+
+def pigLatin(text):
+    res = ''
+    for word in text.split(" "):
+        temp = word[1:] + word[0] + 'ay'
+        if res == '':
+            res = temp[0].upper() + temp[1:].lower()
+        else:
+            res = res + ' ' + temp
+    return res
 
 # Here's our "unit tests".
+
+
 class Lesson1Tests(unittest.TestCase):
+
     def testArrayFront9(self):
         self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
         self.assertEqual(array_front9([1, 2, 3, 4, 9]), False)
@@ -111,10 +103,11 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(number2digits(4985098), [4, 9, 8, 5, 0, 9, 8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox") , "heTay uickqay rownbay oxfay")
+        self.assertEqual(pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")
 
 
 def main():
+    fizbuzz(200)
     unittest.main()
 
 
