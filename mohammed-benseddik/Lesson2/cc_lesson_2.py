@@ -1,90 +1,96 @@
-# -*- coding: utf-8 -*-
 import unittest
-# Mahzad KALANTARI Septembre 2016
+
 
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
 
-def string_times(string, n):
 
-    return string*n
+def string_times(string, n):
+    if n < 0 :
+        return ""
+    else:
+        return string*n
+    return
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    if len(nums)<4:
-       return False
+    if len(nums) < 4:
+        print("The array length may be less than 4.")
+        return False
     else:
-        if 9 in nums[0:4]:
-             return True
-        else:
-             return False
+        for i in range(0,3):
+            if nums[i] == 9:
+                return True
+        return False
+
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    count=0
-    for n in range(len(string)-2):
-        if string[n:n+2]==string[-2:]:
-            count+=1
-    return count
+    array = {}
+
+    if len(string) < 2:
+        return 0
+    else :
+        for i in range(len(string)):
+            mot = string[i:i+2]
+            if mot in array.keys():
+                array[mot]+=1
+            else :
+                array[mot]=0
+        return array[string[len(string)-2:len(string)]]
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    list_of_word_number=[]
-    for a in array:
-        list_of_word_number.append(len(a))
-    return list_of_word_number
+    list = []
+    for element in array:
+        list.append(len(element))
+    return list
+
 
 #write fizbuzz programm
-#Écrire un programme qui affiche les nombres de 1 à 199.
-#Mais pour les multiples de 3, afficher “Fizz” au lieu du nombre
-#et pour les multiples de 5 afficher “Buzz”.
-#Pour les nombres multiples de 3 et 5, afficher “FizzBuzz”.
-
-
 def fizbuzz():
-    num_list=[]
-    for num in range(0,199):
-        if num%3==0  and not num%5==0 :
-           num_list.append("Fizz")
-        elif num%5==0 and not num%3==0 :
-             num_list.append("Buzz")
-        elif num%5==0 and num%3==0 :
-             num_list.append("FizzBuzz")
-        else :
-             num_list.append(num)
-    print(num_list)
-    return num_list
-
+    for x in range(1, 200):
+        fizz = not x % 3
+        buzz = not x % 5
+        if fizz and buzz :
+            print("FizzBuzz")
+        elif fizz:
+            print("Fizz")
+        elif buzz:
+            print("Buzz")
+        else:
+            print(x)
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    list_of_digit=[]
-    for num in str(number):
-        list_of_digit.append(int(num))
-    return list_of_digit
+    list = []
+    s = str(number)
+    for digit in s:
+        list.append(int(digit))
+    return list
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
-# "The quick brown fox") , "Hetay uickqay rownbay oxfay"
-
 def pigLatin(text):
-  pig_list=[]
-  split_txt= text.split()
-  for s in split_txt:
-      s = s[1:len(s)]+s[0].lower()+'ay'
-      pig_list.append(s)
+    str = ""
+    words = text.split()
+    for word in words:
+        word = word.lower()
+        if word == words[0].lower():
+            str += word[1].upper() + word[2:].lower() + word[0] + "ay" + " "
+        else:
+            if word == words[-1:]:
+                str += word[1:] + word[0] + "ay"
+            else:
+                str += word[1:] + word[0] + "ay" + " "
+    return str
 
-  pig_text= pig_list[0].capitalize()+' '
-
-  for p in pig_list[1:]:
-      pig_text = pig_text + p+' '
-  return pig_text.rstrip()
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -113,9 +119,8 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(number2digits(4985098) , [4,9,8,5,0,9,8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
+        self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay ")
 
-    fizbuzz()
 
 
 def main():

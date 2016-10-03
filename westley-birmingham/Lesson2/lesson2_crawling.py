@@ -1,4 +1,3 @@
-#Crawling course start-kit data science
 import requests
 from bs4 import BeautifulSoup
 
@@ -27,9 +26,9 @@ def computeIndicatorForPage(url):
   print(title)
   print("Likes", number_of_likes)
   print("Dislikes", number_of_dislikes)
-  print ("VIews", number_of_views)
-  print ("Popularity", indicator)
-  print ('=====')
+  print("VIews", number_of_views)
+  print("Popularity", indicator)
+  print('=====')
   metrics = {}
   metrics['number_of_views'] = number_of_views
   metrics['number_of_likes'] = number_of_likes
