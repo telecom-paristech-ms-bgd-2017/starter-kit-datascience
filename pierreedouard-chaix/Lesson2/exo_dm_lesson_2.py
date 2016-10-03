@@ -3,6 +3,8 @@
 
 import requests
 import bs4
+import csv
+import os
 
 URL_BASE = "http://alize2.finances.gouv.fr/communes/eneuro/detail.php?"
 LABEL_COMMUNE = "icom"
@@ -29,8 +31,10 @@ def construireURL(commune, departement, type, param, exercice):
     return URL_BASE + LABEL_COMMUNE + "=" + commune + "&" + LABEL_DEPARTEMENT + "=" + departement + "&" + LABEL_TYPE + "=" + type + "&" + LABEL_PARAM + "=" + param + "&" + LABEL_EXERCICE + "=" + str(exercice)
 
 def recupValeurs(commune, departement, type, param, exercicedebut, exercicefin):
+    RESULTATS = []
     for annee in range(exercicedebut, exercicefin + 1):
         URL = construireURL(commune, departement, type, param, annee)
+
 
         TABLEAU_COMPLET = [[]]
         TABLEAU_SIMPLIFIE = {}
@@ -65,7 +69,8 @@ def recupValeurs(commune, departement, type, param, exercicedebut, exercicefin):
             except IndexError:
                 continue
         TABLEAU_SIMPLIFIE["Valeurs"] = VALEURS
-        print TABLEAU_SIMPLIFIE
+        RESULTATS.append(TABLEAU_SIMPLIFIE)
+    return RESULTATS
 
 def construireIndexAvecZeros(n):
     if n < 10:
@@ -76,12 +81,23 @@ def construireIndexAvecZeros(n):
         return str(n)
 
 def recupValeursCommuneDepartement(departement, type, param, exercicedebut, exercicefin):
+    RESULTATS = []
     for i in range(0,1000):
+        print(i)
         try:
-            recupValeurs(construireIndexAvecZeros(i), departement, type, param, exercicedebut, exercicefin)
+            RESULTATS.append(recupValeurs(construireIndexAvecZeros(i), departement, type, param, exercicedebut, exercicefin))
         except IndexError:
             continue
 
+    try:
+        os.remove("RESULTATS_"+str(departement)+"_"+str(exercicedebut)+"_"+str(exercicefin)+".csv")
+    except OSError:
+        print "Le fichier n'existe pas encore"
+    c = csv.writer(open("RESULTATS_"+str(departement)+"_"+str(exercicedebut)+"_"+str(exercicefin)+".csv", "wb"))
+    c.writerow(["Département", "Ville", "Année", "A Euros par habitant", "A Moyenne de la strate", "B Euros par habitant", "B Moyenne de la strate", "C Euros par habitant", "C Moyenne de la strate", "D Euros par habitant", "D Moyenne de la strate"])
+    for resultat in RESULTATS:
+        print(resultat)
+        c.writerow([resultat[0]["Departement"], resultat[0]["Ville"], resultat[0]["Annee"], resultat[0]["Valeurs"]["A"][0], resultat[0]["Valeurs"]["A"][1],resultat[0]["Valeurs"]["B"][0], resultat[0]["Valeurs"]["B"][1], resultat[0]["Valeurs"]["C"][0], resultat[0]["Valeurs"]["C"][1], resultat[0]["Valeurs"]["D"][0], resultat[0]["Valeurs"]["D"][1]])
 
 # Récupérer les valeurs pour toutes les villes du Calvados
-recupValeursCommuneDepartement(construireIndexAvecZeros(14), "BPS", "5", 2010, 2014)
+recupValeursCommuneDepartement(construireIndexAvecZeros(95), "BPS", "5", 2014, 2014)
