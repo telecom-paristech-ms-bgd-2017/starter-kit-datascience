@@ -7,10 +7,9 @@ detail_base_url = base_url + "detail.php?type=BPS"
 dep_base_url = base_url + "RDep.php"
 
 def getDataByExerciceAndDepartment(year, dep):
-    communes = communesByDepartment(dep)
-    # print(table)
-
-    id_communes = []
+    for name, ID in communesByDepartment(dep).items():
+        print("Commune: " + name)
+        getDataByExerciceAndDepartmentAndCommune(year, dep, ID)
 
 
 def getDataByExerciceAndDepartmentAndCommune(year, dep, com):
@@ -58,19 +57,19 @@ def communesByDepartment(dep):
 
     data = {'DEP': dep, 'TYPE': 'BPS'}
 
+    result = {}
     for link_lettre in table.select("td")[3:-1]:
         data['LETTRE'] = link_lettre.text
         resp = requests.post(dep_base_url, data = data)
         soup = BeautifulSoup(resp.text, 'html.parser')
         cols = soup.select("table")[1:]
         communes = cols[0].select('td')
-        communes.append(cols[1].select('td'))
+        communes.extend(cols[1].select('td'))
         for commune in communes:
             href = commune.select('a')[0]['href']
-            print(href)
             match_id = regex_id_commune.search(href)
-            print(match_id.group(1))
-
+            result[cell_content(commune)] = match_id.group(1)
+    return result
 
 # TEST
 # getDataByExerciceAndDepartmentAndCommune('2013', '075', '056')
