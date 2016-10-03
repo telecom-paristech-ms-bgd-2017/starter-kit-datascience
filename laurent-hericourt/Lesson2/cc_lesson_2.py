@@ -35,25 +35,37 @@ def last2(string):
 def length_words(array):
     dico = [len(word) for word in array]
     return dico
+    # Autre solution dessous avec un map
+    # return list(map(lambda x:len(x),array))
 
 
 # write fizbuzz programm
 def fizbuzz():
-    pass
+    for i in range(1,200):
+        if i%15 == 0:
+            print("FizzBuz")
+        elif i%3 == 0:
+            print ("Fizz")
+        elif i%5 == 0:
+            print("Buzz")
+        else:
+            print(i)
 
 
 # Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    string = str(number)
-    return list(string)
+    return list(map(lambda char:int(char),str(number)))
 
 
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-    pass
-
+    text_traduit=""
+    for word in text.split(" "):
+        word_traduit = word[1:] + word[0] + "ay"
+        text_traduit += word_traduit.lower() + " "
+    return text_traduit.strip(" ").capitalize()
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -76,12 +88,16 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(length_words(['hello', 'toto']), [5, 4])
         self.assertEqual(length_words(['s', 'ss', '59fk', 'flkj3']), [1, 2, 4, 5])
 
-    """def testNumber2Digits(self):
+    def testNumber2Digits(self):
         self.assertEqual(number2digits(8849), [8, 8, 4, 9])
         self.assertEqual(number2digits(4985098), [4, 9, 8, 5, 0, 9, 8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")"""
+        self.assertEqual(pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")
+
+    def testFizzBuss(self):
+        fizbuzz()
+
 
 
 def main():
@@ -90,3 +106,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
