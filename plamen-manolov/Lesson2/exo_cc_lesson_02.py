@@ -5,7 +5,9 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-
+    if n isinstance (n,int):
+            return 'Bad argument'
+    if n isinstance (string,string):        
     return strgin * n
 
 # Given an array of ints, return True if one of the first 4 elements
@@ -22,12 +24,14 @@ def array_front9(nums):
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
+    #utiliser [-2:] pour recuperer les 2 derniers car , puis parcourir la chaine et compter
     return
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
+    map(lambda x: len(x),array)
     return
 
 #write fizbuzz programm
