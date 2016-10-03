@@ -1,75 +1,110 @@
 import unittest
-
+import math
 
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return string * n
+    try:
+        s = str(string)
+        nb = int(n)
+        if nb >= 0:
+            return n*s
+        else:
+            return n + " should not be < 0"
+    except ValueError:
+        return str(n) + "is not a valid argument"
+
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
+
+
 def array_front9(nums):
-    result = False
-    for num in nums:
-        if num == 9 and nums.index(num) < 4:
-            result = True
-    return result
+    try:
+        l = len(nums)
+        m = min(l, 4)
+        if 9 in nums[0:m]:
+            return True
+        else:
+            return False
+    except ValueError:
+        print("Bad argument")
+        return False
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    dict = {}
-    count = 0
-    for n in range(0,len(string)-2):
-        subs = string[n:n + 2]
-        if subs == string[-2:]:
-            count += 1
-    return count
+    if(len(string)) > 3:
+        last_2 = string[-2:]
+        c = 0
+        for i in range(0, len(string)-2):
+            sub_str = string[i] + string[i+1]
+            if sub_str == last_2:
+                c += 1
+        return c
+    else:
+        return 0
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-# ----- MAP() est à la base de la parallélisation
-# ----- ATTENTION! la fonction map() change les lists en 'objets', 
-# ----- il faut rendre le format liste avec list()
+
+
 def length_words(array):
-    return list(map(lambda x: len(x), array))
+    if len(array) < 1:
+        return "Bad argument"
+    res = []
+    for word in array:
+        res.append(len(word))
+    return res
 
 #write fizbuzz programm
+
+
 def fizbuzz():
-    for x in range(1, 200):
-
-        # ----- '%' stands for 'modulus': it returns the remainder of the division
-        fizz = not x % 3
-        buzz = not x % 5
-     
-        if fizz and buzz:
-            result = "FizzBuzz"
-        elif fizz:
-            result = "Fizz"
-        elif buzz:
-            result = "Buzz"
+    for i in range(1, 100):
+        if i % 15 == 0:
+            print(str(i) + ': fizzbuzz')
+        elif i % 3 == 0:
+            print(str(i) + ': fizz')
+        elif i % 5 == 0:
+            print(str(i) + ': buzz')
         else:
-            result = x
+            print(str(i))
+    return
 
-        return result
 
 #Write a function that takes a number and returns a list of its digits.
+
+
 def number2digits(number):
-    results = map(int, list(str(number)))
-    return list(map(int, results))
+    res = [int(i) for i in str(number)]
+    return res
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
+
+
 def pigLatin(text):
-    textPigLatin = ' '
-    textList = text.lower().split(' ')
-    textList = list(map(lambda word: word[1:] + word[0] + 'ay', textList))
-    return textPigLatin.join(textList).replace(textList[0][0], textList[0][0].upper())
+    words = str(text).split(' ')
+    new_text = ""
+    n = 0
+    for w in words:
+        first_letter = str(w[0]).lower()
+        new_word = w[1:] + first_letter + "ay"
+        if n == 0:
+            new_word = new_word[0].upper() + new_word[1:]
+        if n != len(words)-1:
+            new_text += new_word + " "
+        else:
+            new_text += new_word
+        n += 1
+    return new_text
+
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -103,7 +138,8 @@ class Lesson1Tests(unittest.TestCase):
 
 
 def main():
-    unittest.main()
+    #unittest.main()
+    fizbuzz()
 
 if __name__ == '__main__':
     main()
