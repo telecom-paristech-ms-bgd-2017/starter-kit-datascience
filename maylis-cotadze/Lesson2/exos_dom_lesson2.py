@@ -5,40 +5,76 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return string * n
+    if not isinstance(n,int):
+        return 'bad argument'
+    if not isinstance(string,str):
+        return 'bad argument'
+    if n>=0:
+        return string * n
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
+    if len(nums)<4:
+        if 9 in nums:
+            return True
+        else :
+            return False
+    else:
+        if 9 in nums[:5]:
+            return True
+        else:
+            return False
 
-  return
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    return
+    if len(string) < 2:
+        print("Error: string is too short")
+
+    end_char = string[-2:]
+    count=0
+    for i in range(len(string)-3):
+        if string[i,i+2]==end_char:
+            count +=1
+    return count
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    return
+    ## Utiliser la fonction map
+    return list(map(lambda x : len(x), array))
 
 #write fizbuzz programm
 def fizbuzz():
-  return
+    s = ""
+    for i in xrange(1,101):
+        if i%15 == 0:
+            s += "fizbuzz"
+        elif i%3 == 0:
+            s += "fiz"
+        elif i%5 == 0:
+            s+= "buzz"
+        else:
+            s+= str(i)
+    return s
+
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-  return
+    return [int(i) for i in str(number)]
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-  return
+    listeText = text.split(' ')
+    return ' '.join([word[1:] + word[0] + 'ay' for word in listeText]).capitalize()
+
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
