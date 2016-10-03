@@ -55,7 +55,7 @@ def exportCsv(commune):
                         extrasaction='ignore', delimiter = ';')
             w.writerow(commune)
     except IOError :
-        print("I/O error")
+        print("Erreur d\'entrée sortie")
     return
 
 #paris = getAccountsByYear([X for X in range(2010,2016)],'056','075')
