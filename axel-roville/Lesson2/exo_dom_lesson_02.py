@@ -95,11 +95,11 @@ def prettyPrint(results):
         if not args:
             continue
 
-        # print('==================================================')
+        print('==================================================')
         print(args['com'] + " id:" + str(args['com_id']) + " year:" + args['year'])
-        # for key, lineNb in lines:
-        #     cells = args[key]
-        #     print(key + "\t€/hbt:" + cells[0] + "\tmoyenne:" + cells[1])
+        for key, lineNb in lines:
+            cells = args[key]
+            print(key + "\t€/hbt:" + cells[0] + "\tmoyenne:" + cells[1])
 
 # Récupérer la ligne numéro 'lineNb' de table, cellules 1 et 2 (0 based)
 def cellsInLine(table, lineNb):
@@ -192,7 +192,7 @@ def animateWaiting(msg):
     idx = 0
     while pool_busy:
         s = str(total_communes).zfill(3) + " communes to go " if total_communes > 0 else ""
-        # sys.stdout.write(s + animation[idx % len(animation)] + "\r")
+        sys.stdout.write(s + animation[idx % len(animation)] + "\r")
         idx += 1
         time.sleep(0.1)
     return
