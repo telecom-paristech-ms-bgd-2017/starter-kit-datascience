@@ -7,6 +7,7 @@ import unittest
 def string_times(string, n):
     return ''.join([string for _ in range(n)])
 
+
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
@@ -22,12 +23,8 @@ def last2(string):
         return
 
     str_to_count = string[-2:]
-
-    count = 0
-    for i in range(len(string) - 3):
-        if string[i:i+2] == str_to_count:
-            count += 1
-    return count
+    l = range(len(string) - 3)
+    return len([1 for i in l if string[i:i+2] == str_to_count])
 
 
 #Write a program that maps a list of words into a list of
@@ -37,7 +34,6 @@ def length_words(array):
 
 #write fizbuzz programm
 def fizbuzz():
-
     for i in range(1, 101):
         s = ""
         if i % 3 == 0:
@@ -55,7 +51,7 @@ def number2digits(number):
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
     t = text.split(' ')
-    return ' '.join([w[1:]+w[0]+'ay' for w in t]).capitalize()
+    return ' '.join([w[1:] + w[0] + 'ay' for w in t]).capitalize()
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
@@ -88,9 +84,8 @@ class Lesson1Tests(unittest.TestCase):
 
 
 def main():
+    fizbuzz()
     unittest.main()
 
 if __name__ == '__main__':
     main()
-
-fizbuzz()
