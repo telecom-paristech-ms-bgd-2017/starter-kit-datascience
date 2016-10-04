@@ -21,7 +21,7 @@ def array_front9(nums):
 
 
 # Given a string, return the count of the number of times
-# that a substring length 2 appears  in the string and also as
+# that a substring length 2 appears in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1
 # (we won't count the end substring).
 def last2(string):
@@ -45,10 +45,9 @@ def fizz_buzz(n):
         return 'FizzBuzz'
     if n % 3 == 0:
         return 'Fizz'
-    elif n % 5 == 0:
+    if n % 5 == 0:
         return 'Buzz'
-    else:
-        return n
+    return n
 
 
 # Write a function that takes a number and returns a list of its digits.

@@ -1,47 +1,59 @@
 import requests
 from bs4 import BeautifulSoup
+import sys
 
+def getData(year):
+  
+  url = requests.get('http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='+str(year))
+  soup = BeautifulSoup(url.text,'html.parser')
+  tab = saveData(soup)
+  return tab
 
-
-for page in range(2010,2014):
-
-  all_city_count = requests.get('http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='+str(page))
-  soup_city = BeautifulSoup(all_city_count.text,'html.parser')
-
-  euros = []
-  strate = []
-  res_str = soup_city.find_all(class_='bleu')
-
-  for row in res_str:
-    cols = row.find_all(class_='montantpetit G')
-    cols = [ele.text.strip() for ele in cols]
-    
-    if len(cols) == 0:
-      continue
-    else:
-      euros.append(cols[1])
-      strate.append(cols[2])
-
-  dico_euros = {'A': euros[0] , 'B': euros[1],'C': euros[3], 'D' : euros[4]}
-  dico_strate =  {'A': strate[0] , 'B': strate[1],'C': strate[3], 'D' : strate[4]}
+def toString(year, dico):
   
   print('==========')
-  print('Année '+str(page)+' :')
+  print('Année '+str(year)+' :')
   print()
-  print('TOTAL DES PRODUITS DE FONCTIONNEMENT : '+dico_euros['A']+ ' (Euros par habitant)')
-  print('TOTAL DES PRODUITS DE FONCTIONNEMENT : '+dico_strate['A']+ ' (Moyenne de la strate)')
+  print('TOTAL DES PRODUITS DE FONCTIONNEMENT : '+dico['euroA']+ ' (Euros par habitant)')
+  print('TOTAL DES PRODUITS DE FONCTIONNEMENT : '+dico['strateA']+ ' (Moyenne de la strate)')
   print()
-  print('TOTAL DES CHARGES DE FONCTIONNEMENT: '+dico_euros['B']+ ' (Euros par habitant)')
-  print('TOTAL DES CHARGES DE FONCTIONNEMENT : '+dico_strate['B']+ ' (Moyenne de la strate)')
+  print('TOTAL DES CHARGES DE FONCTIONNEMENT: '+dico['euroB']+ ' (Euros par habitant)')
+  print('TOTAL DES CHARGES DE FONCTIONNEMENT : '+dico['strateB']+ ' (Moyenne de la strate)')
   print()
-  print('TOTAL DES RESSOURCES D\'INVESTISSEMENT : '+dico_euros['C']+ ' (Euros par habitant)')
-  print('TOTAL DES RESSOURCES D\'INVESTISSEMENT : '+dico_strate['C']+ ' (Moyenne de la strate)')
+  print('TOTAL DES RESSOURCES D\'INVESTISSEMENT : '+dico['euroC']+ ' (Euros par habitant)')
+  print('TOTAL DES RESSOURCES D\'INVESTISSEMENT : '+dico['strateC']+ ' (Moyenne de la strate)')
   print()
-  print('TOTAL DES EMPLOIS D\'INVESTISSEMENT : '+dico_euros['D']+ ' (Euros par habitant)')
-  print('TOTAL DES EMPLOIS D\'INVESTISSEMENT : '+dico_strate['D']+ ' (Moyenne de la strate)')
+  print('TOTAL DES EMPLOIS D\'INVESTISSEMENT : '+dico['euroD']+ ' (Euros par habitant)')
+  print('TOTAL DES EMPLOIS D\'INVESTISSEMENT : '+dico['strateD']+ ' (Moyenne de la strate)')
   print('==========')
 
+def getLine(soup,pos):
+  return soup.find_all(class_ = "montantpetit G")[pos].text.replace('\xa0','')
+
+def saveData(soup):
+  dico = {}
+
+  dico['euroA'] = getLine(soup,1)
+  dico['strateA'] = getLine(soup,2)
+  dico['euroB'] = getLine(soup,4)
+  dico['strateB'] = getLine(soup,5)
+  dico['euroC'] = getLine(soup,10)
+  dico['strateC'] = getLine(soup,11)
+  dico['euroD'] = getLine(soup,13)
+  dico['strateD'] = getLine(soup,14)
+
+  return dico
 
 
+def main(argv):
+  years = [2010, 2011, 2012, 2013]
+
+  for y in years:
+    data = getData(y)
+    toString(y,data)
+
+
+if __name__ == '__main__':
+    main(sys.argv)
 
   
