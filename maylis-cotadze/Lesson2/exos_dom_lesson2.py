@@ -5,72 +5,76 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return string * n
+    if not isinstance(n,int):
+        return 'bad argument'
+    if not isinstance(string,str):
+        return 'bad argument'
+    if n>=0:
+        return string * n
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    result = False
-    for num in nums:
-        if num == 9 and nums.index(num) < 4:
-            result = True
-    return result
+    if len(nums)<4:
+        if 9 in nums:
+            return True
+        else :
+            return False
+    else:
+        if 9 in nums[:5]:
+            return True
+        else:
+            return False
+
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    dict = {}
-    count = 0
-    for n in range(0,len(string)-2):
-        subs = string[n:n + 2]
-        if subs == string[-2:]:
-            count += 1
+    if len(string) < 2:
+        print("Error: string is too short")
+
+    end_char = string[-2:]
+    count=0
+    for i in range(len(string)-3):
+        if string[i,i+2]==end_char:
+            count +=1
     return count
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-# ----- MAP() est à la base de la parallélisation
-# ----- ATTENTION! la fonction map() change les lists en 'objets', 
-# ----- il faut rendre le format liste avec list()
 def length_words(array):
-    return list(map(lambda x: len(x), array))
+    ## Utiliser la fonction map
+    return list(map(lambda x : len(x), array))
 
 #write fizbuzz programm
 def fizbuzz():
-    for x in range(1, 200):
-
-        # ----- '%' stands for 'modulus': it returns the remainder of the division
-        fizz = not x % 3
-        buzz = not x % 5
-     
-        if fizz and buzz:
-            result = "FizzBuzz"
-        elif fizz:
-            result = "Fizz"
-        elif buzz:
-            result = "Buzz"
+    s = ""
+    for i in xrange(1,101):
+        if i%15 == 0:
+            s += "fizbuzz"
+        elif i%3 == 0:
+            s += "fiz"
+        elif i%5 == 0:
+            s+= "buzz"
         else:
-            result = x
+            s+= str(i)
+    return s
 
-        return result
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    results = map(int, list(str(number)))
-    return list(map(int, results))
+    return [int(i) for i in str(number)]
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
 def pigLatin(text):
-    textPigLatin = ' '
-    textList = text.lower().split(' ')
-    textList = list(map(lambda word: word[1:] + word[0] + 'ay', textList))
-    print('resultat est: ' + textList[0][0].upper())
-    return textPigLatin.join(textList)
+    listeText = text.split(' ')
+    return ' '.join([word[1:] + word[0] + 'ay' for word in listeText]).capitalize()
+
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
