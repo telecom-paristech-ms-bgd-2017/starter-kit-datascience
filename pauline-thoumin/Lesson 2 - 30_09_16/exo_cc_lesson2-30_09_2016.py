@@ -86,7 +86,7 @@ def number2digits(number):   ########## OK ############
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
 
-def pigLatin(text):
+def pigLatin(text):     ########## OK ############
 	t=text.split(" ")
 	final=""
 	for el in t : 
