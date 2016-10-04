@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # encoding: utf-8
-# execute: exo_dom_lesson_2.py
+# execute: ./exo_dom_lesson_2.py
 
 import re
 import requests
@@ -50,7 +50,6 @@ def extractData(years):
     params = {'icom': '056', 'type': 'BPS', 'param': '5', 'dep': '075'}
     for year in years:
         print('*** Comptes de la ville de Paris pour {} ***'.format(year))
-        params['exercice'] = str(year)
         params['exercice'] = str(year)
         print(extractDataFromPage(url, params))
 
