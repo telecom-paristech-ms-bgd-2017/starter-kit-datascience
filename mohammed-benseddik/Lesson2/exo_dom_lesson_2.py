@@ -1,8 +1,27 @@
+# @author : BENSEDDIK Mohammed
+# @version : 0.2
+# @desc : Crawler for financial results of accounts of Paris from 2010 to 2015
+
 import requests
 from bs4 import BeautifulSoup
 
+url = "http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice="
+display_str_choice = ["TOTAL DES PRODUITS DE FONCTIONNEMENT = A","TOTAL DES CHARGES DE FONCTIONNEMENT = B",
+                        "TOTAL DES RESSOURCES D'INVESTISSEMENT = C","TOTAL DES EMPLOIS D'INVESTISSEMENT = D"]
+
+def display_value(ligne, display_str):
+    per_habitant = ligne.select('td:nth-of-type(2)')[0].text.replace(u'\xa0','')
+    mean_strat = ligne.select('td:nth-of-type(3)')[0].text.replace(u'\xa0','')
+
+    print("*******************   " + display_str)
+    print("Moyenne par habitant : " + str(per_habitant))
+    print("Moyenne de la strat : " + str(mean_strat))
+
+
+print("Debut ==================================================")
+
 for year in range(2010, 2016):
-    req = requests.get("http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice=" + str(year))
+    req = requests.get(url + str(year))
 
     soup = BeautifulSoup(req.text,'html.parser')
 
@@ -14,36 +33,10 @@ for year in range(2010, 2016):
         title_gen = (ligne.find_all(class_ = 'libellepetit G'))
         if title_gen:
             title = title_gen[0].text
-            if title == "TOTAL DES PRODUITS DE FONCTIONNEMENT = A":
-                per_habitant = ligne.select('td:nth-of-type(2)')[0].text.replace(u'\xa0','')
-                mean_strat = ligne.select('td:nth-of-type(3)')[0].text.replace(u'\xa0','')
-
-                print( "******************* TOTAL DES PRODUITS DE FONCTIONNEMENT = A")
-                print("Moyenne par habitant :" + str(per_habitant))
-                print("Moyenne de la strat :" + str(mean_strat))
-
-            if title == "TOTAL DES CHARGES DE FONCTIONNEMENT = B":
-                per_habitant = ligne.select('td:nth-of-type(2)')[0].text.replace(u'\xa0','')
-                mean_strat = ligne.select('td:nth-of-type(3)')[0].text.replace(u'\xa0','')
-
-                print( "******************* TOTAL DES CHARGES DE FONCTIONNEMENT = B")
-                print("Moyenne par habitant :" + str(per_habitant))
-                print("Moyenne de la strat :" + str(mean_strat))
-
-            if title == "TOTAL DES RESSOURCES D'INVESTISSEMENT = C":
-                per_habitant = ligne.select('td:nth-of-type(2)')[0].text.replace(u'\xa0','')
-                mean_strat = ligne.select('td:nth-of-type(3)')[0].text.replace(u'\xa0','')
-
-                print( "******************* TOTAL DES RESSOURCES D'INVESTISSEMENT = C")
-                print("Moyenne par habitant :" + str(per_habitant))
-                print("Moyenne de la strat :" + str(mean_strat))
-
-            if title == "TOTAL DES EMPLOIS D'INVESTISSEMENT = D":
-                per_habitant = ligne.select('td:nth-of-type(2)')[0].text.replace(u'\xa0','')
-                mean_strat = ligne.select('td:nth-of-type(3)')[0].text.replace(u'\xa0','')
-
-                print( "******************* TOTAL DES EMPLOIS D'INVESTISSEMENT = D")
-                print("Moyenne par habitant :" + str(per_habitant))
-                print("Moyenne de la strat :" + str(mean_strat))
+            for display_str_value in display_str_choice:
+                if title == display_str_value:
+                    display_value(ligne,display_str_value)
 
     print("\n\n\n")
+
+print("Fin ==================================================")
