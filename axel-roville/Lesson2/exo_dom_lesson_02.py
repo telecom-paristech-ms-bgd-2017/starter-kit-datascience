@@ -1,8 +1,10 @@
 import requests
 import re
-import datetime
+import datetime, time
 import sys, getopt
+import threading
 from bs4 import BeautifulSoup
+from multiprocessing import Pool
 
 ##############
 # CONSTANTES #
@@ -10,14 +12,13 @@ from bs4 import BeautifulSoup
 base_url = "http://alize2.finances.gouv.fr/communes/eneuro/"
 detail_base_url = base_url + "detail.php"
 dep_base_url = base_url + "RDep.php"
+pool_busy = False
+total_communes = 0
+result_list = []
+communes_list = []
 
 # Le titre et l'index des lignes qui nous intéressent
-lines = {
-    "TOTAL DES PRODUITS DE FONCTIONNEMENT = A":     7,
-    "TOTAL DES CHARGES DE FONCTIONNEMENT = B":      11,
-    "TOTAL DES RESSOURCES D'INVESTISSEMENT = C":    19,
-    "TOTAL DES EMPLOIS D'INVESTISSEMENT = D":       24
-}
+lines = [("A", 7), ("B", 11), ("C", 19), ("D", 24)]
 
 # Expression régulière pour récupérer l'ID de la commune dans le href
 regex_id = re.compile("'ICOM':'([0-9]*)'")
@@ -25,17 +26,40 @@ regex_id = re.compile("'ICOM':'([0-9]*)'")
 #############
 # FONCTIONS #
 #############
-def dataByYearAndDep(year, dep):
-    for commune in communesByDepartment(dep):
-        dataByYearAndDepAndCom(year, dep, commune)
+def dataByYearAndDep(year, dep, communes = None):
+    if not communes:
+        communes = communesByDepartment(dep)
+
+    global pool_busy
+    global total_communes
+    pool_busy = True
+    total_communes = len(communes)
+    pool = Pool(30)
+    t = threading.Thread(target = animateWaiting,
+        args=("Retrieving data for " + str(total_communes) + " communes", ))
+    t.start()
+    for commune in communes:
+        pool.apply_async(dataByYearAndDepAndCom, args = (year, dep, commune), callback = logResult)
+    pool.close()
+    pool.join()
+    pool_busy = False
+    t.join()
+
+def logResult(result):
+    global result_list
+    result_list.append(result)
+    global total_communes
+    total_communes -= 1
 
 def dataByYearRangeAndDep(r, dep):
+    communes = communesByDepartment(dep)
     for year in r:
-        dataByYearAndDep(year, dep)
+        dataByYearAndDep(year, dep, communes)
 
 def dataByYearRangeAndDepAndCom(r, dep, com):
+    global result_list
     for year in r:
-        dataByYearAndDepAndCom(year, dep, com)
+        result_list.append(dataByYearAndDepAndCom(year, dep, com))
 
 def dataByYearAndDepAndCom(year_int, dep_int, com_int):
     year = str(year_int)
@@ -52,19 +76,30 @@ def dataByYearAndDepAndCom(year_int, dep_int, com_int):
         print("No data for parameters:" + str(params))
         return
 
-    extractData(tables[2], com_int, dep_int, year)
+    return(extractData(tables[2], com_int, dep_int, year))
 
 # Récupérer seulement l'information demandée
 def extractData(table, com_id, dep, year):
-    com = table.select('tr')[1].select('td')[1].text
-    print('==================================================')
-    print("Commune: " + com + " (id: " + str(com_id) + "), year: " + year)
+    result = {}
+    result['com'] = table.select('tr')[1].select('td')[1].text
+    result['com_id'] = com_id
+    result['year'] = year
 
-    for key, lineNb in lines.items():
-        cells = list(map(cleanCell, cellsInLine(table, lineNb)))
-        print(key)
-        print("\tEuros par habitant   : " + cells[0])
-        print("\tMoyenne de la strate : " + cells[1])
+    for key, lineNb in lines:
+        result[key] = list(map(cleanCell, cellsInLine(table, lineNb)))
+
+    return result
+
+def prettyPrint(results):
+    for args in results:
+        if not args:
+            continue
+
+        # print('==================================================')
+        print(args['com'] + " id:" + str(args['com_id']) + " year:" + args['year'])
+        # for key, lineNb in lines:
+        #     cells = args[key]
+        #     print(key + "\t€/hbt:" + cells[0] + "\tmoyenne:" + cells[1])
 
 # Récupérer la ligne numéro 'lineNb' de table, cellules 1 et 2 (0 based)
 def cellsInLine(table, lineNb):
@@ -74,33 +109,47 @@ def cellsInLine(table, lineNb):
 def cleanCell(cell):
     return cell.text.replace(u'\xa0', '').replace(' ', '')
 
+
 # Récupère toutes les communes appartenant à un département
 def communesByDepartment(dep_int):
     # On formatte le code du département sur 3 caractères
     dep = str(dep_int).zfill(3)
+    global pool_busy
+    pool_busy = True
+    pool = Pool(30)
+    t = threading.Thread(target = animateWaiting,
+        args=("Retrieving communes for department " + dep, ))
+    t.start()
+    for letter in getInitials(dep):
+        pool.apply_async(communesByInitial, args = (dep, letter), callback = addCommune)
+    pool.close()
+    pool.join()
+    pool_busy = False
+    t.join()
 
-    data = {'DEP': dep, 'TYPE': 'BPS'}
+    return [com for comlist in communes_list for com in comlist]
+
+def addCommune(commune):
+    communes_list.append(commune)
+
+def communesByInitial(dep, lettre):
+    data = {'DEP': dep, 'TYPE': 'BPS', 'LETTRE': lettre}
+
+    # Les communes dont le nom commence par 'lettre' ne sont pas disponibles
+    # par un simple GET, il faut d'abord poster avec les bons critères, puis
+    # parser la réponse
+    resp = requests.post(dep_base_url, data = data)
+    cols = BeautifulSoup(resp.text, 'html.parser').select("table")[1:]
+
+    # On rassemble les communes des 2 colonnes
+    communes = cols[0].select('td')
+    communes.extend(cols[1].select('td'))
+
     result = []
-
-    # Pour chaque initiale
-    for lettre in getInitials(dep):
-        data['LETTRE'] = lettre
-
-        # Les communes dont le nom commence par 'lettre' ne sont pas disponibles
-        # par un simple GET, il faut d'abord poster avec les bons critères, puis
-        # parser la réponse
-        resp = requests.post(dep_base_url, data = data)
-        cols = BeautifulSoup(resp.text, 'html.parser').select("table")[1:]
-
-        # On rassemble les communes des 2 colonnes
-        communes = cols[0].select('td')
-        communes.extend(cols[1].select('td'))
-
-        # Enfin, on récupère l'ID et on le met à sa place
-        for commune in communes:
-            match_id = regex_id.search(commune.select('a')[0]['href'])
-            result.append(match_id.group(1))
-
+    # Enfin, on récupère l'ID et on le met à sa place
+    for commune in communes:
+        match_id = regex_id.search(commune.select('a')[0]['href'])
+        result.append(match_id.group(1))
     return result
 
 def getInitials(dep):
@@ -136,6 +185,18 @@ def isInt(s):
         return True
     except ValueError:
         return False
+
+def animateWaiting(msg):
+    print(msg)
+    animation = "|/-\\"
+    idx = 0
+    while pool_busy:
+        s = str(total_communes).zfill(3) + " communes to go " if total_communes > 0 else ""
+        # sys.stdout.write(s + animation[idx % len(animation)] + "\r")
+        idx += 1
+        time.sleep(0.1)
+    return
+
 
 ########
 # MAIN #
@@ -175,19 +236,23 @@ def main(argv):
         print("Arguments must be integers")
         sys.exit(1)
 
+    global result_list
+
     if year:
         if com:
-            dataByYearAndDepAndCom(year, dep, com)
+            result_list.append(dataByYearAndDepAndCom(year, dep, com))
         else:
             dataByYearAndDep(year, dep)
     else:
         if not end:
-            end = datetime.datetime.now().year
+            end = datetime.datetime.now().year - 1
         r = range(int(start), int(end) + 1)
         if com:
             dataByYearRangeAndDepAndCom(r, dep, com)
         else:
             dataByYearRangeAndDep(r, dep)
+
+    prettyPrint(result_list)
     print()
 
 
