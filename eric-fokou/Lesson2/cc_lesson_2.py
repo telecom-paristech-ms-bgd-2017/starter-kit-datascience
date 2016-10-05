@@ -53,14 +53,14 @@ def fizbuzz():
         fizz = not x % 3
         buzz = not x % 5
 
-		if fizz and buzz:
-			print "FizzBuzz"
-		elif fizz:
-			print "Fizz"
-		elif buzz:
-			print "Buzz"
-		else:
-			print x
+        if fizz and buzz:
+            print "FizzBuzz"
+        elif fizz:
+            print "Fizz"
+        elif buzz:
+            print "Buzz"
+        else:
+            print x
 
 
 # Write a function that takes a number and returns a list of its digits.
