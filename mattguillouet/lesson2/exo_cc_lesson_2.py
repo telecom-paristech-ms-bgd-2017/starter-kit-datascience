@@ -10,20 +10,20 @@ def string_times(string, n):
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-
-    ok = False
-    for ii in range(4):
-        if nums[ii]==9:
-            ok = True
-            break
-    return ok
+    return any(map(lambda x: x==9, nums[:4]))
 
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    return
+    subStr = string[-2:]
+    count = 0
+    for ii in range(len(string)-3):
+        if string[ii:ii+2]==subStr:
+            count += 1
+
+    return count
 
 
 #Write a program that maps a list of words into a list of
@@ -35,22 +35,24 @@ def length_words(array):
 def fizbuzz():
     nMax = 50
     fizbuzz = []
-    for ii in range(nMax):
+    for ii in range(1,nMax):
 
-        if ii%3==0 and not ii%5==0:
+        mod3 = ii%3==0 
+        mod5 = ii%5==0
+        if mod3 and not mod5:
             fizbuzz.append('fiz')
-        elif ii%5==0 and not ii%3==0:
+        elif mod5 and not mod3:
             fizbuzz.append('buzz')
-        elif ii%3==0 and ii%5==0:
+        elif mod3 and mod5:
             fizbuzz.append('fizbuzz')
         else:
             fizbuzz.append('')
 
-  return fizbuzz
+    return fizbuzz
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-    return [c for c in '{}'.format(number)]
+    return [int(c) for c in '{}'.format(number)]
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
@@ -58,7 +60,10 @@ def number2digits(number):
 def pigLatin(text):
     ok = []
     for w in text.split():
-        ok.append(w[1:] + w[0] + 'ay')
+        w1 = w.lower()
+        ok.append(w1[1:] + w1[0] + 'ay')
+
+    ok[0] = ok[0].title()
 
     return ' '.join(ok)
 
@@ -70,10 +75,10 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(array_front9([1, 2, 3, 4, 9]) , False)
         self.assertEqual(array_front9([1, 2, 3, 4, 5]) , False)
 
- #   def testStringTimes(self):
- #       self.assertEqual(string_times('Hel', 2),'HelHel' )
- #       self.assertEqual(string_times('Toto', 1),'Toto' )
- #       self.assertEqual(string_times('P', 4),'PPPP' )
+    def testStringTimes(self):
+        self.assertEqual(string_times('Hel', 2),'HelHel' )
+        self.assertEqual(string_times('Toto', 1),'Toto' )
+        self.assertEqual(string_times('P', 4),'PPPP' )
 
     def testLast2(self):
         self.assertEqual(last2('hixxhi') , 1)
@@ -90,6 +95,7 @@ class Lesson1Tests(unittest.TestCase):
 
     def testPigLatin(self):
         self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
+
 
 
 

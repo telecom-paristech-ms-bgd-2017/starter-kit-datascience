@@ -51,7 +51,7 @@ def getMeanIndicators(metrics):
 	for m in metrics:
 		sum_ += m['indicator']
 
-	return double(sum)/double(len(metrics))
+	return float(sum_)/float(len(metrics))
 
 if __name__ == '__main__':
 	artist1 = sys.argv[1]
