@@ -26,7 +26,7 @@ for year in years:
 for year in sorted(data.keys()):
 
     print('------------------------\n')
-    print('Année ' + str(year) + ' :')
+    print('AnnÃ©e ' + str(year) + ' :')
     print('\nEuros par habitant :')
     for data_letter in sorted(data_rows):
         print(' ' + data_letter + ' = ' + data[year][data_letter + per_hab])
