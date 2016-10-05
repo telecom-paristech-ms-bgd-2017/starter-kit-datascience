@@ -42,17 +42,17 @@ for year in range(2009, 2014):
 
 for year in range(2009, 2014):
     print("\n")
+    print("RESULTS: [k€ €/hab mean_of_srata]")
+    print("*" * 40)
     print("Year " + str(year))
+    print("*" * 40)
 
-    print("TOTAL DES PRODUITS DE FONCTIONNEMENT = A ")
-    print(global_account[year].get("TOTAL DES PRODUITS DE FONCTIONNEMENT = A"))
+    financials = ["TOTAL DES PRODUITS DE FONCTIONNEMENT = A",
+                  "TOTAL DES CHARGES DE FONCTIONNEMENT = B",
+                  "TOTAL DES RESSOURCES D'INVESTISSEMENT = C",
+                  "TOTAL DES EMPLOIS D'INVESTISSEMENT = D"]
 
-    print("TOTAL DES CHARGES DE FONCTIONNEMENT = B ")
-    print(global_account[year].get("TOTAL DES CHARGES DE FONCTIONNEMENT = B"))
+    for financial in financials:
+        print(financial + " ")
+        print(global_account.get(year).get(financial))
 
-    print("TOTAL DES RESSOURCES D'INVESTISSEMENT = C ")
-    print(global_account[year].get(
-        "TOTAL DES RESSOURCES D'INVESTISSEMENT = C"))
-
-    print("TOTAL DES EMPLOIS D'INVESTISSEMENT = D ")
-    print(global_account[year].get("TOTAL DES EMPLOIS D'INVESTISSEMENT = D"))
