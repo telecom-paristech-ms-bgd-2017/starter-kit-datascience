@@ -1,7 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 
-base_url = 'http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='
+base_url = 'http://alize2.finances.gouv.fr/communes/eneuro/detail.php'
+#http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice=2013
+#http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=118&dep=014&type=BPS&param=5&exercice=2013
+
+params = {
+    'icom': '???',
+    'dep': '???',
+    'type': 'BPS',
+    'param': 5,
+    'exercice': 2013
+}
 
 target_labels = [
     "TOTAL DES PRODUITS DE FONCTIONNEMENT = A",
@@ -11,12 +21,15 @@ target_labels = [
 ]
 
 
-def load_fiscal_year(year):
-    return requests.get(base_url + str(year))
+def load_fiscal_year(icom, dep, year):
+    params['icom'] = icom
+    params['dep'] = dep
+    params['year'] = year
+    return requests.get(base_url, params=params)
 
 
-def get_all_fiscal_data_for_year(year):
-    fiscal_data = load_fiscal_year(year)
+def get_all_fiscal_data_for_year(icom, dep, year):
+    fiscal_data = load_fiscal_year(icom, dep, year)
     results = {}
     parser = BeautifulSoup(fiscal_data.text, 'html.parser')
     for node in parser.find_all(class_="libellepetit G"):
@@ -32,11 +45,22 @@ def extract_amounts(node):
     return decode(children[1].text), decode(children[2].text)
 
 
-def get_all_fiscal_data_for_years(years):
+def get_all_fiscal_data_for_years(icom, dep, years):
     fiscal_data = {}
     for year in years:
-        fiscal_data[year] = get_all_fiscal_data_for_year(year)
+        fiscal_data[year] = get_all_fiscal_data_for_year(icom, dep, year)
     return fiscal_data
 
+def pretty_print(data):
+    pass
 
-print(get_all_fiscal_data_for_years([2009, 2010, 2011, 2012, 2013]))
+cities = {
+    "Paris" : ('056', '075'),
+    "Caen": ('118', '045'),
+
+}
+for city in cities.keys():
+    print("Data for " + city + ": ")
+    icom, dep = cities[city]
+    print(get_all_fiscal_data_for_years(icom, dep, [2009, 2010, 2011, 2012, 2013]))
+
