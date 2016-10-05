@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 
 
-url_without_year = 'http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='
+url_without_year = "http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice="
 years = range(2010, 2016)
 data_rows = {'A': 6, 'B': 10, 'C': 18, 'D': 23}
 data = {}
