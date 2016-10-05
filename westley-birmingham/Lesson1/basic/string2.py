@@ -37,12 +37,12 @@ def not_bad(s):
     # +++your code here+++
     for el in s.split():
           if el == 'not':
-                  for el2 in s.split()[s.index(el)::]:
-                      if el2 == 'bad':
-                            # ss = ' '.join(map(str, s[s.index(el):s.index(el2)+1:]))
-                        print(s[s.index(el):s.index(el2)+1:])
+              for el2 in s.split()[s.split().index(el)::]:
+                  if el2 == 'bad':
+                      ss = ' '.join(map(str, s.split()[s.split().index(el):s.split().index(el2) + 1:]))
+                      s.split()[s.split().index(el)::].find('bad')
     # print(ss)
-    return 0# s.replace(ss, ' good')
+    return s.replace(ss, 'good')
 
 
 # F. front_back
@@ -89,4 +89,4 @@ def main():
   test(front_back('Kitten', 'Donut'), 'KitDontenut')
 
 if __name__ == '__main__':
-  main()
+    main()
