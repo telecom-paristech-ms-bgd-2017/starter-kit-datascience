@@ -137,6 +137,9 @@ if __name__ == '__main__':
     #print_words(fileName)
 
     #print_top(fileName)
-    print_top_s(fileName)
+   # print_top_s(fileName)
 
     print( re.search(r'\b\d+', 'he33llo 42 I\'m a 32 string 30'))
+
+    text = "Alllowed Hello Hollow"
+    print(len([n for n in range(len(text)) if text.find('ll', n) == n]))
