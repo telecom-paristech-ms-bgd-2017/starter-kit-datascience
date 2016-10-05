@@ -50,10 +50,44 @@ import sys
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-def count(filename):
-  with open("DuTexte.txt","r"):
 
 
+def liste_mots(filename):
+    countWord = {}
+
+    with open(filename, "r") as fichier:
+        for line in fichier:
+            listeMots = line.strip().split(" ")
+            for mot in listeMots:
+                if mot.lower() in countWord:
+                    countWord[mot.lower()] += 1
+                else:
+                    countWord[mot.lower()] = 1
+    return countWord
+
+
+def print_words(filename):
+    countWord = liste_mots(filename)
+
+    motsTries = sorted(countWord.items(), key=lambda col: col[0])
+
+    for mot in motsTries:
+        print(mot[0] + " ! " + str(mot[1]))
+
+
+def print_top(filename):
+    countWord = liste_mots(filename)
+
+    motsTriesParNombreApparitions = sorted(countWord.items(), key=lambda col: col[1], reverse=True)
+
+    i = 0
+    for mot in motsTriesParNombreApparitions:
+        print(mot[0] + " ! " + str(mot[1]))
+        i += 1
+        if (i > 5):
+            break
+
+#test modif
 def main():
     if len(sys.argv) != 3:
         print('usage: ./wordcount.py {--count | --topcount} file')
