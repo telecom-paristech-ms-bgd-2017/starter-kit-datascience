@@ -41,8 +41,7 @@ from bs4 import BeautifulSoup
 
 
 def getAllMetricsForTown(commune,dpt,annee):
-  all_metrics = []
-  MAX_PAGE = 1
+ 
   #for page in range(1, MAX_PAGE + 1):
   #resutTown = requests.get('http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=' + commune + '&dep=' + dpt + '&type=BPS&param=5&exercice=' + annee )
   #lesParams = {'ICOM':commune,'DEP':dpt,'EXERCICE':annee}
