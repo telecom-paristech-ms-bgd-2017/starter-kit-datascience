@@ -56,7 +56,7 @@ def pretty_print(data):
 
 cities = {
     "Paris" : ('056', '075'),
-    "Caen": ('118', '045'),
+    "Caen": ('118', '014'),
 
 }
 for city in cities.keys():
