@@ -8,8 +8,6 @@ from bs4 import BeautifulSoup
 r = requests.get('https://www.youtube.com/watch?v=kOkQ4T5WO9E')
 
 # on cherche "parse html python" >> on tombe sur BeautifulSoup
-
-
 soup = BeautifulSoup(r.text, 'html.parser')
 #print(soup.prettify())
 # Display nb of views
