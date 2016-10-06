@@ -39,24 +39,37 @@ print_words() and print_top().
 
 import sys
 
-def print_words(filename):
-    f = open(filename,'r')
-    dictword = {}
-    for line in f:
-        word = line.split(' ')
-        for w in word:
-            w = word.lower()
-            if w in dictword:
-                dictword[w] += 1
+def dict_words(filename):       #buid up a dictionary of the words of the filename
+    f = open(filename,'r')      #load filename to f ready for reading
+    dictword = {}               #build up a dictionary
+    for line in f:              #look for every line of the file f
+        word = line.split()     #split the line in words
+        for w in word:          #look for every word of each line
+            w = w.lower()       #replace each word by its lowercase version
+            if w in dictword:   #check if the word already is in the dictionary
+                dictword[w] = dictword[w] + 1#increments the value of this word
             else:
-                dictword = 1
-    return dictword
-# +++your code here+++
-# Define print_words(filename) and print_top(filename) functions.
-# You could write a helper utility function that reads a file
-# and builds and returns a word/count dict for it.
-# Then print_words() and print_top() can just call the utility function.
+                dictword[w] = 1    #if 1st time, set value 1
+    f.close()
+    return dictword             #return a dictionary of key/value
 
+def print_words(filename):      #print the dictionary of words from the filename
+    dictword = dict_words(filename) #build up the dictionary
+    word = sorted(dictword.keys())  #sort the dictionary by the key word
+    for w in word:                  #look for every key/value of the dictionary
+        print(w, ' ' ,dictword[w])  #print a key value pair
+        print                       #return to next line
+
+def print_top(filename):
+    dictword = dict_words(filename) #build up the dictionary
+    items = sorted(dictword.items(),key=get_count, reverse=True)#sort the dictionnary reversely by value
+    for i in items[:20]:            #look for the 1st 20 items
+        print(i[0], ' ' , i[1])     #print the key value pair
+        print
+
+def get_count(thetuple):    #return the value of the tuple
+    return thetuple[1]
+#
 ###
 
 # This basic command line argument parsing code is provided and
