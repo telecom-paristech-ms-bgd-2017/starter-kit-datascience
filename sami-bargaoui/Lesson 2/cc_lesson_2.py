@@ -1,6 +1,5 @@
 import unittest
 
-
 # Given a string and a non-negative int n, return a larger string
 # that is n copies of the original string.
 
@@ -11,7 +10,7 @@ def string_times(string, n):
         return string + string_times(string,n-1)
     return
 
-print string_times("chaine",3)
+
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 
@@ -23,8 +22,6 @@ def array_front9(nums):
             if nums[i] == 9:
                 return True
     return False
-
-
 
 
 # Given a string, return the count of the number of times
@@ -82,7 +79,6 @@ def pigLatin(text):
     for word in words:
         Sentence = Sentence + word[1:] + word[0].lower() + "ay "
     return Sentence[:-1].capitalize()
-
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
