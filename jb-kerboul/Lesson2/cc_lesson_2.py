@@ -10,8 +10,7 @@ def string_times(string, n):
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-    maxLen=min([4, len(nums)])  
-    is9=any([ii == 9 for ii in nums[:maxLen]])
+    is9=any([ii == 9 for ii in nums[:min([4, len(nums)])]])
     return is9
 
 
@@ -19,39 +18,37 @@ def array_front9(nums):
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    strtoFind=string[-2:]
-    count=sum([string[y : y + 2]==strtoFind for y in range(len(string)-2)])
+    count=sum([string[y : y + 2]==string[-2:] for y in range(len(string)-2)])
     return count 
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-def length_words(array):
-    listLen=[len(ii) for ii in array]    
-    return listLen
+def length_words(array): 
+    return [len(ii) for ii in array]
 #write fizbuzz programm
-def fizbuzz():
+def fizbuzz():    
+    f = lambda x: 'fizz' if x%3==0 else ''
+    b = lambda x: 'buzz' if x%5==0 else ''
+    n = lambda x: str(x) if x%5!=0 and x%3!=0 else ''
+    test = [f(ii)+b(ii)+n(ii) for ii in range(1,101)]    
+    return ' '.join(test)
     
-  return
-
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
     nSTr=str(number)
-    listDigit=[int(ii) for ii in nSTr]   
-    return listDigit
+    return [int(ii) for ii in nSTr]
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
-def pigLatin(tutu):
-    lText=tutu.lower().strip().split()
-    newstr=''
-    for ii in lText:
-        newWor=ii[1:] + ii[0] + 'ay '
-        if len(newstr)==0:
-            newWor = newWor.capitalize()
-        newstr = newstr + newWor
-    return newstr.rstrip()
+def pigLatin(text):
+    
+    c = (lambda x: x[1:] + x[0]+'ay' if x[0].islower()
+    else x[1:].capitalize() + x[0].lower() + 'ay')  
+    
+    newstr=[c(ii) for ii in text.strip().split()]
+    return ' '.join(newstr).rstrip()
  
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
