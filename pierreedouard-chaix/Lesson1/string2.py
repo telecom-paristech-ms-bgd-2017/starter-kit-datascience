@@ -1,3 +1,4 @@
+import math
 #!/usr/bin/python2.4 -tt
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
@@ -16,13 +17,14 @@
 # If the string length is less than 3, leave it unchanged.
 # Return the resulting string.
 def verbing(s):
-    # +++your code here+++
-    if len(s) >= 3:
-        if s[-3::] == 'ing':
-            s += 'ly'
-        else:
-            s += 'ing'
-    return s
+  # +++your code here+++
+  if len(s) >= 3:
+      if(s[len(s)-3:] != "ing"):
+          return s+"ing"
+      else:
+          return s+"ly"
+  else:
+      return s
 
 
 # E. not_bad
@@ -34,15 +36,13 @@ def verbing(s):
 # So 'This dinner is not that bad!' yields:
 # This dinner is good!
 def not_bad(s):
-    # +++your code here+++
-    for el in s.split():
-          if el == 'not':
-              for el2 in s.split()[s.split().index(el)::]:
-                  if el2 == 'bad':
-                      ss = ' '.join(map(str, s.split()[s.split().index(el):s.split().index(el2) + 1:]))
-                      s.split()[s.split().index(el)::].find('bad')
-    # print(ss)
-    return s.replace(ss, 'good')
+  # +++your code here+++
+    firstnotappearance = s.find("not")
+    firstbadappearance = s.find("bad")
+    if(firstbadappearance > 0 and firstnotappearance > 0 and firstbadappearance > firstnotappearance):
+        return s[0:firstnotappearance] + "good" + s[firstbadappearance + 3:]
+    else:
+        return s
 
 
 # F. front_back
@@ -53,9 +53,14 @@ def not_bad(s):
 # Given 2 strings, a and b, return a string of the form
 #  a-front + b-front + a-back + b-back
 def front_back(a, b):
-  # +++your code here+++
-  return
+  [a1, a2] = split_string(a)
+  [b1, b2] = split_string(b)
+  return a1+b1+a2+b2
 
+def split_string(a):
+
+   sep = int(math.ceil(len(a)/2.0))
+   return [a[0:sep], a[sep:]]
 
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
@@ -64,29 +69,29 @@ def test(got, expected):
     prefix = ' OK '
   else:
     prefix = '  X '
-  print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
+  print '%s got: %s expected: %s' % (prefix, repr(got), repr(expected))
 
 
 # main() calls the above functions with interesting inputs,
 # using the above test() to check if the result is correct or not.
 def main():
-  print('verbing')
+  print 'verbing'
   test(verbing('hail'), 'hailing')
   test(verbing('swiming'), 'swimingly')
   test(verbing('do'), 'do')
 
   print
-  print('not_bad')
+  print 'not_bad'
   test(not_bad('This movie is not so bad'), 'This movie is good')
   test(not_bad('This dinner is not that bad!'), 'This dinner is good!')
-  test(not_bad('This tea is not hot'), 'This tea is not hot')
+  test(not_bad('This tea is bad hot'), 'This tea is bad hot')
   test(not_bad("It's bad yet not"), "It's bad yet not")
 
   print
-  print('front_back')
+  print 'front_back'
   test(front_back('abcd', 'xy'), 'abxcdy')
   test(front_back('abcde', 'xyz'), 'abcxydez')
   test(front_back('Kitten', 'Donut'), 'KitDontenut')
 
 if __name__ == '__main__':
-    main()
+  main()

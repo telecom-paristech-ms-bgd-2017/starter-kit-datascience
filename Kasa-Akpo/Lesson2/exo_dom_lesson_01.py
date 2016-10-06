@@ -5,26 +5,41 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return
+
+    return (string* n)
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
-
-  return
-
+	   for elt in nums:
+        if nums == 9:
+            return True
+        return False
 
 # Given a string, return the count of the number of times
-# that a substring length 2 appears  in the string and also as
+# that a substring ptyh 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    return
+    dico ={}
+    var = string[len(string) -2:len(string) -1] 
+    var1 = var = string[len(string) -1:]
+    print(var1)
+    print(elt.string)
+#    var2 = string[len(string) - 1:len(string)] 
+    for elt in string:
+        if string[elt] + string[elt+1] == var + var1: 
+        if elt in dico.keys() and elt == var : # and elt in string == (string[len(string) - 1:len(string)]):
+            dico[elt]+=1
+        else:
+            dico[elt] = 1        
+    return dico.keys(), dico.values()   
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    return
+tab = []
+    return len(tab))
 
 #write fizbuzz programm
 def fizbuzz():
@@ -32,7 +47,12 @@ def fizbuzz():
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-  return
+    tab = []
+    i = 0
+    while result < 1:
+        result = number / 2
+        tab[i] = number % 2 
+  return tab
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
