@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import numpy as np
 import itertools
 from multiprocessing import Pool
+import time
 
 def get_int_to_url_str_format(int):
     if int < 10:
@@ -67,19 +68,16 @@ def process_commune_dept_year_combination(combination):
     year = combination[2]
     className = "libellepetit G"
     url = geturl(commune, departement, year)
+    res = []
     try:
         soup = getBeautifulSoupObjectfromUrl(url)
         classes = soup.find_all(class_=className)
         for d in dataTypeMapping():
             for c in columnMameMapping():
                 value = extractvaluefromclasses(c, d, classes)
-                if value != "not found":
-                    return commune, departement, year, d, c, value
-                else:
-                    return []
-    except:
-        print("No data for : Commune {0}, dept {1}, year {2}".format(commune, departement, year))
-
+                res.append((commune, departement, year, d, c, value))
+    finally:
+        return res
 
 # Main script - sequential
 
@@ -99,29 +97,39 @@ def main_parallel(combinations_):
     return pool.map(process_commune_dept_year_combination, combinations_)
 
 def display_results(results):
-    for res in results:
-        if len(res)>0:
-            print("Commune : {0}. Departement : {1}. Year : {2}. Datatype : {3}. Column : {4}. Value : {5}".format(res[0], res[1], res[2], res[3], res[4], res[5]))
-
+    valid = 0
+    non_valid = 0
+    for reslist in results:
+        if len(reslist) > 0:
+            for res in reslist:
+                value = res[5]
+                if value != 'not found':
+                    print("Commune : {0}. Departement : {1}. Year : {2}. Datatype : {3}. Column : {4}. Value : {5}".format(res[0], res[1], res[2], res[3], res[4], res[5]))
+                    valid += 1
+                else:
+                    non_valid += 1
+    return valid, non_valid
 
 
 # Main launcher
-communes = np.arange(1, 50, dtype=np.int)
-departements = [14, 75]
-years = [2009, 2010, 2011, 2012, 2013]
 
+start_time = time.time()
+communes = np.arange(1, 51, dtype=np.int) #[1..50]
+departements = [14, 75]
+years = np.arange(2010, 2016, dtype=np.int) #[2010..2016]
+
+print(years)
 # communes = np.arange(1, 3, dtype=np.int)
 # departements = [14, 75]
 # years = [2010, 2011]
 
 combinations = itertools.product(communes, departements, years)
-
-#results = main_sequential(combinations)
+print("Crawling {0} cities...".format(str(len(communes)*len(departements)*len(years))))
+# results = main_sequential(combinations)
 results = main_parallel(combinations)
 
-display_results(results)
-print ("Number of results : {0}".format(len(results)))
-
-
+res_numbers = display_results(results)
+print ("Valid results : {0}. Non valid results : {1}".format(res_numbers[0], res_numbers[1]))
+print("--- Exec time :{0}s ---".format((time.time() - start_time)))
 
 
