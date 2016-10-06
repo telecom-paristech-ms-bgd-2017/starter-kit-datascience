@@ -2,25 +2,27 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def extractPromotions(soup, className):
-    tables = soup.find_all("div", class_=className)
+def extractSources(soup, className):
+    return soup.find_all("div", class_=className)
+
+
+def extractPromotions(soup):
     result = []
-    for i, price in enumerate(tables):
+    for i, price in enumerate(extractSources(soup, 'ecoBlk')):
         result.append(int(price.find('span').text.replace('\u20ac', '')
                           .replace('%', '')))
     return result
 
 
-def extractNumberOfArticles(soup, className):
-    return len(soup.find_all("div", class_=className))
+def extractNumberOfArticles(soup):
+    return len(extractSources(soup, 'prdtBloc'))
 
 
-def extractEco(soup):
+def computeMeanPromotion(promotions, nb):
     sum = 0
-    prices = extractPromotions(soup, 'ecoBlk')
-    for price in prices:
-        sum = sum + price
-    return sum / extractNumberOfArticles(soup, 'prdtBloc')
+    for pr in promotions:
+        sum = sum + pr
+    return sum / nb
 
 
 def getAllMetricsFor(brand):
@@ -32,7 +34,8 @@ def getAllMetricsFor(brand):
     # Parse it with BeautifulSoup
     soup = BeautifulSoup(result.text, "html.parser")
     # Extract metrics
-    return extractEco(soup)
+    return computeMeanPromotion(extractPromotions(soup),
+                                extractNumberOfArticles(soup))
 
 
 def displayMetrics(brand):
