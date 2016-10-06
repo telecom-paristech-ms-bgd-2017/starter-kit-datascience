@@ -37,12 +37,12 @@ def not_bad(s):
     # +++your code here+++
     for el in s.split():
           if el == 'not':
-              for el2 in s.split()[s.index(el)::]:
+              for el2 in s.split()[s.split().index(el)::]:
                   if el2 == 'bad':
-                      ss = ' '.join(map(str, s.split()[s.index(el):s.index(el2)+1:]))
-                      print(s.split()[s.index(el):s.index(el2)+1:])
-    print(ss)
-    return 0 # s.replace(ss, ' good')
+                      ss = ' '.join(map(str, s.split()[s.split().index(el):s.split().index(el2) + 1:]))
+                      s.split()[s.split().index(el)::].find('bad')
+    # print(ss)
+    return s.replace(ss, 'good')
 
 
 # F. front_back
