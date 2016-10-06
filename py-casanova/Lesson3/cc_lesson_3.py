@@ -6,9 +6,11 @@ import pandas as pd
 
 
 def crawlCDiscount(brands, pages):
-    """Crawling Cdiscount pages to get product discounts
-    Usage: arguments = list of strings with brand names to crawl
-    Returns dict of lists
+    """
+    Crawls Cdiscount pages to get product discounts and returns dict of lists by brand 
+    Arguments: 
+    - brands = list of strings with brand names to crawl
+    - pages = number of pages to crawl
     """
 
     db_discounts = {}
@@ -31,8 +33,8 @@ def crawlCDiscount(brands, pages):
                       str(page) + " for brand: " + brand)
                 print("*" * 40)
 
-                # Getting discount, precedent price and current price figures for products
-                # on current page if any
+                # Getting precedent price and current price figures for products
+                # on current page
                 products = soup.find_all(class_="prdtBloc")
 
                 for i, product in enumerate(products):
