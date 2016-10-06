@@ -21,18 +21,25 @@ def array_front9(nums):
 # that a substring length 2 appears  in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
 def last2(string):
-    verif=string[-2]
+    verif=string[-2:]
+    print(verif)
     compteur =0
-    for i in range(len(string)):
-        if (string[i:2]==verif ):
-            compteur:=1  
+    for i in range(len(string)-2):
+        print(string[i:i+2])
+        if (string[i:i+2] == verif ):
+            compteur= compteur + 1  
+    print(compteur)
     return compteur
 
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
 def length_words(array):
-    return
+    compte= []
+    for mots in array:
+        compte.append(len(mots))
+    print(compte)
+    return compte
 
 #write fizbuzz programm
 def fizbuzz():
@@ -40,6 +47,7 @@ def fizbuzz():
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
+    
   return
 
 #Write function that translates a text to Pig Latin and back.

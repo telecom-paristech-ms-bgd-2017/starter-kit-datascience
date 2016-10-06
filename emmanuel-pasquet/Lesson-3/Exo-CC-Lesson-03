@@ -1,10 +1,49 @@
+# -*- coding: utf-8 -*-
+"""
+Éditeur de Spyder
+
+Ceci est un script temporaire.
+"""
+
 import requests
 from bs4 import BeautifulSoup
 
+# Initialisation des variables
+txReducs = {'Acer':[], 'Dell':[]}
 
 
+def getProductBrand():
+    return
+def getProductPrice():
+    return
+def getProductReduc():
+    return
+
+# Boucle sur les produits PRIX CHOC
+
+# If prdtTitle attribut Title contient ACER ou DELL
+brand = getProductBrand()
+# Récupérer contenu de la balise ecoBlk>Span
+# Récupérer contenu de la valeur prise par la variable "price" dans prdtPrice
+
+# Calculer le taux de réduction et ajouter ce taux au tableau des taux
+txReducs[Brand].add(rate)
+
+'''
+def computeIndicatorForPage(url):
+  result = requests.get(url)
+  soup = BeautifulSoup(result.text, 'html.parser')
+  number_of_views = extractIntFromDOM(soup,'watch-view-count')
+  number_of_likes = extractLikeDislikeFromDOM(soup,'like-button-renderer-like-button', 0)
+  number_of_dislikes = extractLikeDislikeFromDOM(soup,'like-button-renderer-dislike-button',1)
+  indicator = 1000.* (number_of_likes - number_of_dislikes ) / number_of_views
+'''
+
+
+
+"""
 def extractIntFromDOM(soup, classname):
-  res_str = soup.find(class_=classname).text.replace(u'\xa0','').replace('vues','')
+  res_str= soup.find(class_=classname).text.replace(u'\xa0','').replace('vues','')
   res = int(res_str)
   return res
 
@@ -55,3 +94,4 @@ def getAllMetricsForArtist(artist):
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
 metrics_beyonce = getAllMetricsForArtist('beyonce')
+"""
