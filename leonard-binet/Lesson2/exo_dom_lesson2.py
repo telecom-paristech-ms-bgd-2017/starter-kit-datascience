@@ -1,5 +1,6 @@
 # coding: utf8
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -104,7 +105,9 @@ def liste_ville_dans_departement(num_departement="014"):
             nom = ville.td.a.font.contents[0]
 
             id_ville = ville.td.a["href"]
+            pat = re.compile('\{\'ICOM\':(\d{3})\'')
             id_ville = id_ville.replace("javascript:openWithPostData('RComm_gfp.php',{", "").replace("}","").split(",")[0]
             id_ville = id_ville.split(":")[1].replace("'","")
+            id_ville = pat.match(id_ville).group(1)
             resultats[nom] = id_ville
     return resultats
