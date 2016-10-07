@@ -5,7 +5,7 @@ url_incomplete = 'http://www.cdiscount.com/search/10/ordinateur'
 end_of_url = '.html#_his_'
 brands = ['acer', 'dell']
 data = {'acer': [], 'dell': []}
-results = {}
+result = {}
 
 for brand in brands:
     request = requests.get(url_incomplete + brand + end_of_url)
@@ -18,6 +18,6 @@ for brand in brands:
     for span in spans:
         data[brand].append(int(span.text.strip()[:-1]))
 
-    results[brand] = sum(data[brand]) / number_of_pcs
+    result[brand] = sum(data[brand]) / number_of_pcs
 
-print(results)
+print(result)
