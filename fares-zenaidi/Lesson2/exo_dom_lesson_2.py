@@ -2,16 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 
 
-
 def extractIntFromDOM(soup, classname):
   res_str = soup.find(class_=classname).text.replace(u'\xa0','').replace('vues','')
   res = int(res_str)
   return res
 
+
 def extractLikeDislikeFromDOM(soup, classname, position):
   res_str = soup.find_all(class_=classname)[position].find(class_="yt-uix-button-content").text.replace(u'\xa0','')
   res = int(res_str)
   return res
+
 
 def computeIndicatorForPage(url):
   result = requests.get(url)
@@ -26,7 +27,7 @@ def computeIndicatorForPage(url):
   print(title)
   print("Likes", number_of_likes)
   print("Dislikes", number_of_dislikes)
-  print("Views", number_of_views)
+  print("VIews", number_of_views)
   print("Popularity", indicator)
   print('=====')
   metrics = {}
