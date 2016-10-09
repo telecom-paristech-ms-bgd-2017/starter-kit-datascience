@@ -35,12 +35,12 @@ results = dict()
 for year in years:
 
 	postDict['exercice'] = year
-	r = requests.post(urlbase, data = postDict)
+	r = requests.get(urlbase, params = postDict)
 
 	soup = BeautifulSoup(r.content, 'html.parser')
 
 
-	baseStr = 'table > tr:nth-of-type({0}) > td:nth-of-type({1})'
+	baseStr = 'table:nth-of-type(3) > tr:nth-of-type({0}) > td:nth-of-type({1})'
 
 	crawl = []
 	iRow = 6

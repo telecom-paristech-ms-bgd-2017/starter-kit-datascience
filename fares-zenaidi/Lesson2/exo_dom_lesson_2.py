@@ -1,7 +1,5 @@
-#Crawling course start-kit data science
 import requests
 from bs4 import BeautifulSoup
-
 
 
 def extractIntFromDOM(soup, classname):
@@ -9,10 +7,12 @@ def extractIntFromDOM(soup, classname):
   res = int(res_str)
   return res
 
+
 def extractLikeDislikeFromDOM(soup, classname, position):
   res_str = soup.find_all(class_=classname)[position].find(class_="yt-uix-button-content").text.replace(u'\xa0','')
   res = int(res_str)
   return res
+
 
 def computeIndicatorForPage(url):
   result = requests.get(url)
@@ -27,15 +27,14 @@ def computeIndicatorForPage(url):
   print(title)
   print("Likes", number_of_likes)
   print("Dislikes", number_of_dislikes)
-  print ("VIews", number_of_views)
-  print ("Popularity", indicator)
-  print ('=====')
+  print("VIews", number_of_views)
+  print("Popularity", indicator)
+  print('=====')
   metrics = {}
   metrics['number_of_views'] = number_of_views
   metrics['number_of_likes'] = number_of_likes
   metrics['number_of_dislikes'] = number_of_dislikes
   metrics['indicator'] = indicator
-
   return  metrics
 
 
@@ -56,5 +55,4 @@ def getAllMetricsForArtist(artist):
   return all_metrics
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
-print(metrics_rihanna)
 metrics_beyonce = getAllMetricsForArtist('beyonce')
