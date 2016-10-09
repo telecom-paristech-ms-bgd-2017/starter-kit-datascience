@@ -1,12 +1,8 @@
 from __future__ import division
-import requests
-from operator import itemgetter
-import json
-import sys
 from collections import defaultdict
-from pprint import pprint
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
+import requests, json, sys
 
 ##############
 # CONSTANTES #
@@ -47,7 +43,11 @@ def add_stars(contributor_stars):
 # UTILS #
 #########
 def api_get(url):
-    return requests.get(url, auth=(username, password)).text
+    resp = requests.get(url, auth=(username, password))
+    if resp.status_code != 200:
+        print(json.loads(resp.text)['message'])
+        resp.raise_for_status()
+    return resp.text
 
 def set_credentials():
     try:
@@ -66,11 +66,8 @@ def set_credentials():
 # MAIN #
 ########
 def main():
-    set_credentials()
-
     global stars
-    repos_per_contributor = {}
-    for contributor in best_contributors("paulmillr/2657075"):
+    for contributor in best_contributors("paulmillr/2657075")[:10]:
         repos = contributor_repos(contributor)
         repos_per_contributor[contributor] = len(repos)
 
@@ -83,9 +80,9 @@ def main():
 
         stars[contributor] /= len(repos)
 
-    sorted_stars = sorted(stars.items(), key=itemgetter(1), reverse=True)
-    for contributor, avg_stars in sorted_stars:
+    for contributor, avg_stars in stars.sort(key=lambda x: -x[1]):
         print(contributor.ljust(20) + ": {s:.2f}".format(s=avg_stars))
 
 if __name__ == '__main__':
+    set_credentials()
     main()
