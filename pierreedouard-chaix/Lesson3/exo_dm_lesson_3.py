@@ -50,6 +50,6 @@ USER_STATS_DF = pd.DataFrame(USER_STATS)
 USER_STATS_DF.columns = ["username","number of repositories", "number of stars"]
 USER_STATS_DF["mean number of stars per repository"] = (USER_STATS_DF["number of stars"]/USER_STATS_DF["number of repositories"]).map(lambda x: round(x,2))
 
-# Classement des utilisateurs par note moyenne
+# Classement des utilisateurs par note moyenne et écriture en csv
 USER_STATS_DF_SORTED = USER_STATS_DF.sort("mean number of stars per repository", ascending=False)
 USER_STATS_DF_SORTED.to_csv("GITHUB_USERS_STAR_COUNT.csv", sep=";", header = True)
