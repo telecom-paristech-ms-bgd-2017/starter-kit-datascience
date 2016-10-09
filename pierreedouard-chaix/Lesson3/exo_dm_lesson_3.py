@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 USER = "pierreedouardchaix"
-TOKEN = "bb79427c8679e3990fcb87b474a799d443d61d35"
+TOKEN = # Insérer un nouveau token
 
 URL = "https://gist.github.com/paulmillr/2657075"
 R = requests.get(URL)
