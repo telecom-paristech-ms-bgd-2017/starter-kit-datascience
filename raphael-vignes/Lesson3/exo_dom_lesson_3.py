@@ -1,9 +1,10 @@
 #Récupérer les 256 top contributors de https://gist.github.com/paulmillr/2657075
+from __future__ import division
 import requests
 from bs4 import BeautifulSoup
-import github3 as gh3
 import json
 import numpy as np
+
 
 def getSoup(url):
     request = requests.get(url)
@@ -38,21 +39,22 @@ for name in names:
 
 
 #Retrieving infos
-gh = gh3.login('rvi008',input('pw :'))
-rvi = gh.user()
-baseUrl = 'https://api.github.com/repos'
+
+token = input('token :')
+credentials = {'Authorization':'token '+token}
+baseUrl = 'https://api.github.com'
 rank = []
 for user in names:
-    repos = gh3.iter_user_repos(user, type = 'owner')
+    repos = requests.get(baseUrl+'/'+'users/'+user+'/'+'repos', headers = credentials)
+    result = json.loads(repos.text)
     starcount = []
-    for repo in repos:
-        req = requests.get(baseUrl+'/'+str(repo)).text
-        result = json.loads(req)
-        print(result)
-        sc = int(result['stargazers_count'])
+    for repo in result:
+        sc = float(repo['stargazers_count'])
         starcount.append(sc)
     avgsg = np.mean(starcount)
-    print(avgsg)
-    rank = rank.append([user, avgsg])
-sorted_rank = rank.sort(key=lambda x: x[1])
-print(sorted_rank)
+    rank.append([user, avgsg])
+rank.sort(key=lambda x: x[1], reverse = True)
+i = 1
+for user in rank:
+    print('#'+str(i)+' User: ' + user[0] + ' Average stars : ' + str(user[1]))
+    i +=1
