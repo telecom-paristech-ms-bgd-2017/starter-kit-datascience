@@ -3,6 +3,7 @@ from collections import defaultdict
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
 import requests, json, sys
+from operator import itemgetter
 
 ##############
 # CONSTANTES #
@@ -67,9 +68,8 @@ def set_credentials():
 ########
 def main():
     global stars
-    for contributor in best_contributors("paulmillr/2657075")[:10]:
+    for contributor in best_contributors("paulmillr/2657075"):
         repos = contributor_repos(contributor)
-        repos_per_contributor[contributor] = len(repos)
 
         with Pool(30) as pool:
             for repo in repos:
@@ -80,7 +80,8 @@ def main():
 
         stars[contributor] /= len(repos)
 
-    for contributor, avg_stars in stars.sort(key=lambda x: -x[1]):
+    sorted_stars = sorted(stars.items(), key=itemgetter(1), reverse=True)
+    for contributor, avg_stars in sorted_stars:
         print(contributor.ljust(20) + ": {s:.2f}".format(s=avg_stars))
 
 if __name__ == '__main__':
