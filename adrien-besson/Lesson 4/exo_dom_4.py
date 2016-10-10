@@ -3,6 +3,8 @@
 import requests
 from bs4 import BeautifulSoup
 
+TOKEN = "d8bf1f9d2c4d367f81d916700deb3f6ab55b9825"
+
 def loadHtml():
 	url = "https://gist.github.com/paulmillr/2657075"
 	r = requests.get(url)
@@ -19,7 +21,7 @@ def loadtopcontributors(soup):
 	return array
 
 def getMeanOfStars(contributor_id):
-	headers = {"Authorization": "token 4eb133ca065dbe251ad5676af1a557eb2512bb69"}
+	headers = {"Authorization": "token " + TOKEN}
 	r = requests.get('https://api.github.com/users/' + contributor_id + '/repos',headers=headers)
 	json = r.json()
 	stargazers_count = 0
@@ -54,4 +56,10 @@ def getRankTopContributorsByMeanRate():
 	meanRates = rankByMeanRates(meanRates)
 	return meanRates
 
-print(getRankTopContributorsByMeanRate())
+def printRanks():
+	ranked = getRankTopContributorsByMeanRate()
+	for rank in range(0,len(ranked)):
+		dico = ranked[rank]
+		print(str(rank + 1) + "	" + dico['Contributor_id'] + "	Score : " + str(dico['Note_moyenne']))
+
+printRanks()
