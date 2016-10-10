@@ -68,17 +68,22 @@ def set_credentials():
 ########
 def main():
     global stars
-    for contributor in best_contributors("paulmillr/2657075"):
+    repos_per_contributor = {}
+    contributors = best_contributors("paulmillr/2657075")
+
+    pool = Pool(30)
+    for contributor in contributors:
         repos = contributor_repos(contributor)
+        repos_per_contributor[contributor] = len(repos)
 
-        with Pool(30) as pool:
-            for repo in repos:
-                args = {'args': (contributor, repo), 'callback': add_stars}
-                pool.apply_async(get_stars, **args)
-            pool.close()
-            pool.join()
+        for repo in repos:
+            args = {'args': (contributor, repo), 'callback': add_stars}
+            pool.apply_async(get_stars, **args)
+    pool.close()
+    pool.join()
 
-        stars[contributor] /= len(repos)
+    for contributor in contributors:
+        stars[contributor] /= repos_per_contributor[contributor]
 
     sorted_stars = sorted(stars.items(), key=itemgetter(1), reverse=True)
     for contributor, avg_stars in sorted_stars:
