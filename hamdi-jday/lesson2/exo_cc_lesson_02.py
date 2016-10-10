@@ -50,7 +50,7 @@ def length_words(array):
 
 def fizbuzz(n):
     for i in range(1, n):
-        print("Fizz"[i % 3 * 4:] + "Buzz"[i % 5 * 4:])
+        print(("Fizz"[i % 3 * 4:] + "Buzz"[i % 5 * 4:]) or i)
     return
 # Write a function that takes a number and returns a list of its digits.
 
@@ -107,7 +107,7 @@ class Lesson1Tests(unittest.TestCase):
 
 
 def main():
-    fizbuzz(200)
+    fizbuzz(100)
     unittest.main()
 
 

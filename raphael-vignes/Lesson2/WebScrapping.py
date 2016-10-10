@@ -35,6 +35,7 @@ def computeIndicatorForPage(url):
   metrics['number_of_likes'] = number_of_likes
   metrics['number_of_dislikes'] = number_of_dislikes
   metrics['indicator'] = indicator
+
   return  metrics
 
 
@@ -55,4 +56,5 @@ def getAllMetricsForArtist(artist):
   return all_metrics
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
+print(metrics_rihanna)
 metrics_beyonce = getAllMetricsForArtist('beyonce')
