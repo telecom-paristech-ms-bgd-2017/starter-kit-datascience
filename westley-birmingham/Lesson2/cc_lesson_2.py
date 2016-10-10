@@ -109,7 +109,6 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
 
 
-
 def main():
     unittest.main()
 
