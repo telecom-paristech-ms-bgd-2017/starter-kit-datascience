@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 
 
-url_without_year = 'http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='
+url_without_year = "http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice="
 years = range(2010, 2016)
 data_rows = {'A': 6, 'B': 10, 'C': 18, 'D': 23}
 data = {}
@@ -26,7 +26,7 @@ for year in years:
 for year in sorted(data.keys()):
 
     print('------------------------\n')
-    print('Year ' + str(year) + ' :')
+    print('Année ' + str(year) + ' :')
     print('\nEuros par habitant :')
     for data_letter in sorted(data_rows):
         print(' ' + data_letter + ' = ' + data[year][data_letter + per_hab])

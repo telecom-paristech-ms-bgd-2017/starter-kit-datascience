@@ -49,7 +49,7 @@ from collections import Counter
 
 ###
 def file_reader(filename):
-  file = file_object = open(filename, 'r')
+  file = open(filename, 'r')
   file_content = file.read()
   counts = Counter()
   counts.update(word.strip('\',--,.,?!"\'').lower() for word in file_content.split())
@@ -59,20 +59,20 @@ def print_top(filename):
     counts= file_reader(filename).most_common(20)
     #pprint.pprint(counts.most_common(20))
     for elem in counts:
-        print "%s: %s" % (elem[0], elem[1])
+        print("%s: %s" % (elem[0], elem[1]))
 
 
 def print_words(filename):
     counts=file_reader(filename)
     for key in sorted(counts.iterkeys()):
-        print "%s: %s" % (key, counts[key])
+        print("%s: %s" % (key, counts[key]))
 
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
   if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
+    print('usage: ./wordcount.py {--count | --topcount} file')
     sys.exit(1)
 
   option = sys.argv[1]
@@ -82,7 +82,7 @@ def main():
   elif option == '--topcount':
     print_top(filename)
   else:
-    print 'unknown option: ' + option
+    print('unknown option: ' + option)
     sys.exit(1)
 
 if __name__ == '__main__':
