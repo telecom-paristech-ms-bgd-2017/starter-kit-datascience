@@ -22,7 +22,7 @@ def extractFromCellElement(table, r_pos, c_pos):
         .find_all('td', recursive=False)[c_pos].contents[0]
 
 
-def extractMultipleDataFromRow(table, r_pos):
+def extractValuesFromRow(table, r_pos):
     return {
         'title': str(extractFromCellElement(table, r_pos, 3)),
         'per_inhabitant': number(extractFromCellElement(table, r_pos, 1)),
@@ -35,10 +35,10 @@ def extractDataFromPage(url, params):
         result = requests.get(url, params=params)
         soup = BeautifulSoup(result.text, 'html.parser')
         table = extractTableElement(soup)
-        a = extractMultipleDataFromRow(table, 5)
-        b = extractMultipleDataFromRow(table, 9)
-        c = extractMultipleDataFromRow(table, 17)
-        d = extractMultipleDataFromRow(table, 22)
+        a = extractValuesFromRow(table, 5)
+        b = extractValuesFromRow(table, 9)
+        c = extractValuesFromRow(table, 17)
+        d = extractValuesFromRow(table, 22)
         return a, b, c, d
     except IndexError:
         sys.stderr.write('ERROR: no data for url {}.\n'.format(result.url))
