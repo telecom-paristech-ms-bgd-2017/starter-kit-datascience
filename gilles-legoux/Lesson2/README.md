@@ -1,3 +1,4 @@
+# Recap #2
 
 En complément du cours de vendredi et des ressources présentées voici :
 - un [résumé des commandes BeautifoulSoup] mais qui ne remplace bien évidemment pas la doc :) 
