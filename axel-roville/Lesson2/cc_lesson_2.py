@@ -84,9 +84,8 @@ class Lesson1Tests(unittest.TestCase):
 
 
 def main():
+    fizbuzz()
     unittest.main()
 
 if __name__ == '__main__':
     main()
-
-fizbuzz()
