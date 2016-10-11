@@ -8,13 +8,13 @@ Persist data in two files:
 Run this script without and with -m option, to compare the execution with and
 without multiprocessing:
 
-with multiprocessing:
+- with multiprocessing:
 $ time python3 exo_dom_lesson_3.py
 real    0m20.682s
 user    0m9.668s
 sys     0m0.932s
 
-without multiprocessing:
+- without multiprocessing:
 $ time python3 exo_dom_lesson_3.py -m
 real    2m3.338s
 user    0m4.560s
@@ -114,7 +114,7 @@ class GitHubAPIv3Client:
 
     def get_repos(self, username):
         """
-        Get information about all repositories of one GitHub username
+        Get information about all repositories of one GitHub user
         under raw format.
 
         Parameters
@@ -125,7 +125,7 @@ class GitHubAPIv3Client:
         Returns
         -------
         raw_data : list of dict objects
-            Information about all repositories of this GitHub username.
+            Information about all repositories of this GitHub user.
 
         References
         ----------
@@ -186,7 +186,7 @@ class InfoRepoHelper:
 
         Returns
         -------
-        raw_data : int
+        all_stars : int
             Total number of stars.
 
         """
@@ -217,7 +217,7 @@ class InfoRepoHelper:
 
         Returns
         -------
-        mean : floot
+        mean_stars_by_repo : floot
             Mean of stars by repository.
 
         """
@@ -266,7 +266,7 @@ class InfoRepoHelper:
         Returns
         -------
         df : pandas.DataFrame
-            A copied data frame with this columns ['owner', 'all_stars',
+            A copied data frame with these columns ['owner', 'all_stars',
             'repos', 'mean_of_stars_by_repo'] and saved into 'data.csv'.
 
         """
@@ -288,8 +288,8 @@ def get_info_users(usernames, is_multiprocessing=False):
     ----------
     contributors : list of str
         Several contributor names, precisely theirs GitHub identifiers.
-    multiprocessing :  bool
-        If True run in multiprocessing (default False)
+    multiprocessing : bool
+        If True use multiprocessing (default False)
 
     Returns
     -------
@@ -298,7 +298,7 @@ def get_info_users(usernames, is_multiprocessing=False):
 
     See Also
     --------
-    InfoRepo, get_info_contributor
+    InfoRepo, get_info_user
 
     """
     if is_multiprocessing:
@@ -338,7 +338,7 @@ def get_info_user(username, verbose=True):
 
     See Also
     --------
-    InfoRepo, get_info_contributors.
+    InfoRepo, get_info_users
 
     """
     info_repos = []
