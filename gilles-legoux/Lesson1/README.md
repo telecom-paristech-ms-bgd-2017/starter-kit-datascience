@@ -1,3 +1,5 @@
+# Recap #1
+
 En résumé de ce premier cours:
 - Il faut mettre les mains dedans et multiplier les exercices, tutoriels, lectures de code et documentation.
 - Assimilez l'important d'un système de gestion de version comme Git https://git-scm.com/about et apprenez les commandes de base
