@@ -3,7 +3,7 @@ En complément du cours de vendredi et des ressources présentées voici :
 - un [résumé des commandes BeautifoulSoup] mais qui ne remplace bien évidemment pas la doc :) 
 - un lien qui liste les sites de coding challenges si vous voulez vous amuser. Kaggle reste la marque la plus reconnue de loin.
 - le challenge [Fizzbuzz] corrigé dans 216 languages ! (no kidding)  
-- un article qui explique tres bien le fonctionnement d'internet  
+- un [article] qui explique tres bien le fonctionnement d'internet  
 
 Comme exercice pour jeudi je vous demande de crawler le résultat des comptes de la ville de Paris pour 
 les exercices 2009 à 2013. Voici par exemple les comptes pour 2013. Je vous demande de récupérer les
