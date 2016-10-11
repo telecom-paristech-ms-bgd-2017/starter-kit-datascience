@@ -1,4 +1,6 @@
 
+### EXO SCRAP CDISCOUNT ###
+
 # Import packages & initialize variables
 import requests
 from bs4 import BeautifulSoup
