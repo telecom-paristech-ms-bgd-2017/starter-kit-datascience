@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# execute: ./cc_lesson2 -v
+# execute: ./exo_cc_lesson2.py -v
 
 import unittest
 
