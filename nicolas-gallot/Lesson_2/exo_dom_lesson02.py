@@ -114,8 +114,13 @@ def display_results(results):
 # Main launcher
 
 start_time = time.time()
+<<<<<<< refs/remotes/origin/master
 communes = np.arange(1, 51, dtype=np.int) #[1..50]
 departements = [14, 75]
+=======
+communes = np.arange(1, 751, dtype=np.int) #[1..50]
+departements = [14]
+>>>>>>> CC3 + Dom_Exo2
 years = np.arange(2010, 2016, dtype=np.int) #[2010..2016]
 
 print(years)
@@ -124,7 +129,11 @@ print(years)
 # years = [2010, 2011]
 
 combinations = itertools.product(communes, departements, years)
+<<<<<<< refs/remotes/origin/master
 print("Crawling {0} cities...".format(str(len(communes)*len(departements)*len(years))))
+=======
+print("Crawling {0} combinations...".format(str(len(communes)*len(departements)*len(years))))
+>>>>>>> CC3 + Dom_Exo2
 # results = main_sequential(combinations)
 results = main_parallel(combinations)
 
