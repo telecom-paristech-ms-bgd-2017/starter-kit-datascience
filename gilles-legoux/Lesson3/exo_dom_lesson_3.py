@@ -20,8 +20,8 @@ real    2m3.338s
 user    0m4.560s
 sys     0m0.648s
 
-With multiprocessing, it is 6 times with 8 cores and 8 processes)
-faster than without.
+With multiprocessing, it is 6 times faster than without.
+(with 8 cores and 8 processes)
 """
 
 # standard library imports
