@@ -176,13 +176,13 @@ class InfoRepoHelper:
     @staticmethod
     def get_all_stars(repos):
         """
-        Get the total number of stars from raw data matching to a list of
+        Get the total number of stars from raw data matching with a list of
         information about GitHub repository.
 
         Parameters
         ----------
         repos : raw data
-            A list of raw data matching to information about GitHub repository.
+            A list of raw data matching with information about GitHub repository.
 
         Returns
         -------
@@ -205,7 +205,7 @@ class InfoRepoHelper:
     @staticmethod
     def get_mean_of_stars_by_repo(all_stars, number_of_repos):
         """
-        Get the total number of stars from raw data matching to a list of
+        Get the total number of stars from raw data matching with a list of
         information about GitHub repository.
 
         Parameters
@@ -239,7 +239,7 @@ class InfoRepoHelper:
         Returns
         -------
         df : pandas.DataFrame
-            A data frame with its columns matching to attributs of InfoRepo
+            A data frame with its columns matching with attributs of InfoRepo
             object'.
 
         """
