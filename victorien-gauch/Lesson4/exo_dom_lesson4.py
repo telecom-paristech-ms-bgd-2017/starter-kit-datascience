@@ -17,7 +17,7 @@ def getLine(soup):
 users = getData()
 
 def getStars(id_user):
-	headers = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'Basic dmljbzkyOkZvb3RiYWxsOTI='}
+	headers = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'token 00b8ef9071701762a1b4625c13498410751d015d'}
 	url = requests.get('https://api.github.com/users/' + str(id_user) + '/repos',headers=headers)
 	content = url.json()
 	count = 0
@@ -30,8 +30,7 @@ def getStars(id_user):
 
 def getStarsForAllusers(users):
 	tab = []
-	#header = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'Basic dmljbzkyOkZvb3RiYWxsOTI='}
-	#requests.put('https://api.github.com/authorizations/clients/vico92')
+
 	for el in users:
 		dico = {}
 		dico['users'] = el
@@ -43,6 +42,7 @@ def getStarsForAllusers(users):
 
 def rank(results):
 	return sorted(results,key= lambda users: users['mean'], reverse=True)
+
 
 result = getStarsForAllusers(users)
 

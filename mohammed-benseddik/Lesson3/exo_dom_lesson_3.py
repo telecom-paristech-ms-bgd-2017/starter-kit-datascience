@@ -11,7 +11,8 @@ from collections import OrderedDict
 Token = "f6b118221bc4d142dbf582caef4fcead69e1a000"
 GITHUB_API = 'https://api.github.com'
 
-#********************** Partie 2 : Crawling pour recupperer les noms des users
+
+#********************** Partie 1 : Crawling pour recupperer les noms des users
 url = 'https://gist.github.com/paulmillr/2657075'
 req = requests.get(url)
 soup = BeautifulSoup(req.text, 'html.parser')
@@ -56,6 +57,8 @@ sorted_dictionary = OrderedDict(
     sorted(dictionary.items(), key=operator.itemgetter(1), reverse=True))
 
 print("Les utilisateurs les mieux etoiles : \n")
+
+del sorted_dictionary['jfrazelle']
 
 for keys, values in sorted_dictionary.items():
     print(str(keys) + " : " + str(values))
