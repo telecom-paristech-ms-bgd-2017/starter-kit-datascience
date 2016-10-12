@@ -1,6 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-# execute: ./cc_lesson2 -v
+
 
 import unittest
 
@@ -14,9 +12,9 @@ def string_times(string, n):
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
-def array_front9(nums):
-    for num in nums[:4]:
-        if num == 9:
+def array_front9(n):
+    for n in n[:4]:
+        if n == 9:
             return True
     return False
 
