@@ -60,12 +60,14 @@ def number2digits(number):
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
-def pig_latin(text):
-    pig = ''
-    words = text.split()
-    for word in words:
-        pig += word[1:] + word[0] + 'ay' + ' '
-    return pig[:-1].capitalize()
+
+def pigLatin(text):
+    l=text.split() 
+    m=[]
+    for i in l:
+        m.append(i[1:].lower()+i[0].lower()+"ay") 
+    p=' '.join(m)
+    return p.capitalize()
 
 
 # Here's our "unit tests".
