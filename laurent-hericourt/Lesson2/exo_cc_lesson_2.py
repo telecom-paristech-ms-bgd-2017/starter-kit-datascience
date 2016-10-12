@@ -1,110 +1,64 @@
-import unittest
+"""
+Déterminer si ce sont les ordinateurs Dell ou Acer qui ont le plus de reduction sur CDiscount (ie le taux de rabat)
+Ce code ne fonctionne que pour les ordinateurs portables
+"""
+
+import urllib.request as req
+from bs4 import BeautifulSoup
 
 
-# Given a string and a non-negative int n, return a larger string
-# that is n copies of the original string.
-
-def string_times(string, n):
-    return string * n
-
-
-# Given an array of ints, return True if one of the first 4 elements
-# in the array is a 9. The array length may be less than 4.
-def array_front9(nums):
-    for num in nums[:4]:
-        if num == 9:
-            return True
-    return False
+def get_soup(produit, numero_page):
+    url = 'http://www.cdiscount.com/search/10/' + produit + '.html?TechnicalForm.SiteMapNodeId=0&TechnicalForm.DepartmentId=10&TechnicalForm.ProductId=&hdnPageType=Search&TechnicalForm.SellerId=&TechnicalForm.PageType=SEARCH_AJAX&TechnicalForm.LazyLoading.ProductSheets=False&NavigationForm.CurrentSelectedNavigationPath=f%2F1%2F0k&FacetForm.SelectedFacets.Index=0&FacetForm.SelectedFacets.Index=1&FacetForm.SelectedFacets.Index=2&FacetForm.SelectedFacets%5B2%5D=f%2F6%2F' + produit + '&FacetForm.SelectedFacets.Index=3&FacetForm.SelectedFacets.Index=4&FacetForm.SelectedFacets.Index=5&FacetForm.SelectedFacets.Index=6&FacetForm.SelectedFacets%5B6%5D=f%2F8%2Fordinateur+portable&FacetForm.SelectedFacets.Index=7&GeolocForm.ConfirmedGeolocAddress=&SortForm.SelectedSort=PERTINENCE&ProductListTechnicalForm.Keyword=' + produit +'&&page=' + numero_page + '_his_'
+    html = req.urlopen(url).read()
+    return BeautifulSoup(html, "html.parser")
 
 
-# Given a string, return the count of the number of times
-# that a substring length 2 appears  in the string and also as
-# the last 2 chars of the string, so "hixxxhi" yields 1 (we won't count the end substring).
-def last2(string):
-    last = string[-2:]
-    i = 0
-    for index, lettre in enumerate(string):
-        if index != 0:
-            if (string[index - 1] + string[index] == last):
-                i += 1
-    return i - 1
+def get_prix(produit, nombre_pages):
+    liste_prix = []
+
+    for i in range(1, nombre_pages + 1):
+        soup = get_soup(produit, str(i))
+        nombre_ordis = len(soup.select("div.prdtPrSt"))
+        index = 0
+
+        while (index < nombre_ordis):
+            nom_ordi = soup.select("div.prdtBTit")[index].text
+            ancien_prix = soup.select("div.prdtPrSt")[index].text.replace(",", ".")
+            nouveau_prix = soup.select("span.price")[index].text.replace("€", ".")
+            if not ancien_prix:
+                ancien_prix = nouveau_prix
+            ordi = {nom_ordi: {ancien_prix, nouveau_prix}}
+            liste_prix.append((nom_ordi, float(ancien_prix), float(nouveau_prix)))
+            index += 1
+    return liste_prix
 
 
-# Write a program that maps a list of words into a list of
-# integers representing the lengths of the correponding words.
-def length_words(array):
-    dico = [len(word) for word in array]
-    return dico
-    # Autre solution dessous avec un map
-    # return list(map(lambda x:len(x),array))
+def calculate_reduction(liste_prix):
 
+    montant_reduction_moyen_tout_portable = 0
+    montant_reduction_moyen_portables_remises = 0
 
-# write fizbuzz programm
-def fizbuzz():
-    for i in range(1,200):
-        if i%15 == 0:
-            print("FizzBuz")
-        elif i%3 == 0:
-            print ("Fizz")
-        elif i%5 == 0:
-            print("Buzz")
-        else:
-            print(i)
+    prix_total_sans_reduction = 0
+    prix_total_avec_reduction = 0
+    nombre_ordis_total = 0
+    nombre_ordis_remises = 0
 
+    for prix in liste_prix:
+        prix_total_sans_reduction += prix[1]
+        prix_total_avec_reduction += prix[2]
+        nombre_ordis_total += 1
+        if prix[1] > prix[2]:
+            nombre_ordis_remises += 1
+    montant_reduction_moyen_tout_portable = (prix_total_sans_reduction - prix_total_avec_reduction) / nombre_ordis_total
+    montant_reduction_moyen_portables_remises = (
+                                              prix_total_sans_reduction - prix_total_avec_reduction) / nombre_ordis_remises
 
-# Write a function that takes a number and returns a list of its digits.
-def number2digits(number):
-    return list(map(lambda char:int(char),str(number)))
-
-
-# Write function that translates a text to Pig Latin and back.
-# English is translated to Pig Latin by taking the first letter of every word,
-# moving it to the end of the word and adding 'ay'
-def pigLatin(text):
-    text_traduit=""
-    for word in text.split(" "):
-        word_traduit = word[1:] + word[0] + "ay"
-        text_traduit += word_traduit.lower() + " "
-    return text_traduit.strip(" ").capitalize()
-
-# Here's our "unit tests".
-class Lesson1Tests(unittest.TestCase):
-    def testArrayFront9(self):
-        self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
-        self.assertEqual(array_front9([1, 2, 3, 4, 9]), False)
-        self.assertEqual(array_front9([1, 2, 3, 4, 5]), False)
-
-    def testStringTimes(self):
-        self.assertEqual(string_times('Hel', 2), 'HelHel')
-        self.assertEqual(string_times('Toto', 1), 'Toto')
-        self.assertEqual(string_times('P', 4), 'PPPP')
-
-    def testLast2(self):
-        self.assertEqual(last2('hixxhi'), 1)
-        self.assertEqual(last2('xaxxaxaxx'), 1)
-        self.assertEqual(last2('axxxaaxx'), 2)
-
-    def testLengthWord(self):
-        self.assertEqual(length_words(['hello', 'toto']), [5, 4])
-        self.assertEqual(length_words(['s', 'ss', '59fk', 'flkj3']), [1, 2, 4, 5])
-
-    def testNumber2Digits(self):
-        self.assertEqual(number2digits(8849), [8, 8, 4, 9])
-        self.assertEqual(number2digits(4985098), [4, 9, 8, 5, 0, 9, 8])
-
-    def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox"), "Hetay uickqay rownbay oxfay")
-
-    def testFizzBuss(self):
-        fizbuzz()
-
-
-
-def main():
-    unittest.main()
-
+    return ({"Montant réduction moyen tout portable": montant_reduction_moyen_tout_portable,
+             "Montant réduction moyen portables remises": montant_reduction_moyen_portables_remises})
 
 if __name__ == '__main__':
-    main()
+    liste_prix_acer = get_prix("acer", 9)
+    print("Pour acer voici les infos sur les réductions faites : {0}".format(calculate_reduction(liste_prix_acer)))
 
-
+    liste_prix_acer = get_prix("dell", 20)
+    print("Pour dell voici les infos sur les réductions faites : {0}".format(calculate_reduction(liste_prix_acer)))
