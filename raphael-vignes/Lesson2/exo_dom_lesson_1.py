@@ -58,6 +58,7 @@ def exportCsv(commune):
         print("Erreur d\'entrée sortie")
     return
 
+
 #paris = getAccountsByYear([X for X in range(2010,2016)],'056','075')
 #prettyPrintAccounts(paris)
 #caen = getAccountsByYear([X for X in range(2010,2016)],'118','014')
