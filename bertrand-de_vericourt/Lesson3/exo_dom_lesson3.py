@@ -1,94 +1,66 @@
-
-###  SCRZAP GITHUB biggest users ###
+############################ SCRAP GITHUB biggest users ##############################
 
 # Import packages & initialize variables
 import requests
 from bs4 import BeautifulSoup
 
-devs_list = []
+def getDevs(maxUsers):
+  devs_list = []
+  url = 'https://gist.github.com/paulmillr/2657075'
+  page_developers = requests.get(url)
+  soup = BeautifulSoup(page_developers.text, 'html.parser')
+  #soup.prettify()
+  devs = soup.select('tbody tr')
 
-url = 'https://gist.github.com/paulmillr/2657075'
-page_developers = requests.get(url)
-soup = BeautifulSoup(page_developers.text, 'html.parser')
-soup.prettify()
-devs = soup.select('tbody tr')
+  # Loop over 256 developers of the table body
+  for idx, dev in enumerate(devs[:maxUsers]):
 
+    try:
+      #print(dev.select('td:nth-of-type(1) a')[0].text + ' : ' + str(idx+1))
+      devs_list.append(dev.select('td:nth-of-type(1) a')[0].text)
 
-# Loop over 256 developers of the table body
-for idx, dev in enumerate(devs[:256]):
+    except Exception as e:
+      print(str(e) + '    ####################################################################')
+      print('error caused by : ' + str(dev.select('td:nth-of-type(1)')))
 
-  try:
-    #print(dev.select('td:nth-of-type(1) a')[0].text + ' : ' + str(idx+1))
-    #devs_list.append(dev.select('td:nth-of-type(1) a')[0].text)
+  return devs_list
 
-  except Exception as e:
-    #print(str(e) + '    ####################################################################')
-    #print('error caused by : ' + str(dev.select('td:nth-of-type(1)')))
+#print(getDevs(256))
 
+############################ GITHUB API SCRAPING ##############################
 
-############################ CONNECTING TO THE API ############################
-# get library for API OAuth2
-from requests_oauthlib import OAuth2Session
+# get User profile
+def get_Profile(access_token, urlUser):
+  headers = {"Authorization": "token " + access_token}
+  response = requests.get(urlUser, headers=headers)
+  me_json = response.json()
+  return me_json
 
-# open a session
-github = OAuth2Session(client_id)
+def get_DevScore(usersList):
+  # get devs' mean of stars for their repos
+  for idx, pseudo in enumerate(usersList):
 
-# Redirect user to GitHub for authorization
-authorization_url, state = github.authorization_url(authorization_base_url)
-print('Please go here and authorize,', authorization_url)
+    my_token = 'WRITE YOUR TOKEN HERE'
+    urlUser = 'https://api.github.com/users/' + pseudo + '/repos'
+    starsCount = 0
+    devData = {}
+    profile = get_Profile(my_token, urlUser)
 
-# Get the authorization verifier code from the callback url
-redirect_response = raw_input('Paste the full redirect URL here:')
+    # count stars total
+    for val in profile:
+      starsCount += val['stargazers_count']
 
-# Fetch the access token
-github.fetch_token(token_url, client_secret=client_secret, authorization_response=redirect_response)
+    # register mean
+    StarsMean = starsCount / len(profile)
+    devData['pseudo'] = pseudo
+    devData['rank'] = idx + 1
+    devData['meanStars'] = StarsMean
+    print('this dev has these data : ')
+    print(devData)
 
-############################ EXPLOITING THE API ############################
-for pseudo in devs_list
+  return
 
-  urlUser = 'https://api.github.com/users/' + pseudo + '/repos'
-  auth = OAuth1('YOUR_APP_KEY', 'YOUR_APP_SECRET', 'USER_OAUTH_TOKEN', 'USER_OAUTH_TOKEN_SECRET')
+# print out devs data (scores included)
+ListOfDevs = getDevs(256)
+get_DevScore(ListOfDevs)
 
-  # Fetch a protected resource, here: repos data from the developer account
-  r = requests.get(urlUser, auth=auth)
-  print(r.content)
-
-
-
-# stargazers_count
-
-
-
-###########################
-"""
-
-SOURCE : https://requests-oauthlib.readthedocs.io/en/latest/examples/github.html
-Setup credentials following the instructions on GitHub. When you have obtained a client_id and a client_secret you can try out the command line interactive example below.
-
-# Credentials you get from registering a new application
-client_id = '<the id you get from github>'
-client_secret = '<the secret you get from github>'
-
-# OAuth endpoints given in the GitHub API documentation
-authorization_base_url = 'https://github.com/login/oauth/authorize'
-token_url = 'https://github.com/login/oauth/access_token'
-
-from requests_oauthlib import OAuth2Session
-github = OAuth2Session(client_id)
-
-# Redirect user to GitHub for authorization
-authorization_url, state = github.authorization_url(authorization_base_url)
-print 'Please go here and authorize,', authorization_url
-
-# Get the authorization verifier code from the callback url
-redirect_response = raw_input('Paste the full redirect URL here:')
-
-# Fetch the access token
-github.fetch_token(token_url, client_secret=client_secret,
-        authorization_response=redirect_response)
-
-# Fetch a protected resource, i.e. user profile
-r = github.get('https://api.github.com/user')
-print r.content
-
-"""
