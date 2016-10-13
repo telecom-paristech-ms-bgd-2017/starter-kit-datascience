@@ -7,9 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def extractData(departement,year):
+def extractData(departement,commune,year):
 
-    r3= requests.post("http://alize2.finances.gouv.fr/communes/eneuro/tableau.php",{'ICOM':'056','DEP':departement,
+    r3= requests.post("http://alize2.finances.gouv.fr/communes/eneuro/tableau.php",{'ICOM':'commune','DEP':departement,
                                                                                 'TYPE':'BPS','PARAM':'0',
                                                                                 'dep':'','reg':'',
                                                                                 'nomdep':'',
@@ -71,14 +71,8 @@ def extractData(departement,year):
             print("")
 
 # In[12]:
-extractData('075','2008')
-extractData('075','2009')
-extractData('075','2010')
-extractData('075','2011')
-extractData('075','2012')
-extractData('075','2013')
-extractData('075','2014')
-extractData('075','2015')
+extractData('075','04','2008')
+extractData('075','04','2015')
 
 
 # In[ ]:
