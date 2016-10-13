@@ -4,9 +4,8 @@ import json
 import pandas as pd
 import numpy as np
 
-# replace 'my key " by 7a0fee0f5a7b5ec182dcd0d0189b2384ac225fd2
 
-authentification = {'Authorization': 'token %s' % 'my key'}
+authentification = {'Authorization': 'token %s' % 'd15c378b8093c140ff19c834933ed6f0c4f709a3'}
 
 r3 = requests.get("https://gist.github.com/paulmillr/2657075")
 soup = BeautifulSoup(r3.text, 'html.parser')
@@ -25,10 +24,7 @@ def get_star(name):
     jsonData = requests.get(url, headers=authentification)
     jsonToPython = json.loads(jsonData.text)
     star = [jsonToPython[i]['stargazers_count'] for i in range(len(jsonToPython))]
-    if star not empty:
-        return np.mean(star)
-    else:
-        return 0
+    return np.mean(star)
 
 
 stars=[]
