@@ -37,7 +37,7 @@ def decode_row(row):
     return login, name, rank
     
 
-def get_users(maxnb=1):
+def get_users(maxnb=256):
     '''returns maxnb contributors'''
     url = 'https://gist.github.com/paulmillr/2657075'
     r = requests.get(url)
@@ -56,40 +56,45 @@ def get_users(maxnb=1):
             users[login] = {'name': name, 'rank': rank}
     return users
 
-def get_users_avg2(users):
-    '''github api + json'''
-    ranking = pd.DataFrame()
+def get_users_avg3(users):
+    '''github token + json'''
     # authentification
-    # curl -i
-    os.system("curl -u drussier https://api.github.com/users/drussier")
+    token = os.environ.get('GITHUB_TOKEN')
+    # print "token ", token
+    auth_tuple = ('drussier', token)
 
+    ranking = pd.DataFrame()
     for user in users:
         # list repositories for another user:
         url = "https://api.github.com/users/%s/repos" % (user)
-        os.system("curl " + url + " > user.json")
+        r = requests.get(url, auth=auth_tuple)
+        # print r.json()
+
         avg = 0.
         count = 0
-        with open('user.json') as f:
-            data = json.load(f)
-            # pprint(data)
-            for d in data:
-                note = d['stargazers_count']
-                avg += note
-                count += 1
-        avg /= count
+        data = r.json()
+        # pprint(data)
+        for d in data:
+            note = d['stargazers_count']
+            avg += note
+            count += 1
+        if count > 0:
+            avg /= count
+        else:
+            avg = 0.
         ranking = ranking.append({'login': user,
                                   'note': avg},
                                  ignore_index=True)
     ranking = ranking.sort_values(['note'], ascending=False)
     ranking = ranking.reset_index(drop=True)
-    ranking.to_csv('ranking2.csv', sep=',')
+    ranking.to_csv('ranking3.csv', sep=',')
     return ranking
 
 
 users = get_users()
 # print users
 
-ranking = get_users_avg2(users)
+ranking = get_users_avg3(users)
 
 
 
