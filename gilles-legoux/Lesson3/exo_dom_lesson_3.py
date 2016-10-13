@@ -8,17 +8,17 @@ Persist data in two files:
 Run this script without and with -m option, to compare the execution with and
 without multiprocessing:
 
-- with multiprocessing:
-$ time python3 exo_dom_lesson_3.py
-real    0m20.682s
-user    0m9.668s
-sys     0m0.932s
-
 - without multiprocessing:
-$ time python3 exo_dom_lesson_3.py -m
+$ time python3 exo_dom_lesson_3.py
 real    2m3.338s
 user    0m4.560s
 sys     0m0.648s
+
+- with multiprocessing:
+$ time python3 exo_dom_lesson_3.py -m
+real    0m20.682s
+user    0m9.668s
+sys     0m0.932s
 
 With multiprocessing, it is 6 times faster than without.
 (with 8 cores and 8 processes)
@@ -366,6 +366,7 @@ if __name__ == "__main__":
     def print_usage():
         print('usage: python3 {} [-m|--multiprocessing]'.format(sys.argv[0]))
         sys.exit(1)
+
 
     args = sys.argv[1:]
     if len(args) > 1:
