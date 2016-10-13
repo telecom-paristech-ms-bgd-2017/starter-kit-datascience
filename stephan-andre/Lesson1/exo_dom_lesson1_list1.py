@@ -11,10 +11,10 @@ def match_ends (l):
     for s in l:
         if len(s)>1 and s[0]==s[-1]:
             int+=1
-            return int
         else:
             int+=0    
-            return int
+    return int
+    
     
 # B. front_x
 def front_x(l):
