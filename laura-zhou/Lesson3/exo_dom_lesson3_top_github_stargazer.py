@@ -24,7 +24,7 @@ def get_top_github():
 
 
 def get_stargazers_count(pseudo):
-    access_token="b57ba6115902952fe60e2c88571480d22a9374ff"
+    access_token="TOKEN"
     headers = {"Authorization": "bearer " + access_token}
     response = requests.get('https://api.github.com/users/' + pseudo + '/repos', headers=headers)
     me_json = response.json() #permet de lire le Json dans une liste
