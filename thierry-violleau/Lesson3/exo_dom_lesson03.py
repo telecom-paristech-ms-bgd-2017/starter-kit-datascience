@@ -16,7 +16,6 @@ Headers = {
     # "Authorization": 'token <token>'
 }
 
-
 # Retrieves the names of the top ranked GitHub contributors from Gist GitHub web site;
 # returns a list of string names.
 def get_user_names(token):
@@ -51,7 +50,6 @@ def get_starred_repos(user, token):
             results.append(i["stargazers_count"])
     return numpy.mean(results)
 
-
 # Retrieves and sorts the top rated GitHub contributors according to their average 'stargazers_count';
 # returns a list of tuples <username, count>
 def sort_users_by_starred_repos(token):
@@ -62,7 +60,6 @@ def sort_users_by_starred_repos(token):
         results[user] = stars
     return sorted(results.items(), key=lambda x: x[-1], reverse=True)
 
-
 # Loads an oAuth token from the designated file;
 # returns the token as a string.
 # The oAuth token must, for example, be obtained via "https://github.com/settings/tokens" and saved in a file locally.
@@ -71,5 +68,10 @@ def load_oauth_token(filename):
         token = file.readline().strip()
         return token
 
+# Prints out the provided results (from sort_users_by_starred_repos).
+def pretty_print(results):
+    for username, average in results:
+        print("User: %s = Average StarGazers: %2f" % (username, average))
 
-print(sort_users_by_starred_repos(load_oauth_token('GitHub_API_OAuth_token.txt')))
+# Test
+pretty_print(sort_users_by_starred_repos(load_oauth_token('GitHub_API_OAuth_token.txt')))
