@@ -1,6 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-# execute: ./cc_lesson2 -v
+
 
 import unittest
 
@@ -14,9 +12,9 @@ def string_times(string, n):
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
-def array_front9(nums):
-    for num in nums[:4]:
-        if num == 9:
+def array_front9(n):
+    for n in n[:4]:
+        if n == 9:
             return True
     return False
 
@@ -25,17 +23,19 @@ def array_front9(nums):
 # that a substring length 2 appears in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1
 # (we won't count the end substring).
+
+    
 def last2(string):
-    res = 0
-    last = string[-2:]
-    for k in range(len(string[:-2])):
-        if last == string[k:k + 2]:
-            res += 1
-    return res
+    count=0
+    for n in range(len(string)-2):
+        if string[n:n+2]==string[-2:]:
+            count+=1
+    return count
 
 
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the corresponding words.
+
 def length_words(words):
     return map(len, words)
 
@@ -52,6 +52,7 @@ def fizz_buzz(n):
 
 
 # Write a function that takes a number and returns a list of its digits.
+
 def number2digits(number):
     return map(int, list(str(number)))
 
@@ -59,12 +60,14 @@ def number2digits(number):
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
-def pig_latin(text):
-    pig = ''
-    words = text.split()
-    for word in words:
-        pig += word[1:] + word[0] + 'ay' + ' '
-    return pig[:-1].capitalize()
+
+def pigLatin(text):
+    l=text.split() 
+    m=[]
+    for i in l:
+        m.append(i[1:].lower()+i[0].lower()+"ay") 
+    p=' '.join(m)
+    return p.capitalize()
 
 
 # Here's our "unit tests".
