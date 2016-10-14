@@ -56,53 +56,20 @@ def get_users(maxnb=256):
             users[login] = {'name': name, 'rank': rank}
     return users
 
-def get_users_avg2(users):
-    '''github api + json'''
-    ranking = pd.DataFrame()
-    # authentification
-    # curl -i
-    os.system("curl -u drussier https://api.github.com/users/drussier")
-
-    for user in users:
-        # list repositories for another user:
-        url = "https://api.github.com/users/%s/repos" % (user)
-        os.system("curl " + url + " > user.json")
-        avg = 0.
-        count = 0
-        with open('user.json') as f:
-            data = json.load(f)
-            # pprint(data)
-            for d in data:
-                note = d['stargazers_count']
-                avg += note
-                count += 1
-        avg /= count
-        ranking = ranking.append({'login': user,
-                                  'note': avg},
-                                 ignore_index=True)
-    ranking = ranking.sort_values(['note'], ascending=False)
-    ranking = ranking.reset_index(drop=True)
-    ranking.to_csv('ranking2.csv', sep=',')
-    return ranking
-
-
 def get_users_avg3(users):
     '''github token + json'''
     # authentification
     token = os.environ.get('GITHUB_TOKEN')
-    print "token ", token
-    auth_tuple = ('drussier', token)    
-    
-    ranking = pd.DataFrame()
-    # curl -i
-    os.system("curl -u drussier https://api.github.com/users/drussier")
+    # print "token ", token
+    auth_tuple = ('drussier', token)
 
+    ranking = pd.DataFrame()
     for user in users:
         # list repositories for another user:
         url = "https://api.github.com/users/%s/repos" % (user)
         r = requests.get(url, auth=auth_tuple)
         # print r.json()
-        
+
         avg = 0.
         count = 0
         data = r.json()
@@ -127,7 +94,6 @@ def get_users_avg3(users):
 users = get_users()
 # print users
 
-# ranking = get_users_avg2(users)
 ranking = get_users_avg3(users)
 
 
