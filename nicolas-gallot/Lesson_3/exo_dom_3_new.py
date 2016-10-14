@@ -7,7 +7,18 @@ from multiprocessing import Pool
 # En utilisant l'API github https://developer.github.com/v3/ récupérer pour chacun de ces users le nombre moyens de stars des repositories
 # qui leur appartiennent. Pour finir classer ces 256 contributors par leur note moyenne.﻿
 
+# ###############################
+
+# Before running this script, get an access token for GitHub API
+# and write it in a file token.txt, located in the script directory.
+
+# ###############################
+
 GITHUB_API = 'https://api.github.com'
+
+def get_github_api_token():
+    with open('token.txt') as f:
+        return f.read()
 
 def getBeautifulSoupObjectfromUrl(url):
     return BeautifulSoup(requests.get(url).text, 'html.parser')
@@ -28,7 +39,7 @@ def get_gt_users():
 
 
 def get_git_user_repos_average_stars(user_name):
-    headers_credentials = {'Authorization': 'token {0}'.format(TOKEN)}
+    headers_credentials = {'Authorization': 'token {0}'.format(token)}
     url = 'https://api.github.com/users/{}/repos'.format(user_name)
     repos = requests.get(url, headers=headers_credentials)
     repos_info = json.loads(repos.text)
@@ -52,8 +63,7 @@ def get_git_info_parallel():
 
 
 # Main script :
-
-TOKEN = input('Token :')
+token = get_github_api_token()
 data = get_git_info_parallel()
 res = sorted(data, key=lambda d: d[1], reverse=True)
 print("Number of results : {0}".format(len(res)))
