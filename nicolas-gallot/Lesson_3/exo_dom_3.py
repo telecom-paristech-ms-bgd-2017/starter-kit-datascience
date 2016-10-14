@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import numpy as np
 import json
 from multiprocessing import Pool
+import time
 
 # En utilisant l'API github https://developer.github.com/v3/ récupérer pour chacun de ces users le nombre moyens de stars des repositories
 # qui leur appartiennent. Pour finir classer ces 256 contributors par leur note moyenne.﻿
@@ -16,12 +17,15 @@ from multiprocessing import Pool
 
 GITHUB_API = 'https://api.github.com'
 
+
 def get_github_api_token():
     with open('token.txt') as f:
         return f.read()
 
+
 def getBeautifulSoupObjectfromUrl(url):
     return BeautifulSoup(requests.get(url).text, 'html.parser')
+
 
 def get_gt_users():
     url = 'https://gist.github.com/paulmillr/2657075'
@@ -63,10 +67,18 @@ def get_git_info_parallel():
 
 
 # Main script :
+
+start_time = time.time()
 token = get_github_api_token()
 data = get_git_info_parallel()
 res = sorted(data, key=lambda d: d[1], reverse=True)
-print("Number of results : {0}".format(len(res)))
-print("")
+
+
 for r in res:
     print("User : {0}. Avg stars : {1}".format(r[0], r[1]))
+
+print("")
+print("#########################")
+print("")
+print("--- Number of results : {0} ---".format(len(res)))
+print("--- exec time (in s) : {0} ---".format(time.time() - start_time))

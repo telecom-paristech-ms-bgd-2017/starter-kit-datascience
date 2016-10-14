@@ -4,7 +4,7 @@ from requests_oauthlib import OAuth1
 from bs4 import BeautifulSoup
 import os
 from requests_oauthlib import OAuth1
-from urllib2 import urlopen, Request
+# from urllib2 import urlopen, Request
 
 #Accept: application/vnd.github.v3+json
 
@@ -19,7 +19,7 @@ def findUsers(soup_tbody):
     usersDictionary = {}
     for el in soup_tbody.find_all('tr'):
         #soup_td = soup_tbody.find_all('td')
-        print(el.find_all('td')[0].find('a').text)
+        #print(el.find_all('td')[0].find('a').text)
         user = el.find_all('td')[0].find('a').text
         usersDictionary[user] = 0
     return usersDictionary
@@ -31,42 +31,36 @@ def extractUsersMeanStars():
     soup_tbody = soup.tbody
     usersDictionary = findUsers(soup_tbody)
     # print(soup_tbody.find_all('tr')[0].find_all('td'))
+    for el in usersDictionary:
+        usersDictionary[el] = float(extractUsersStars(el))
+    print(sorted(usersDictionary, key=usersDictionary.__getitem__, reverse=True))
+    return usersDictionary
 
 # test connexion 1
-def extractUsersStars():
-    token = '40af341916805f9e563bbfccc96ed3ce897a4f7b'
+def extractUsersStars(username):
+    #token = '40af341916805f9e563bbfccc96ed3ce897a4f7b'
+    token = getMyToken
     user = 'westleyb'
     url = 'https://gist.github.com/paulmillr/2657075'
+    stars_mean_total = 0.0
+    stars_mean = 0.0
+    nb_stars_count = 0
+    result = requests.get('https://api.github.com/users/' + str(username) + '/repos', auth=('westleyb', '40af341916805f9e563bbfccc96ed3ce897a4f7b'))
+    #print(result)
+    for el in result.json():
+        for el2 in el:
+            if el2 == 'stargazers_count':
+                stars_mean += int(el['stargazers_count'])
+                nb_stars_count += 1
 
-    r = requests.get('https://api.github.com/users/GrahamCampbell/repos', auth=('westleyb', '40af341916805f9e563bbfccc96ed3ce897a4f7b'))
-    r.json()
-
-
-
-    ########
-
-    # url = 'https://github.com/login/oauth/access_token'
-    # auth = OAuth1('YOUR_APP_KEY', 'YOUR_APP_SECRET',
-    #                   'USER_OAUTH_TOKEN', 'USER_OAUTH_TOKEN_SECRET')
-
-    # urll = '"Authorization: token OAUTH-TOKEN" https: // api.github.com'
-    # rezl = requests.get(urll, auth=(user, token))
-    # print(rezl)
-
-
-
-
-    # os.path.dirname(os.path.realpath('__file__'))
-    # token = open('../token_github.txt', 'r').read()
-    # print(token)
-    # username + ':' + token + ' https://api.github.com/GrahamCampbell'
-    # GitHub(access_token='abc1234567xyz')~
+    if nb_stars_count > 0:
+        stars_mean_total = stars_mean / nb_stars_count
+    else:
+        stars_mean_total = 0
+    return stars_mean_total
 
 
-#url = 'https://gist.github.com/paulmillr/2657075'
-#auth = OAuth1('YOUR_APP_KEY', 'YOUR_APP_SECRET',
-#                  'USER_OAUTH_TOKEN', 'USER_OAUTH_TOKEN_SECRET')
+def getMyToken():
+    return open('/Users/Wes/CloudStation/Big Data/Master Spe BGD/6 - INFMDI 721 - Kit Big data/token_github.txt', 'r').read()
 
-#result =  requests.get(url, auth=auth)
-
-#soup = BeautifulSoup(result, 'html.parser')
+extractUsersMeanStars()
