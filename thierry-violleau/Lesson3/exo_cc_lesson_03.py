@@ -20,50 +20,49 @@ def load_search_page(brand, page):
 # Retrieves the list recommended retail prices and discount prices for computers of the specified brand from the designated
 # search results page;
 # returns a list of tuples <retail price, discounted price>.
-def get_discounts_on_page(brand, page=1):
+def get_discounts_on_page(brand, discounts_only=False, page=1):
     data = load_search_page(brand, page)
     results = []
     parser = BeautifulSoup(data.text, 'html.parser')
     for node in parser.find_all(class_="prdtBZPrice"):
-        discount_node = node.find(class_="prdtPrSt")
-        if discount_node:
-            price_node = node.find(class_="price")
-            if price_node:
+        price_node = node.find(class_="prdtPrice")
+        if price_node:
+            price_node = price_node.find(class_="price")
+            try:
+                discounted_price = extract_price(price_node)
+                discount_node = node.find(class_="prdtPrSt")
+                recommended_price = discounted_price
                 try:
-                    price = extract_price(price_node)
-                    discount = extract_price(discount_node)
-                    results.append([price, discount])
+                    if discount_node:
+                        recommended_price = extract_price(discount_node)
+                    elif discounts_only:
+                        continue
                 except ValueError:
                     pass
-    print(results)
+                results.append([discounted_price, recommended_price])
+            except ValueError:
+                pass
     return results
-
 
 # Extracts the price from the text of the designated DOM node.
 def extract_price(node):
     return float(node.text.replace(u'\xa0', '').replace(u' ', '').replace(u'€', '.').replace(u',', u'.'))
 
-
 # Retrieves the list of recommended retail prices and discount prices for computers of the specified brand from the first
 # search results pages;
 # returns a list of tuples <retail price, discounted price>.
-def get_discounts(brand, pages=10):
+def get_discounts(brand, discounts_only=False, pages=10):
     results = []
-    for page in range(1, pages):
-        results.extend(get_discounts_on_page(brand, page=page))
+    for page in range(1, pages + 1):
+        results.extend(get_discounts_on_page(brand, discounts_only=discounts_only, page=page))
     return results
 
-
 def test(pages):
-    discounts_dell = get_discounts('dell', pages)
-    discounts_acer = get_discounts('acer', pages)
-    average_discounts_dell = (sum(map(lambda v: v[0], discounts_dell)) - sum(map(lambda v: v[1], discounts_dell))) \
-                            / sum(map(lambda v: v[0], discounts_dell))
-    print(discounts_dell)
-    print(discounts_acer)
-    average_discounts_acer = (sum(map(lambda v: v[0], discounts_acer)) - sum(map(lambda v: v[1], discounts_acer))) \
-                            / sum(map(lambda v: v[0], discounts_acer))
+    discounts_dell = get_discounts('dell', discounts_only=True, pages=pages)
+    discounts_acer = get_discounts('acer', discounts_only=True, pages=pages)
+    average_discounts_dell = 1 - sum(map(lambda v: v[0], discounts_dell)) / sum(map(lambda v: v[1], discounts_dell))
+    average_discounts_acer = 1 - (sum(map(lambda v: v[0], discounts_acer)) / sum(map(lambda v: v[1], discounts_acer)))
     print("Average discounts for Dell from the %d first pages: %f" % (pages, average_discounts_dell))
     print("Average discounts for Acer from the %d first pages: %f" % (pages, average_discounts_acer))
 
-test(4)
+test(3)
