@@ -7,8 +7,14 @@ import json
 #json.dumps(UnArray)
 # =====> me transforme l'array au format JSON.
 
+# Pour teter les REGEX:
+# aller sur regex101.com (teste les regex)   ou  emailregex.com  => récupérer un cheat sheet
+#  importer la library  re
+
 # AMELIORATION pour chaîne de caractères avec paramètres:
 # utiliser >>>> 'maString1{}maString2'.format(LeParamètre)  >>> plutôt que 'maString1' + LeParamètre + 'maString2'
+
+# Pour ne pas avoir à réécrire les underscores par exemple: utiliser les KAMEL CASE
 
 # Import packages & initialize variables
 import requests
@@ -29,6 +35,7 @@ for city in cities[1:31]:
 # get distances (on utilise des dataframes, ils sont plus manipulables que les matrices)
 
 allCities = pd.DataFrame(0, cities_list, cities_list)
+f = open('maCleGG.txt', 'r')
 
 for idx, city1 in enumerate(cities_list):
 
@@ -36,22 +43,22 @@ for idx, city1 in enumerate(cities_list):
 
 		try:
 
-			if city1 == 'LeMans': city1 = 'Le Mans'
-			if city2 == 'LeMans': city2 = 'Le Mans'
-			StartFrom = city1
-			GoTo = city2
+			StartFrom = city1 + 'France'
+			GoTo = city2 + 'France'
 
-			YOUR_API_KEY = 'AIzaSyCy_-e9MGpAfoFboppXEXXul1zNFQ7puqw'
-			urlDistance = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + StartFrom + '&destinations=' + GoTo + '&key=' + YOUR_API_KEY
+			YOUR_API_KEY = f.readline()
+			urlDistance = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + \
+				StartFrom + '&destinations=' + GoTo + '&key=' + YOUR_API_KEY
 
 			response = requests.get(urlDistance)
 			me_json = response.json()
 			# in meters
 			print('from ' + city1 + ' to ' + city2)
-			distanceTemp = me_json['rows'][0]['elements'][0]['distance']['value']
+			if city2 == 'Dijon': print(me_json)
+			distanceTemp = me_json['rows'][0]['elements'][0]['distance']['text']
 			allCities[city1][city2] = distanceTemp
 			# in seconds
-			TimeTemp = me_json['rows'][0]['elements'][0]['duration']['value']
+			TimeTemp = me_json['rows'][0]['elements'][0]['duration']['text']
 			allCities[city2][city1] = TimeTemp
 
 		except ValueError as e:
