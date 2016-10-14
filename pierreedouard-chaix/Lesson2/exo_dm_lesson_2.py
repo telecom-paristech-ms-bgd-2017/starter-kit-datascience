@@ -13,6 +13,15 @@ LABEL_TYPE = "type"
 LABEL_PARAM = "param"
 LABEL_EXERCICE = "exercice"
 
+# DICT = {}
+# DICT["COMMUNE"] = "056"
+# DICT["DEPARTEMENT"] = "075"
+# DICT["TYPE"] = "BPS"
+# DICT["PARAM"] = "5"
+# DICT["EXERCICE"] = "2013"
+
+# requests.get(URL_BASE, params = DICT)
+
 def escapeandint(s):
     try:
         ss = int(s.replace(u'','').replace(' ',''))
@@ -80,6 +89,8 @@ def construireIndexAvecZeros(n):
     elif n <1000:
         return str(n)
 
+
+
 def recupValeursCommuneDepartement(departement, type, param, exercicedebut, exercicefin):
     RESULTATS = []
     for i in range(0,1000):
@@ -100,4 +111,4 @@ def recupValeursCommuneDepartement(departement, type, param, exercicedebut, exer
         c.writerow([resultat[0]["Departement"], resultat[0]["Ville"], resultat[0]["Annee"], resultat[0]["Valeurs"]["A"][0], resultat[0]["Valeurs"]["A"][1],resultat[0]["Valeurs"]["B"][0], resultat[0]["Valeurs"]["B"][1], resultat[0]["Valeurs"]["C"][0], resultat[0]["Valeurs"]["C"][1], resultat[0]["Valeurs"]["D"][0], resultat[0]["Valeurs"]["D"][1]])
 
 # Récupérer les valeurs pour toutes les villes du Calvados
-recupValeursCommuneDepartement(construireIndexAvecZeros(95), "BPS", "5", 2014, 2014)
+recupValeursCommuneDepartement(construireIndexAvecZeros(14), "BPS", "5", 2011, 2014)
