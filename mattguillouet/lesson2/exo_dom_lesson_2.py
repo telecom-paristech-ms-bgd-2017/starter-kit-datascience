@@ -39,7 +39,6 @@ for year in years:
 
 	soup = BeautifulSoup(r.content, 'html.parser')
 
-
 	baseStr = 'table:nth-of-type(3) > tr:nth-of-type({0}) > td:nth-of-type({1})'
 
 	crawl = []

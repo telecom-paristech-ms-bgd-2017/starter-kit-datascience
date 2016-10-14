@@ -28,8 +28,8 @@ def getDatasOnPage(soup):
 			m = re.search('(\d*)(,|€)(\d*)',initialPriceTxt)
 			initialPrice = int(m.group(1)) + int(m.group(3))/100
 
-		pourcentage = ((initialPrice - newPrice) / initialPrice) * 100.
-		addForPage += pourcentage
+			pourcentage = ((initialPrice - newPrice) / initialPrice) * 100.
+			addForPage += pourcentage
 
 	dico['SumOfReductions'] = addForPage
 	dico['NumberOfPriceOnPage'] = priceOnPage

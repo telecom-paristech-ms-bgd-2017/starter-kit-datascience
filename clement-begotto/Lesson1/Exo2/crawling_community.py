@@ -9,8 +9,6 @@ def exploring(id_commune, id_departement, year, hashmap):
 			+ '&type=BPS&param=5&exercice=' + str(year) )
 		soup = BeautifulSoup(ville.text, 'html.parser')
 
-		
-
 		for x in soup.find_all('tr') :
 			if x.find_all(class_="libellepetit") != [] and "DEPARTEMENT" in x.find_all(class_="libellepetit")[0].text:
 				hashmap['departement'].append(x.find_all(class_="libellepetit")[0].text.split(' : ')[1])
