@@ -65,7 +65,7 @@ resduration_mat.columns = villes["Ville"][0:top]
 
 # Nommage des lignes
 reskm_mat.index = villes["Ville"][0:top]
-resduration_mat.columns = villes["Ville"][0:top]
+resduration_mat.index = villes["Ville"][0:top]
 
 # Ecriture en csv
 reskm_mat.to_csv("Distance matrix.csv", sep=";", header = True)
