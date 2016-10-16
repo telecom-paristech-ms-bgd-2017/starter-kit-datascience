@@ -64,6 +64,7 @@ class GoogleMapsAPIClient:
     ----------
     https://console.developers.google.com/apis/credentials
     https://console.developers.google.com/iam-admin
+    
     """
     FORMAT = 'json'
     URL = 'https://maps.googleapis.com/maps/api/{function}/' + FORMAT
@@ -117,6 +118,7 @@ class GoogleMapsAPIClient:
         References
         ----------
         https://developers.google.com/maps/documentation/distance-matrix
+        
         """
         options = {'function': 'distancematrix'}
         url = GoogleMapsAPIClient.URL.format(**options)
@@ -151,7 +153,6 @@ class GoogleMapsAPIClient:
             return result
 
         try:
-
             if raw_data['status'] != 'OK':
                 error(raw_data)
 
@@ -178,6 +179,7 @@ def get_distance_matrix_with_library(city_names):
     References
     ----------
     https://github.com/googlemaps/google-maps-services-python
+    
     """
 
     def clean_and_save(distances, city_names, indicator, type_indicator):
