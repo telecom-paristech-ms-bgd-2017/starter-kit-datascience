@@ -174,7 +174,7 @@ class GoogleMapsAPIClient:
 
 def get_distance_matrix_with_library(city_names):
     """
-    Without manage errors.
+    Without manage error.
 
     References
     ----------
