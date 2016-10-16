@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 # execute: ./exo_cc_lesson2.py -v
 
 import unittest
