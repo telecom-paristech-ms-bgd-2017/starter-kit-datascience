@@ -76,7 +76,7 @@ class GoogleMapsAPIClient:
         self.config.read(GoogleMapsAPIClient.CONFIG)
         self.api_key = self.config['default']['api_key']
 
-    # public functions
+    # public methods
 
     def get_distance_matrix(self,
                             city_names,
@@ -111,7 +111,7 @@ class GoogleMapsAPIClient:
         df.to_csv(file_name, index=False)
         return df
 
-    # private functions
+    # private methods
 
     def _get_distance_matrix_raw_data(self, origins, destinations):
         """
