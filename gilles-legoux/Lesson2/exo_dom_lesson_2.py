@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# encoding: utf-8
+#!/usr/bin/env python3
 # execute: ./exo_dom_lesson_2.py
 
 import re
