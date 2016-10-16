@@ -67,8 +67,8 @@ class ScrapingContributors:
         contributors = []
         url = 'https://gist.github.com/paulmillr/2657075'
         soup = ScrapingContributors._get_soup(url)
-        tbody = ScrapingContributors._extract_tbody_elt(soup)
-        for tr in ScrapingContributors._extract_tr_elts(tbody):
+        table_body = ScrapingContributors._extract_tbody_elt(soup)
+        for tr in ScrapingContributors._extract_tr_elts(table_body):
             contributors.append(ScrapingContributors._get_contributor(tr))
         return contributors
 
@@ -86,8 +86,8 @@ class ScrapingContributors:
             .find('tbody')
 
     @staticmethod
-    def _extract_tr_elts(tbody):
-        return tbody.find_all('tr', recursive=False)
+    def _extract_tr_elts(table_body):
+        return table_body.find_all('tr', recursive=False)
 
     @staticmethod
     def _get_contributor(tr):
