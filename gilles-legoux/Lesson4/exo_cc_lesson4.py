@@ -51,7 +51,7 @@ class ScrapingCities:
     def persist(cities):
         if len(cities) == 0:
             return pandas.DataFrame()
-        city_dicts = list(map(lambda x: x.__dict__, cities))
+        city_dicts = [city.__dict__ for city in cities]
         columns = list(city_dicts[0].keys())
         df = pandas.DataFrame(city_dicts, columns=columns)
         df.to_csv(ScrapingCities.CITY_FILE, index=False)
@@ -174,7 +174,7 @@ class GoogleMapsAPIClient:
 
 def get_distance_matrix_with_library(city_names):
     """
-    Without manage errors.
+    Without manage error.
 
     References
     ----------
