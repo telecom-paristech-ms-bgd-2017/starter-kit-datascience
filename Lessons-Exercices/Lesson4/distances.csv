@@ -1,0 +1,10 @@
+,Paris,Lille,Marseille,Lyon,Strasbourg,Nantes,Nice,Bordeaux,Toulouse
+Paris,1 m,219 km,775 km,466 km,492 km,385 km,932 km,585 km,679 km
+Lille,225 km,1 m,"1,001 km",692 km,525 km,601 km,"1,158 km",800 km,895 km
+Marseille,775 km,"1,000 km",1 m,314 km,798 km,985 km,207 km,645 km,403 km
+Lyon,466 km,691 km,314 km,1 m,488 km,685 km,471 km,556 km,537 km
+Strasbourg,490 km,525 km,800 km,493 km,1 m,866 km,784 km,969 km,971 km
+Nantes,385 km,600 km,986 km,685 km,866 km,1 m,"1,143 km",347 km,586 km
+Nice,932 km,"1,157 km",205 km,471 km,785 km,"1,143 km",1 m,803 km,560 km
+Bordeaux,590 km,806 km,645 km,556 km,968 km,353 km,803 km,1 m,246 km
+Toulouse,679 km,894 km,403 km,538 km,969 km,585 km,560 km,245 km,1 m
