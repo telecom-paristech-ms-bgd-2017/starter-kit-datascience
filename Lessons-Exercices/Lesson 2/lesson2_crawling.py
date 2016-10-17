@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 
@@ -55,3 +56,11 @@ def getAllMetricsForArtist(artist):
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
 metrics_beyonce = getAllMetricsForArtist('beyonce')
+
+df_rihanna = pd.DataFrame(metrics_rihanna)
+df_rihanna.to_csv('rihanna.csv')
+print df_rihanna['indicator'].mean()
+
+df_beyonce = pd.DataFrame(metrics_beyonce)['indicator'].mean()
+df_beyonce.to_csv('beyonce.csv')
+print df_beyonce['indicator'].mean()

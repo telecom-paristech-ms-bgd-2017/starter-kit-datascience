@@ -1,18 +1,13 @@
 from __future__ import division
-from collections import defaultdict
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
 import requests, json, sys
 from operator import itemgetter
-import threading, time
 
 ######################
 # VARIABLES GLOBALES #
 ######################
-stars = defaultdict(lambda: 0)
-username = None
-password = None
-pool_busy = True
+token = None
 
 #############
 # FONCTIONS #
@@ -33,10 +28,6 @@ def contributor_stars(contributor):
         print("User {u} doesn't own any repo, moving on.".format(u=contributor))
         return(contributor, 0)
 
-def add_stars(contributor_stars):
-    global stars
-    stars[contributor_stars[0]] = contributor_stars[1]
-
 
 #########
 # UTILS #
@@ -53,43 +44,17 @@ def set_credentials():
     global token
     token = json.loads(open('credentials.json').read())
 
-def animateWaiting():
-    idx = 0
-    anim = "|/-\\"
-    start_time = time.time()
-    while pool_busy:
-        t = time.time() - start_time
-        sys.stdout.write(anim[idx % len(anim)] + " {t:2.1f}".format(t=t) + "\r")
-        idx += 1
-        time.sleep(0.1)
-    return
-
 ########
 # MAIN #
 ########
 def main():
-    global stars
-    global pool_busy
-    repos_per_contributor = {}
-
-    t = threading.Thread(target = animateWaiting)
-    t.start()
-
     contributors = best_contributors("paulmillr/2657075")
 
-    pool = Pool(len(contributors))
-    for contributor in contributors:
-        args = {'args': (contributor,), 'callback': add_stars}
-        pool.apply_async(contributor_stars, **args)
-    pool.close()
-    pool.join()
-    pool_busy = False
-    t.join()
-
-    sorted_stars = sorted(stars.items(), key=itemgetter(1), reverse=True)
+    with Pool(len(contributors)) as pool:
+        stars = pool.map(contributor_stars, contributors)
 
     i = 1
-    for c, avg in sorted_stars:
+    for c, avg in sorted(stars, key=itemgetter(1), reverse=True):
         print((str(i) + ') ' + c).ljust(22, '.') + ": {s:.2f}".format(s=avg))
         i += 1
 
