@@ -1,46 +1,52 @@
 import requests
 from bs4 import BeautifulSoup
 
-dell_reduction = []
-acer = []
-
-def getData(marque,page):
-
-	url = requests.get('http://www.cdiscount.com/search/10/'+marque+'.html?TechnicalForm.SiteMapNodeId=0&TechnicalForm.DepartmentId=10&TechnicalForm.ProductId=&hdnPageType=Search&TechnicalForm.SellerId=&TechnicalForm.PageType=SEARCH_AJAX&TechnicalForm.LazyLoading.ProductSheets=False&NavigationForm.CurrentSelectedNavigationPath=0&FacetForm.SelectedFacets.Index=0&FacetForm.SelectedFacets.Index=1&FacetForm.SelectedFacets.Index=2&FacetForm.SelectedFacets.Index=3&FacetForm.SelectedFacets.Index=4&FacetForm.SelectedFacets.Index=5&FacetForm.SelectedFacets.Index=6&FacetForm.SelectedFacets.Index=7&FacetForm.SelectedFacets.Index=8&GeolocForm.ConfirmedGeolocAddress=&SortForm.SelectedNavigationPath=&ProductListTechnicalForm.Keyword='+marque+'&page='+str(page)+'&_his_')
-	soup = BeautifulSoup(url.text,'html.parser')
-	pc = soup.find_all(class_="prdtBloc")
-	return pc
-
-
-def parcourir(marque,page):
-
-	for j in marque:	
-
-		for i in page:
-			
-			pc = getData(j,i)
-			
-			for el in pc:
-				if el.find(class_="prdtPrSt") == None:
-					dell_reduction.append(0)
-				else:
-					dell_reduction.append(float(el.find(class_="prdtPrice").text.replace('€','.')) / float(el.find(class_="prdtPrSt").text.replace(',','.')))
-
-				somme = 0
-				for el in dell_reduction:
-					somme += el
-					moyenne = somme / len(dell_reduction)
-
-	print(moyenne * 100)
-
-parcourir(['dell'],[1,2,3])
-
-
-
-
+def getData():
 	
+	url = requests.get('https://gist.github.com/paulmillr/2657075')
+	soup = BeautifulSoup(url.text,'html.parser')
+	tab = getLine(soup)
+	users = []
+	for el in range(1,len(tab)):
+		users.append(tab[el].find_all('td')[0].text.split(' ')[0])
+	return users
+
+def getLine(soup):
+  return soup.find_all('tr')
+
+users = getData()
+
+def getStars(id_user):
+	headers = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'token 00b8ef9071701762a1b4625c13498410751d015d'}
+	url = requests.get('https://api.github.com/users/' + str(id_user) + '/repos',headers=headers)
+	content = url.json()
+	count = 0
+
+	if len(content) != 0:
+		for c in content:
+			count += c['stargazers_count']
+		count /= float(len(content))
+	return count
+
+def getStarsForAllusers(users):
+	tab = []
+
+	for el in users:
+		dico = {}
+		dico['users'] = el
+		dico['mean'] = getStars(el)
+		tab.append(dico)
+	
+	tab = rank(tab)
+	return tab
+
+def rank(results):
+	return sorted(results,key= lambda users: users['mean'], reverse=True)
 
 
+result = getStarsForAllusers(users)
+
+print(result)
 
 
 

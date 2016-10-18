@@ -28,10 +28,10 @@ def extract_value_from_row(tr_tag):
 
 
 def print_bilan(commune, city_data):
-    print  "************************     {}    **********************".format(commune)
-    for key, value in city_data.iteritems():
-        print value["label"]
-        print "{}/ {}".format(value["by_habitant"], value["by_strate"])
+    print ("************************     {}    **********************".format(commune))
+    for key, value in city_data.items():
+        print(value["label"])
+        print("{}/ {}".format(value["by_habitant"], value["by_strate"]))
 
 
 def analysis_by_city_by_year(departement,exercice,icom):
@@ -39,7 +39,7 @@ def analysis_by_city_by_year(departement,exercice,icom):
     interesting_cells = city_data.find_all("td", {"class":'libellepetit G'})
     interesting_row = filter_interesting_row_by_label(interesting_cells)
     final_data = {}
-    for key,value in  interesting_row.iteritems():
+    for key,value in  interesting_row.items():
         final_data[key] = extract_value_from_row(value)
 
     return final_data
