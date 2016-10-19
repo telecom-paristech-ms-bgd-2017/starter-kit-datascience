@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-listMarques = ['dell','acer']
+listMarques = ['dell','acer','apple']
 pages = [1,2]
 
 def getData(marque,page):
