@@ -4,7 +4,8 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # Google's Python Class
-# http://code.google.com/edu/languages/google-python-class/
+
+file='http://code.google.com/edu/languages/google-python-class/'
 
 """Mimic pyquick exercise -- optional extra exercise.
 Google's Python Class
