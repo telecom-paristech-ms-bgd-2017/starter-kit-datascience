@@ -84,8 +84,8 @@ def generate_csv(dataframe):
 all_links = []
 
 for region in regions:
-		for page in pages:
-			all_links += get_data(region,page)
+	for page in pages:
+		all_links += get_data(region,page)
 
 listeCars = get_All_content(all_links)
 generate_csv(listeCars)
