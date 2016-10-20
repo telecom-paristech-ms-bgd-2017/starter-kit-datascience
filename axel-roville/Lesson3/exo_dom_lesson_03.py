@@ -1,5 +1,4 @@
 from __future__ import division
-from collections import defaultdict
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
 import requests, json, sys
@@ -8,9 +7,7 @@ from operator import itemgetter
 ######################
 # VARIABLES GLOBALES #
 ######################
-stars = defaultdict(lambda: 0)
-username = None
-password = None
+token = None
 
 #############
 # FONCTIONS #
@@ -24,11 +21,12 @@ def best_contributors(gist):
 def contributor_stars(contributor):
     repos = json.loads(api_get_repos(contributor))
     total_stars = sum([repo['stargazers_count'] for repo in repos])
-    return (contributor, total_stars / len(repos))
 
-def add_stars(contributor_stars):
-    global stars
-    stars[contributor_stars[0]] = contributor_stars[1]
+    try:
+        return (contributor, total_stars / len(repos))
+    except ZeroDivisionError:
+        print("User {u} doesn't own any repo, moving on.".format(u=contributor))
+        return(contributor, 0)
 
 
 #########
@@ -36,45 +34,28 @@ def add_stars(contributor_stars):
 #########
 def api_get_repos(contributor):
     url = 'https://api.github.com/users/' + contributor + '/repos'
-    resp = requests.get(url, auth=(username, password))
+    resp = requests.get(url, params=token)
     if resp.status_code != 200:
         print(json.loads(resp.text)['message'])
         resp.raise_for_status()
     return resp.text
 
 def set_credentials():
-    try:
-        cred = json.loads(open('credentials.json').read())
-        global username
-        global password
-        username, password = cred['username'], cred['password']
-        if not username or not password:
-            raise Exception
-    except Exception:
-        print('You must provide your GitHub credentials in "credentials.json"')
-        print('Template: {"username":"<username>", "password":"<password>"}')
-        sys.exit(1)
+    global token
+    token = json.loads(open('credentials.json').read())
 
 ########
 # MAIN #
 ########
 def main():
-    global stars
-    repos_per_contributor = {}
     contributors = best_contributors("paulmillr/2657075")
 
-    pool = Pool(30)
-    for contributor in contributors:
-        args = {'args': (contributor,), 'callback': add_stars}
-        pool.apply_async(contributor_stars, **args)
-    pool.close()
-    pool.join()
-
-    sorted_stars = sorted(stars.items(), key=itemgetter(1), reverse=True)
+    with Pool(len(contributors)) as pool:
+        stars = pool.map(contributor_stars, contributors)
 
     i = 1
-    for contributor, avg_stars in sorted_stars:
-        print((str(i) + ') ' + contributor).ljust(20) + ": {s:.2f}".format(s=avg_stars))
+    for c, avg in sorted(stars, key=itemgetter(1), reverse=True):
+        print((str(i) + ') ' + c).ljust(22, '.') + ": {s:.2f}".format(s=avg))
         i += 1
 
 if __name__ == '__main__':
