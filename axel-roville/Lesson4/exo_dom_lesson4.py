@@ -13,12 +13,14 @@ api_key = '54bb0281238b45a03f0ee695f73e704f'
 app_id = 'leboncoin_web_utils'
 search_params = {'q':'zoe', 'it': 1}
 
+cols = ['version','annee','km','prix','prix lacentrale','comparaison lacentrale','phone','vendeur','ref']
 cats = ['url', 'annee', 'km', 'prix', 'titre', 'offres', 'description']
 num_cats = ['annee', 'km', 'prix']
 versions = ['life', 'zen', 'intens']
 regions = ['provence_alpes_cote_d_azur', 'ile_de_france', 'aquitaine']
 
 re_int = re.compile(r'\d+')
+re_phone = re.compile('(\d{2}).?(\d{2}).?(\d{2}).?(\d{2}).?(\d{2})')
 re_version = re.compile('|'.join(versions), re.IGNORECASE)
 re_vendeur = re.compile(r'pro|part')
 re_ref = re.compile(r'https?:\/\/www\.leboncoin\.fr\/voitures\/(\d+)\.htm')
@@ -62,11 +64,14 @@ def clean_info(info):
     clean_info['version'] = parse_version(info['titre'] + info['description'])
     clean_info['vendeur'] = parse_vendeur(info['offres'])
     clean_info['ref'] = int(re_ref.search(info['url']).group(1))
-
+    try:
+        clean_info['phone'] = ''.join(re_phone.search(info['description']).groups())
+    except:
+        pass
     # data = {'list_id': ref,'app_id': app_id,'text': 1,'key': api_key}
     # resp = requests.post(phone_number_url, data=data).text
     # j = json.loads(resp)['utils']
-    # clean_info['phone number'] = j['phonenumber'] if j['status'] == 'OK' else ''
+    # clean_info['phone'] = j['phonenumber'] if j['status'] == 'OK' else ''
 
     return clean_info
 
@@ -135,19 +140,13 @@ def get_prix_lacentrale(all_data):
                     plus_cher = all_data[i]['prix'] > prix_lacentrale
                     all_data[i]['comparaison lacentrale'] = '+' if plus_cher else '-'
     browser.quit()
-    with open('output2.json', 'w+') as otherfile:
-        json.dump(all_data, otherfile)
     return all_data
 
 
-# all_data = [d for reg in regions for d in data_by_region(reg)]
-# with open('output.json', 'w+') as outfile:
-#     json.dump(all_data, outfile)
-
-all_data = json.loads(open('output.json', 'r').read())
+all_data = [d for reg in regions for d in data_by_region(reg)]
 all_data = get_prix_lacentrale(all_data)
 with open('result.csv', 'w+') as f:
-    w = csv.DictWriter(f, ['version','annee','km','prix','prix lacentrale','comparaison lacentrale','phone number','vendeur','ref'])
+    w = csv.DictWriter(f, cols)
     w.writeheader()
     w.writerows(all_data)
 
