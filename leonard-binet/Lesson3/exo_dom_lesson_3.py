@@ -16,6 +16,11 @@ auth_user = "Leonardbinet"
 auth_token = "e72fd38150c9aaa6100c420f531a59d2fc6226b0"
 
 
+def get_github_token():
+    with open('token.txt') as f:
+        return f
+
+
 def get_df_best_contributors(number):
     url = "https://gist.github.com/paulmillr/2657075"
     rq = requests.get(url, auth=HTTPBasicAuth(auth_user, auth_token)).text
@@ -40,10 +45,10 @@ def soup_to_contributors_df(soup):
         location = eltd[2].string
         # ipdb.set_trace()
         liste = [
-          classement,
-          contribs,
-          location
-          ]
+            classement,
+            contribs,
+            location
+        ]
         dfel = pd.DataFrame([liste], columns=columns, index=[user])
         df = df.append(dfel)
     return df
@@ -61,7 +66,7 @@ def add_github_info_to_df(df):
         url_base = "https://api.github.com"
         url_add = "/users/"
         url_end = "/repos"
-        url = url_base+url_add+user+url_end
+        url = url_base + url_add + user + url_end
         rq = requests.get(url, auth=HTTPBasicAuth(auth_user, auth_token)).text
         df_user = pd.read_json(rq)
         # à partir de la donnée extraite, rajouter les infos
@@ -70,7 +75,7 @@ def add_github_info_to_df(df):
             repo_count = df_user.stargazers_count.count()
         except AttributeError:
             print("Apparemment pas de repo pour %s" % user)
-        df.set_value(col='moyenne_stars',index=user,value=repo_star_mean)
-        df.set_value(col='nombre_repo', index=user,value=repo_count)
+        df.set_value(col='moyenne_stars', index=user, value=repo_star_mean)
+        df.set_value(col='nombre_repo', index=user, value=repo_count)
         # ipdb.set_trace()
     return df
