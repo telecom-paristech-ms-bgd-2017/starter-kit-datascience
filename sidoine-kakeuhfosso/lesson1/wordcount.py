@@ -37,9 +37,11 @@ print_words() and print_top().
 
 """
 
-import sys
+from __future__ import print_function
+
 import operator
 import string
+import sys
 
 
 def print_words(filename):
@@ -56,38 +58,58 @@ def print_top(filename):
 # Then print_words() and print_top() can just call the utility function.
 
 ## Utility functions:
-def file_dict(filename):
-    f = open(filename, 'r')
+def helperfct(filename):
+    i = 0
+    line_update_without_symbol_and_space = []
+    file_content_in_str_without_symbol = []
+    file_content = open(filename, 'r')
 
-    result = {}
-    table = str.maketrans({key: None for key in string.punctuation})
-    for w in f.read().translate(table).split():
-        result[w.lower()] = result.get(w.lower(), 0) + 1
+    for line in file_content:
+        translator = string.maketrans(string.punctuation + '§', ' ' * len(string.punctuation + '§'))
+        line_update_without_symbol_and_space = line.translate(translator).lower().split()
+        file_content_in_str_without_symbol += line_update_without_symbol_and_space
 
-    return result
+    words_with_count = dict()
+    for i in range(len(file_content_in_str_without_symbol)):
+        words_with_count[file_content_in_str_without_symbol[i]] = file_content_in_str_without_symbol.count(
+            file_content_in_str_without_symbol[i])
 
-def print_dico(dico_items):
-    for word, count in dico_items:
-        print(word + ": " + str(count))
+    for key in sorted(words_with_count):
+        print(key, words_with_count[key])
+
+
+        # print(words_with_count)#vue du dictionnaire en {key:dict(key),..,..}
+    # print(words_with_count.items())#vue du dictionnaire en liste de tuple
+
+    # print(words_with_count.keys())#print only dictionary keys
+    # print("=========sorted by words which is 0 index=============")
+    # print(OrderedDict(sorted(words_with_count.items(), key=lambda t: t[0])))
+    # print("=========sorted by count which is 1 index=============")
+    # print( OrderedDict(sorted(words_with_count.items(), key=lambda t: t[1],reverse = True)))
+    # print("=========sorted by length of word =============")
+    # print(OrderedDict(sorted(words_with_count.items(), key=lambda t: len(t[0]))))
+
+    return sorted(words_with_count.items(), key=lambda t: t[1], reverse=True)
+
 
 
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
-  if len(sys.argv) != 3:
-    print 'usage: ./wordcount.py {--count | --topcount} file'
-    sys.exit(1)
+    if len(sys.argv) != 3:
+        print ('usage: ./wordcount.py {--count | --topcount} file')
+        sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print 'unknown option: ' + option
-    sys.exit(1)
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print ('unknown option: ' + option)
+        sys.exit(1)
 
 if __name__ == '__main__':
-  main()
+    main()
