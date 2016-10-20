@@ -113,8 +113,8 @@ def parse_version(s):
 
 def open_browser():
     global browser
-    executable_path = {'executable_path': 'chromedriver'}
-    browser = Browser('chrome', **executable_path)
+    executable_path = {'executable_path': './phantomjs'}
+    browser = Browser('phantomjs', **executable_path)
 
 def est_cotee():
     try:
