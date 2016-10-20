@@ -50,7 +50,7 @@ for i in range(0,top):
                 duration_m = float(duration[2])
 
             reskm.append(km)
-            resduration.append(duration_h*60+duration_m)
+            resduration.append(duration_h*60+duration_m) # Conversion des heures en minutes
         else: # Cas ou i = j
             reskm.append(0)
             resduration.append(0)
