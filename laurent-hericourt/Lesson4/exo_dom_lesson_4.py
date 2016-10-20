@@ -9,12 +9,12 @@ import numpy as np
 URL_VOITURE = "//www.leboncoin.fr/voitures/"
 liste_regions = ["ile_de_france", "provence_alpes_cote_d_azur", "aquitaine"]
 liste_type = ['c', 'p']
-liste_url_argus = {"ZEN TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide-2013.html",
-                           "LIFE TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide-2013.html",
-                           "INTENSE TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-intens+charge+rapide-2013.html",
-                           "ZEN TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide+type+2-2013.html",
-                           "LIFE TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide+type+2-2013.html",
-                           "INTENSE TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-intens+charge+rapide+type+2-2013.html"}
+liste_url_argus = {"ZEN TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide-",
+                           "LIFE TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide-",
+                           "INTENSE TYPE 1": "http://www.lacentrale.fr/cote-auto-renault-zoe-intens+charge+rapide-",
+                           "ZEN TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide+type+2-",
+                           "LIFE TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide+type+2-",
+                           "INTENSE TYPE 2": "http://www.lacentrale.fr/cote-auto-renault-zoe-intens+charge+rapide+type+2-"}
 detail_voitures = []
 
 
@@ -57,13 +57,14 @@ def add_car_in_array(urlvoitures_et_type):
     html = req.get(urlvoitures_et_type[0]).text
     soup = BeautifulSoup(html, "html.parser")
     type = urlvoitures_et_type[1]
+    url = urlvoitures_et_type[0]
     annee, km, prix, version = "NaN", "NaN", "NaN", "NaN"
 
     # Retrouve les informations année, km et prix
     liste_valeurs = soup.find_all("span", {"class": "value"})
     for valeur in liste_valeurs:
-        if re.match('[0-9]{4}', valeur.text.strip()):
-            annee = int(re.findall('[0-9]{4}', valeur.text.strip())[0])
+        if re.match('201[0-9]', valeur.text.strip()):
+            annee = int(re.findall('201[0-9]', valeur.text.strip())[0])
         if re.match('(([0-9]+\s?)+)KM', valeur.text.strip()):
             km = int(re.findall('(([0-9]+\s?)+)KM', valeur.text.strip())[0][0].replace(u'\xa0', u' ').replace(" ", ""))
         if re.match('(([0-9]+\s?)+)€', valeur.text.strip()):
@@ -89,12 +90,12 @@ def add_car_in_array(urlvoitures_et_type):
         else:
             version += " TYPE 1"
 
-    detail_voitures.append([version, annee, km, prix, "Nan", "NaN", type])
+    detail_voitures.append([version, annee, km, prix, "Nan", "NaN", type, url])
 
 
 # Permet d'obetnir les prix pour une voiture à l'argus
-def get_prix_from_argus(version, km):
-    url = liste_url_argus[version]
+def get_prix_from_argus(version, km, date):
+    url = liste_url_argus[version]+str(date)+".html"
     r = req.get(url)
     cookies = r.cookies
     headers = {
@@ -103,8 +104,11 @@ def get_prix_from_argus(version, km):
 
     r_prix = req.get("http://www.lacentrale.fr/cote_proxy.php?km="+str(km)+"&month=01", headers=headers, cookies=cookies)
     prix_json = r_prix.json()
+    prix = 0
+    if (prix_json):
+        prix = prix_json["cote_perso"]
 
-    return int(prix_json["cote_perso"])
+    return prix
 
 if __name__ == '__main__':
     for region in liste_regions:
@@ -117,11 +121,11 @@ if __name__ == '__main__':
 
     df_voitures_boncoin_temp = pd.DataFrame(detail_voitures,
                                             columns=["version", "annee", "km", "prix", "prix_argus",
-                                                    "telephones", "professionnel"])
+                                                    "telephones", "professionnel", "url"])
     df_voitures_boncoin = df_voitures_boncoin_temp[(df_voitures_boncoin_temp["prix"] != "NaN") & (df_voitures_boncoin_temp["version"] != "NaN")]
 
 
-    df_voitures_boncoin['prix_argus'] = df_voitures_boncoin.apply(axis=1,func= lambda x: get_prix_from_argus(x['version'],x['km']))
+    df_voitures_boncoin['prix_argus'] = df_voitures_boncoin.apply(axis=1,func= lambda x: get_prix_from_argus(x['version'],x['km'],x['annee']))
 
     df_voitures_boncoin['prix_au_dessus_argus'] = np.where(df_voitures_boncoin['prix'] > df_voitures_boncoin['prix_argus'], True, False)
     df_voitures_boncoin.to_csv('Analyse_voitures_boncoin.csv')
