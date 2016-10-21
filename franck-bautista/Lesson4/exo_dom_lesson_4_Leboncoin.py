@@ -79,7 +79,7 @@ for region in liste_regions:
 
 df = pd.DataFrame({'Region': liste_region_annonces, 'Site': liste_annonces, 'Type_Vendeur': liste_type_vendeur,
                    'prix': 0, 'annee': 0, 'kms': 0, 'marque': "", 'version': "", 'tel': "", 'Argus': 0})
-
+ 
 num_tel = re.compile(
     "(\+33|0)(\s||0|\-)[0-9](\.|\s||)([0-9]{2}(\.|\s||\-)){3}[0-9]{2}")
 for row in range(0, df.count()[0]):
