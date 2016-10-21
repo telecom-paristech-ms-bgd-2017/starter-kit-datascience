@@ -59,9 +59,15 @@ def get_git_user_repos_average_stars(user_name):
         return user_name, -1
 
 
-def get_git_info_parallel():
+def get_git_info_sequential(users):
+    results = []
+    for u in users:
+        res = get_git_user_repos_average_stars(u)
+        results.append(res)
+    return results
 
-    users = get_gt_users()
+
+def get_git_info_parallel(users):
     pool = Pool()
     return pool.map(get_git_user_repos_average_stars, users)
 
@@ -70,9 +76,16 @@ def get_git_info_parallel():
 
 start_time = time.time()
 token = get_github_api_token()
-data = get_git_info_parallel()
-res = sorted(data, key=lambda d: d[1], reverse=True)
+run_type = input('Run type? P (parallel) / S (sequential)')
 
+users = get_gt_users()
+
+if run_type.upper() == 'P':
+    data = get_git_info_parallel(users)
+elif run_type.upper() == 'S':
+    data = get_git_info_sequential(users)
+
+res = sorted(data, key=lambda d: d[1], reverse=True)
 
 for r in res:
     print("User : {0}. Avg stars : {1}".format(r[0], r[1]))
@@ -81,4 +94,4 @@ print("")
 print("#########################")
 print("")
 print("--- Number of results : {0} ---".format(len(res)))
-print("--- exec time (in s) : {0} ---".format(time.time() - start_time))
+print("--- Run type : {0}. Exec time (in s) : {1} ---".format(run_type.upper(), time.time() - start_time))
