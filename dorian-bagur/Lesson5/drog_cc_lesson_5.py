@@ -17,12 +17,8 @@ def extractData(drog):
     return regex_name.findall(drog)[0]
 
 
-def compose(drog):
-    return extractData(drog)
-
-
 def getDrog(drog):
-    return drog.text
+    return extractData(drog.text)
 
 
 def getDrogsList(url, drog):
@@ -36,7 +32,7 @@ def getDrogsList(url, drog):
     return BeautifulSoup(res.text, "html.parser").find(
         class_="result").find_all(class_="standart")
 
-uncleaned_drog_list = map(getDrog, getDrogsList(URL, DROGNAME))
-df = pd.DataFrame.from_records(map(compose, uncleaned_drog_list),
+drog_list = map(getDrog, getDrogsList(URL, DROGNAME))
+df = pd.DataFrame.from_records(drog_list,
                                columns=['name', 'factory', 'quantity', 'type'])
 df.to_csv(PATH + "/" + DROGNAME + ".csv")
