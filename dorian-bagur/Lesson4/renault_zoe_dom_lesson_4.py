@@ -2,6 +2,9 @@ import dryscrape
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import re
+import unicodedata
+import os
 
 
 URL = "https://www.leboncoin.fr/voitures/offres/"
@@ -13,6 +16,8 @@ AREAS = ["ile_de_france"]
 SALERS = ["p"]
 BRAND = "renault"
 MODEL = "zoé"
+PATH = os.path.dirname(os.path.realpath(__file__))
+print(PATH)
 
 
 def extractArgus(ad):
@@ -36,11 +41,20 @@ def extractDistanceTraveled(ad):
 
 
 def extractYear(ad):
-    return ad.find(itemprop="releaseDate").text
+    year = ad.find(itemprop="releaseDate").text
+    pattern = r'\d{4}'
+    regex_year = re.compile(pattern)
+    return regex_year.findall(year)[0]
 
 
 def extractVersion(ad):
-    return ad.find(class_="adview_header").h1.text
+    version = ad.find(class_="adview_header").h1.text
+    # gestion des accents
+    version = unicodedata.normalize('NFKD', version).encode('ASCII', 'ignore'
+                                                            ).decode('UTF-8')
+    pattern = r'(?i)zoe\s\w+'
+    regex_version = re.compile(pattern, flags=re.IGNORECASE)
+    return regex_version.findall(version)[0].split(' ')[1].upper()
 
 
 def extractPrice(ad):
@@ -83,9 +97,9 @@ for area in AREAS:
         adsList = getAdsList(URL, BRAND, MODEL, area, saler)
         adsUrl = map(getAdLink, adsList)
         adsList_unclean = map(getAd, adsUrl)
-        dict_ads.append(list(map(lambda ad: compose(ad, area, saler),
-                        adsList_unclean)))
+        dict_ads.append(map(lambda ad: compose(ad, area, saler),
+                        adsList_unclean))
 
-"""print(dict_ads)
-df = pd.DataFrame.from_records(dict_ads)
-print(df)"""
+df = pd.DataFrame.from_records(dict_ads[0])
+df.to_csv(PATH + "/" + BRAND + "_" + MODEL + ".csv")
+print(df)
