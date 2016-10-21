@@ -1,9 +1,12 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import pandas as pd
+import re
 
 API_KEY = 'AIzaSyBOuK5dIloWttaUKwCCoQ2apYaaWtTU840'
 BASE_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins={0}&destinations={1}&key={2}'
+URL_CITIES_RANKING = 'http://lespoir.jimdo.com/2015/03/05/classement-des-plus-grandes-villes-de-france-source-insee/'
 
 #Vancouver+BC|Seattle
 # Main script
@@ -11,18 +14,19 @@ BASE_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins={0}
 def getBeautifulSoupObjectfromUrl(url):
     return BeautifulSoup(requests.get(url).text, 'html.parser')
 
-def get_30_biggest_cities_france():
-    url = 'https://fr.wikipedia.org/wiki/Liste_des_communes_de_France_les_plus_peupl%C3%A9es'
+
+def get_biggest_cities_france(bumber):
+    url = URL_CITIES_RANKING
     bs = getBeautifulSoupObjectfromUrl(url)
     table = bs.find('table')
     table_body = table.find('tbody')
     rows = table_body.find_all('tr')
     cities = []
-    for row in rows:
+    for r in range(1, bumber+1):
+        row = rows[r]
         cols = row.find_all('td')
-        c = cols[0]
-        city = c.next.text
-        cities.append(city)
+        c = cols[1]
+        cities.append(c.text.strip().replace("-", "+"))
     return cities
 
 
@@ -33,9 +37,7 @@ def build_cities_url(cities):
         res += '|' + c
     return res
 
-
-cities = ['Paris', 'Marseille', 'Lyon']
-cities_2 = get_30_biggest_cities_france()
+cities = get_biggest_cities_france(10)
 cities_url = build_cities_url(cities)
 g_map_res = requests.get(BASE_URL.format(cities_url, cities_url, API_KEY))
 json = json.loads(g_map_res.text)
@@ -50,13 +52,10 @@ for r in rows:
     j = 0
     for el in elts:
         dest = cities[j]
-        dist = el['distance']
+        dist = el['distance']['value']
         res = origin, dest, dist
         results.append(res)
-        print(res)
         j += 1
     i += 1
 
-
-
-# print(g_map_res.text)
+print(results)
