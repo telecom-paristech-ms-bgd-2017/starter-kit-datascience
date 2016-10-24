@@ -27,7 +27,8 @@ def getNames():
 
 
 def getRepo(name):
-    authentification = {'Authorization': 'token %s' % 'f3c3f17a15d97ecef34c2345521fa1b4721f7281'}
+	token = intput("Please enter a token")
+    authentification = {'Authorization': 'token %s' % str(token)}
     urlRepos = 'https://api.github.com/users/' + str(name) + '/repos'
     read = requests.get(urlRepos, headers=authentification)
     if(read.ok):
