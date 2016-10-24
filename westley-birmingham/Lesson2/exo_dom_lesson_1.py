@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-#Python crawler ebook
 
 def extractColumnsFromDOM(soup1, classname):
     listColumns = soup1.find_all(class_=classname)
