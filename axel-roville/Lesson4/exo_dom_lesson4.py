@@ -36,9 +36,9 @@ def data_by_region(region):
         search_params['o'] = page_nb
         html = requests.get(url_leboncoin + region, params=search_params).text
         soup = BeautifulSoup(html, 'html.parser')
-        page_exists = len(soup.select('#result_ad_not_found_proaccount')) == 0
-        print(page_exists)
-        if not page_exists:
+
+        # Check if the page contains any ad. If not, we are over the max page
+        if len(soup.select('#result_ad_not_found_proaccount')) != 0
             break;
 
         list_ads = soup.select('#listingAds ul')[0]
@@ -143,10 +143,13 @@ def get_prix_lacentrale(all_data):
     return all_data
 
 
-all_data = [d for reg in regions for d in data_by_region(reg)]
-all_data = get_prix_lacentrale(all_data)
+# all_data = [d for reg in regions for d in data_by_region(reg)]
+# all_data = json.loads(open('output.json', 'r').read())
+# all_data = get_prix_lacentrale(all_data)
+# open('output2.json', 'w+').write(json.dumps(all_data))
+all_data = json.loads(open('output2.json', 'r').read())
 with open('result.csv', 'w+') as f:
-    w = csv.DictWriter(f, cols)
+    w = csv.DictWriter(f, cols, delimiter='\t')
     w.writeheader()
     w.writerows(all_data)
 
