@@ -11,6 +11,6 @@ C'est un sujet assez ouvert pris du Hackathon "données de santé" de Etalab. Il
 
 ## References
 
-https://www.etalab.gouv.fr/retour-sur-le-premier-hackathon-donnees-de-sante
+https://www.etalab.gouv.fr/retour-sur-le-premier-hackathon-donnees-de-sante  
 https://www.data.gouv.fr/
 
