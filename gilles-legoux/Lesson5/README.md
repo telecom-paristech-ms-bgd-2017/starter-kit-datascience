@@ -8,3 +8,9 @@ Peut-on établir un lien entre la densité de médecins par spécialité  et par
 
 C'est un sujet assez ouvert pris du Hackathon "données de santé" de Etalab. Il y a un github qui contient une partie des données dont vous aurez besoin. Vous pouvez compléter ça avec de l'INSEE et des données sur la démographie des médecins.
 
+
+## References
+
+https://www.etalab.gouv.fr/retour-sur-le-premier-hackathon-donnees-de-sante
+https://www.data.gouv.fr/
+
