@@ -9,6 +9,7 @@ import numpy as np
 from unidecode import unidecode
 import re
 import pdb
+import time
 
 regexphone = '((0|\\+33|0033)[1-9][0-9]{8})|((0|\\+33|0033)[1-9] [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2})|((0|\\+33|0033)[1-9].[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2})'
 regexversion = 'ZOE(.)*(INTENS|ZEN|LIFE)'
@@ -56,6 +57,9 @@ def analyser_page(page, region):
 	 	if(annonces[i].find("p", class_="item_supp").text.split("\n")[3].strip() == "Voitures"):
 			r2 = requests.get("https://"+lien_annonce)
 			soup2 = bs4.BeautifulSoup(r2.content, 'html.parser')
+
+			# Récupération du numéro de l'annonce
+			item_id = lien_annonce.split("/")[2].split(".")[0]
 
 			# Récupération de la marque
 			item_marque = str(find_property(soup2, "Marque"))
@@ -108,15 +112,23 @@ def analyser_page(page, region):
 				ip = re.search(regexphone,item_description).group().replace(" ","").replace(".","")
 				item_phone = ip[:-8]+"."+ip[-8:-6]+"."+ip[-6:-4]+"."+ip[-4:-2]+"."+ip[-2:] # Mise sous la forme 01.23.45.67.89 (pour garder le 0 initial)
 			except AttributeError:
-				item_phone = ""
-
-			print item_modele, item_annee, item_kilometrage, item_price, item_phone, propart, lien_annonce
+				# On essaye via l'API
+				paramphonenumber = {'app_id': 'leboncoin_web_utils', 'key': '54bb0281238b45a03f0ee695f73e704f', 'list_id': item_id, 'text': '1'}
+				try:
+					requestphonenumber = requests.post("https://api.leboncoin.fr/api/utils/phonenumber.json", paramphonenumber).text
+					time.sleep(10) # L'API interdit les requêtes trop fréquentes
+					phone_json = json.loads(requestphonenumber)
+					ip = phone_json["utils"]["phonenumber"]
+					item_phone = ip[:-8]+"."+ip[-8:-6]+"."+ip[-6:-4]+"."+ip[-4:-2]+"."+ip[-2:]
+				except KeyError:
+					item_phone = ""
 
 			if(item_modele != ""):
-				cote = find_cote(item_modele.split(" ")[1], flag_type2, item_annee)
+				cote = find_cote(item_modele.split(" ")[1], flag_type2, item_annee, item_kilometrage)
 			else:
 				cote = -9999
 
+			print item_modele, flag_type2, item_annee, item_kilometrage, item_price, item_phone, propart, lien_annonce, cote
 			res.append([region, item_modele, flag_type2, item_annee, item_kilometrage, item_price, item_phone, propart, lien_annonce, cote, item_price > cote])
 	 	# else:
 	 		# print "Il ne s'agit pas d'une voiture"
@@ -142,17 +154,22 @@ def find_description(soup2):
 	 		continue
 	 return description.encode("utf8")
 
-def find_cote(modele,type2,annee):
+def find_cote(modele,type2,annee, kilometrage):
 	if(type2):
 		type2str = "+type+2"
 	else:
 		type2str = ""
-	r = requests.get("http://www.lacentrale.fr/cote-auto-renault-zoe-"+str.lower(modele)+"+charge+rapide"+type2str+"-"+str(annee)+".html")
-	soup = bs4.BeautifulSoup(r.content, 'html.parser')
-	try:
-		cote = int(unidecode(soup.find("strong",class_="f24").text).replace("EUR","").replace(" ",""))
-	except AttributeError:
-		cote = 0
-	return cote
 
+	cote_url = "http://www.lacentrale.fr/cote_proxy.php"
+
+	querystring = {"km":kilometrage,"month":"01"}
+
+	headers = {
+	    'referer': "http://www.lacentrale.fr/cote-auto-renault-zoe-"+str.lower(modele)+"+charge+rapide"+type2str+"-"+str(annee)+".html",
+		'cookie': "_mob_=0; xtvrn=$251312$; retargeting_data=B; __troRUID=c856a6cc-df93-4881-b05e-d44e98f3aca9; __uzma=580a1657837779.55293622; __uzmb=1477056087; __sonar=15887911551786862098; user_type=vendeur; php_sessid=b231c45e7444c700ba0d8915d5ab59f8; __troSYNC=1; __uzmc=882243454918; __uzmd=1477399983; tCdebugLib=1; xtan251312=-; xtant251312=1; ry_ry-9mpyr1d3_realytics=eyJpZCI6InJ5XzhFOEIzRTNFLUZEMDctNENBNS05MTU1LTEyQTlBMTIyNUZBMSIsImNpZCI6bnVsbCwiZXhwIjoxNTA4MjI1NTcwODk3fQ%3D%3D; ry_ry-9mpyr1d3_so_realytics=eyJpZCI6InJ5XzhFOEIzRTNFLUZEMDctNENBNS05MTU1LTEyQTlBMTIyNUZBMSIsImNpZCI6bnVsbCwib3JpZ2luIjp0cnVlLCJyZWYiOm51bGwsImNvbnQiOm51bGx9"
+	    # Le cookie est probablement à changer si le code plante...
+	    }
+
+	response = requests.get(cote_url, headers=headers, params=querystring)
+	return json.loads(response.text)["cote_perso"]
 
