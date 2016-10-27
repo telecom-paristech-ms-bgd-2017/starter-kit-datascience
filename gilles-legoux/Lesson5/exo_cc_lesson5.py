@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 # standard library imports
+import re
 
 # related third party imports
 import requests
 import pandas
-import re
 from bs4 import BeautifulSoup
 
 
@@ -55,19 +55,19 @@ class Scraping:
             regex = r'([A-Z]+) (\d+) ([a-z]+),(.*)'
             match = re.search(regex, text)
             if match:
-                med.name = match.group(0)
-                med.quantity = match.group(1)
-                med.unity = match.group(2)
-                med.description = match.group(3)
+                med.name = match.group(1)
+                med.quantity = match.group(2)
+                med.unity = match.group(3)
+                med.description = match.group(4)
                 meds.append(med)
         return bs, meds
 
 
     @staticmethod
-    def persist(item):
-        if len(item) == 0:
+    def persist(items):
+        if len(items) == 0:
             return pandas.DataFrame()
-        item_dicts = [item.__dict__ for item in item]
+        item_dicts = [item.__dict__ for item in items]
         columns = list(item_dicts[0].keys())
         df = pandas.DataFrame(item_dicts, columns=columns)
         df.to_csv(Scraping.FILE, index=False)
