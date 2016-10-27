@@ -1,5 +1,8 @@
 import requests
+import pandas as pd
 from bs4 import BeautifulSoup
+
+MAX_PAGE = 2
 
 
 def extractIntFromDOM(soup, classname):
@@ -10,6 +13,7 @@ def extractIntFromDOM(soup, classname):
 
 
 def extractLikeDislikeFromDOM(soup, classname, position):
+    # print len(soup.find_all(class_=classname))
     res_str = soup.find_all(class_=classname)[position].find(
         class_="yt-uix-button-content").text.replace(u'\xa0', '')
     res = int(res_str)
@@ -36,6 +40,7 @@ def computeIndicatorForPage(url):
     print "Popularity", indicator
     print '====='
     metrics = {}
+    metrics['song'] = title
     metrics['number_of_views'] = number_of_views
     metrics['number_of_likes'] = number_of_likes
     metrics['number_of_dislikes'] = number_of_dislikes
@@ -48,19 +53,40 @@ def computeIndicatorForPage(url):
 
 def getAllMetricsForArtist(artist):
     all_metrics = []
-    MAX_PAGE = 1
     for page in range(1, MAX_PAGE + 1):
         all_videos_artist = requests.get(
             'https://www.youtube.com/results?search_query=' + artist + '&page=' + str(page))
         soup_artist = BeautifulSoup(all_videos_artist.text, 'html.parser')
+        # print(soup_artist.prettify())
+
         list_video_artist = map(
-            lambda x: x['href'], soup_artist.find_all(class_="yt-uix-tile-link"))
+            # lambda x: x['href'],
+            # soup_artist.find_all(class_="yt-uix-tile-link"))
+            lambda x: x['href'], soup_artist.find_all(attrs={"class": "yt-uix-sessionlink spf-link ", "dir": "ltr"}))
         for link in list_video_artist:
-            if 'watch' in link:
-                metrics = computeIndicatorForPage(
-                    'https://www.youtube.com' + link)
-                all_metrics.append(metrics)
+            metrics = computeIndicatorForPage('https://www.youtube.com' + link)
+            all_metrics.append(metrics)
     return all_metrics
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
+df_rihanna = pd.DataFrame(metrics_rihanna, columns=[
+                          'song', 'number_of_views', 'number_of_likes', 'number_of_dislikes', 'indicator'])
+df_rihanna.to_csv('Rihanna.csv', index=False, encoding='utf-8')
+avg_rihanna_indicator = 0
+for song in metrics_rihanna:
+    avg_rihanna_indicator += song['indicator']
+
 metrics_beyonce = getAllMetricsForArtist('beyonce')
+df_beyonce = pd.DataFrame(metrics_beyonce, columns=[
+                          'song', 'number_of_views', 'number_of_likes', 'number_of_dislikes', 'indicator'])
+df_beyonce.to_csv('Beyonce.csv', index=False, encoding='utf-8')
+avg_beyonce_indicator = 0
+for song in metrics_beyonce:
+    avg_beyonce_indicator += song['indicator']
+print(
+    "=================================================================================")
+
+print("Rihanna AVG indicator = " +
+      str(float(avg_rihanna_indicator) / len(metrics_rihanna)))
+print("Beyonce AVG indicator = " +
+      str(float(avg_beyonce_indicator) / len(metrics_beyonce)))
