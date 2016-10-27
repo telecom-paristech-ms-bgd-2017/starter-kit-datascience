@@ -23,18 +23,19 @@ def computeIndicatorForPage(url):
   indicator = 1000.* (number_of_likes - number_of_dislikes ) / number_of_views
 
   title = soup.title.text
-  print '====='
-  print title
-  print "Likes", number_of_likes
-  print "Dislikes", number_of_dislikes
-  print "VIews", number_of_views
-  print "Popularity", indicator
-  print '====='
+  print('=====')
+  print(title)
+  print("Likes", number_of_likes)
+  print("Dislikes", number_of_dislikes)
+  print ("VIews", number_of_views)
+  print ("Popularity", indicator)
+  print ('=====')
   metrics = {}
   metrics['number_of_views'] = number_of_views
   metrics['number_of_likes'] = number_of_likes
   metrics['number_of_dislikes'] = number_of_dislikes
   metrics['indicator'] = indicator
+
   return  metrics
 
 
@@ -55,4 +56,5 @@ def getAllMetricsForArtist(artist):
   return all_metrics
 
 metrics_rihanna = getAllMetricsForArtist('rihanna')
+print(metrics_rihanna)
 metrics_beyonce = getAllMetricsForArtist('beyonce')
