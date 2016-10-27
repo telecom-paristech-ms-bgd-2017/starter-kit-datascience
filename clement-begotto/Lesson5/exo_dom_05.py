@@ -44,17 +44,18 @@ def extract_tel(soup_recherche):
 
 
 def cote_argus(version_complete, type_2, date):
-	type_2 = '+type+2' if date == "2016" else type_2
-	url_cotation = 'http://www.lacentrale.fr/cote-auto-renault-zoe-<version>+charge+rapide+<type>-<date>.html'
-	recherche_curr_cote = BeautifulSoup(requests.get(url_cotation.replace('<version>', version_complete).replace('+<type>', type_2).replace('<date>', date)).text, 'html.parser')	
-	cote = recherche_curr_cote.find('strong', class_='f24 bGrey9L txtRed pL15 mL15')
-	return float(cote.text.strip()[:-1].replace(' ', '')) if version_complete != "NOT FOUND" else "NOT FOUND"
+    type_2 = '+type+2' if date == "2016" else type_2
+    url_cotation = 'http://www.lacentrale.fr/cote-auto-renault-zoe-<version>+charge+rapide+<type>-<date>.html'
+    recherche_curr_cote = BeautifulSoup(requests.get(url_cotation.replace(
+        '<version>', version_complete).replace('+<type>', type_2).replace('<date>', date)).text, 'html.parser')
+    cote = recherche_curr_cote.find(
+        'strong', class_='f24 bGrey9L txtRed pL15 mL15')
+    return float(cote.text.strip()[:-1].replace(' ', '')) if version_complete != "NOT FOUND" else "NOT FOUND"
 
+# Main
 url = u'https://www.leboncoin.fr/voitures/offres/<region>/?th=1&q=Renault%20Zoé&parrot=0'
-
 data_recherche = {'Version': [], 'Année-modèle': [], 'Kilométrage': [],
                   'Prix': [], 'Téléphone': [], 'Vendeur': [], 'Argus': [], 'Région': []}
-
 regions = ['ile_de_france', 'aquitaine', 'provence_alpes_cote_d_azur']
 
 for region in regions:
@@ -77,7 +78,8 @@ for region in regions:
         data_recherche['Kilométrage'].append(float(table_extract[2]))
         data_recherche['Région'].append(region.replace("_", ' '))
         data_recherche['Vendeur'].append(type_vendeur(link))
-        data_recherche['Argus'].append(cote_argus(version_complete, type_2, table_extract[1]))
+        data_recherche['Argus'].append(cote_argus(
+            version_complete, type_2, table_extract[1]))
         data_recherche['Téléphone'].append(
             extract_tel(recherche_curr_leboncoin))
 
