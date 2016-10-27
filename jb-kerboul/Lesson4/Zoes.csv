@@ -1,0 +1,80 @@
+,title,price,location,année,kilométrage,tel,vendeur,Description,prix,+/-,année
+0,Renault Zoe Intens,23512.0,Fresnes 94260,2016.0,2500.0,0183799570,pro,"['intens', 'gamme', '2017']",14989.0,+,2016.0
+1,Renault Zoe Zen type 2,16890.0,Fresnes 94260,2016.0,100.0,0183799570,pro,"['zen', 'type', '2']",14207.0,+,2016.0
+2,Renault Zoe LIFE CHARGE RAPIDE,10990.0,Courbevoie 92400,2015.0,11494.0,0174704406,pro,"['life', 'charge', 'rapide']",12424.0,-,2015.0
+3,Renault Zoe ZEN CHARGE RAPIDE,10190.0,Valenton 94460,2014.0,17791.0,0176455461,pro,"['zen', 'charge', 'rapide']",11591.0,-,2014.0
+4,Renault Zoe INTENS CHARGE RAPIDE TYPE 2,17100.0,Les Pavillons-sous-Bois 93320,2016.0,1000.0,0805805802,pro,"['intens', 'charge', 'rapide', 'type', '2']",14564.0,+,2016.0
+5,Renault Zoe Life Type 2,21490.0,Villemomble 93250,2016.0,2000.0,0805805802,pro,"['life', 'type', '2']",13731.0,+,2016.0
+6,Renault Zoe LIFE,11290.0,Paris 75015,2015.0,7569.0,0175448159,pro,['life'],12258.0,-,2015.0
+7,Renault Zoe INTENS CHARGE RAPIDE TYPE 2,17100.0,Les Pavillons-sous-Bois 93320,2016.0,1000.0,0805805802,pro,"['intens', 'charge', 'rapide', 'type', '2']",14564.0,+,2016.0
+8,Renault Zoe Life Type 2,21490.0,Villemomble 93250,2016.0,2000.0,0805805802,pro,"['life', 'type', '2']",13731.0,+,2016.0
+9,Renault Zoe Life Type 2,13490.0,Paris 75012,2016.0,10.0,0182714652,pro,"['life', 'type', '2']",13731.0,-,2016.0
+10,Renault Zoe Intens charge rapide Type 2,15490.0,Vitry-sur-Seine 94400,2016.0,3000.0,0805805802,pro,"['intens', 'charge', 'rapide', 'type', '2']",14564.0,+,2016.0
+11,Renault Zoe ZEN,8990.0,Courbevoie 92400,2013.0,27689.0,0174704406,pro,"['zen', 'charge', 'rapide']",10456.0,-,2013.0
+12,Renault Zoe Intens,9790.0,Orgeval 78630,2013.0,53800.0,0139754280,pro,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+13,Renault Zoe LIFE CHARGE RAPIDE,11720.0,Versailles 78000,2015.0,11480.0,0175448151,pro,"['life', 'charge', 'rapide']",12424.0,-,2015.0
+14,Renault Zoe Zen,16500.0,Trappes 78190,2016.0,6000.0,0184040214,pro,"['zen', 'gamme', '2017']",14708.0,+,2016.0
+15,Renault Zoe Zen,13990.0,Brie-Comte-Robert 77170,2016.0,1.0,0160625056,pro,"['zen', 'gamme', '2017']",14708.0,-,2016.0
+16,Renault Zoe ZEN MB 8,20000.0,Paris 75015,2016.0,100.0,0184030570,pro,"['zen', 'gamme', '2017']",14708.0,+,2016.0
+17,Renault Zoe Intens,20900.0,Courbevoie 92400,2015.0,2350.0,0175448643,pro,['intens'],12913.0,+,2015.0
+18,Renault Zoe Life type 2,19700.0,Paris 75015,2016.0,100.0,0184030570,pro,"['life', 'type', '2']",13731.0,+,2016.0
+19,Renault Zoe INTENS CHARGE RAPIDE,12500.0,Versailles 78000,2015.0,17979.0,0175448151,pro,"['intens', 'charge', 'rapide']",13074.0,-,2015.0
+20,Renault Zoe Zen,9990.0,Persan 95340,2013.0,21500.0,0171025422,pro,"['zen', 'charge', 'rapide']",10456.0,-,2013.0
+21,Zoe life type 2,12990.0,Montreuil 93100,2016.0,14.0,0142870720,pro,"['life', 'type', '2']",13731.0,-,2016.0
+22,Renault Zoe ZEN,10490.0,Montreuil 93100,2013.0,24973.0,0170176498,pro,"['zen', 'charge', 'rapide']",10456.0,+,2013.0
+23,Renault Zoe ZEN MB 8,14800.0,Paris 75015,2016.0,100.0,0184030570,pro,"['zen', 'gamme', '2017']",14708.0,+,2016.0
+24,Renault Zoe LIFE CHARGE RAPIDE,10990.0,Courbevoie 92400,2015.0,13195.0,0174704406,pro,"['life', 'charge', 'rapide']",12424.0,-,2015.0
+25,Renault Zoe INTENS CHARGE RAPIDE,11490.0,Pantin 93500,2013.0,7700.0,0623550699,pro,"['intens', 'charge', 'rapide']",10639.0,+,2013.0
+26,Renault Zoe Life charge rapide,9970.0,Argenteuil 95100,2014.0,7297.0,0178769520,pro,"['life', 'charge', 'rapide']",11208.0,-,2014.0
+27,Renault Zoe Life 5P,12820.0,Le Perreux-sur-Marne 94170,2016.0,10.0,0143240835,pro,"['life', 'type', '2']",13731.0,-,2016.0
+28,Renault Zoe INTENS CHARGE RAPIDE,11900.0,Versailles 78000,2014.0,17885.0,0175448151,pro,"['intens', 'charge', 'rapide']",11794.0,+,2014.0
+29,Renault Zoe Intens 5P,14464.0,Le Perreux-sur-Marne 94170,2016.0,10.0,0143240835,pro,"['intens', 'gamme', '2017']",14989.0,-,2016.0
+30,Renault Zoe Intens 5P,14464.0,Le Perreux-sur-Marne 94170,2016.0,200.0,0143240835,pro,"['intens', 'gamme', '2017']",14989.0,-,2016.0
+31,Renault Zoe Life Type 2,13290.0,Fontenay-sous-Bois 94120,2016.0,200.0,0148763773,pro,"['life', 'type', '2']",13731.0,-,2016.0
+32,Renault Zoe Zen,15600.0,Paris 75015,2016.0,100.0,0184030570,pro,"['zen', 'gamme', '2017']",14708.0,+,2016.0
+33,Renault Zoe ZEN CHARGE RAPIDE,12990.0,Pantin 93500,2015.0,7975.0,0174730257,pro,"['zen', 'charge', 'rapide']",12849.0,+,2015.0
+34,Renault Zoe Zen,9480.0,Orgeval 78630,2014.0,37240.0,0139754280,pro,"['zen', 'charge', 'rapide']",11591.0,-,2014.0
+35,Renault Zoe ZEN CHARGE RAPIDE,12590.0,Courbevoie 92400,2015.0,8214.0,0174704406,pro,"['zen', 'charge', 'rapide']",12849.0,-,2015.0
+36,Renault Zoe Intens charge rapide,20000.0,Paris 75015,2014.0,100.0,0184030570,pro,"['intens', 'charge', 'rapide']",11794.0,+,2014.0
+37,Renault Zoe INTENS CHARGE RAPIDE TYPE 2,16990.0,Saint-Fargeau-Ponthierry 77310,2016.0,1490.0,0164895656,pro,"['intens', 'charge', 'rapide', 'type', '2']",14564.0,+,2016.0
+38,Renault Zoé LIFE type 2,14000.0,Groslay 95410,2016.0,10064.0,0000000000,part,"['life', 'type', '2']",13731.0,+,2016.0
+39,Belle Renault ZOE ZEN charge rapide blanc nacré,12000.0,Lizy-sur-Ourcq 77440,2015.0,19500.0,0000000000,part,"['zen', 'charge', 'rapide']",12849.0,-,2015.0
+40,Renault zoe intens charge rapide,9600.0,Ris-Orangis 91130,2013.0,30000.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+41,Zoé Life nouveau moteur et autonomie augmentée,12800.0,Saint-Arnoult-en-Yvelines 78730,2016.0,1700.0,0000000000,part,"['life', 'type', '2']",13731.0,-,2016.0
+42,Renault zoe life,10800.0,La Queue-en-Brie 94510,2015.0,22000.0,0000000000,part,['life'],12258.0,-,2015.0
+43,Renault Zoé INTENS charge rapide,8950.0,Savigny-sur-Orge 91600,2013.0,25000.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+44,Renault zoe noir intense,10950.0,Paris 75015,2013.0,15400.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,+,2013.0
+45,Renault Zoe LIFE,11990.0,Pessac 33600,2015.0,12905.0,0531081450,pro,['life'],12258.0,-,2015.0
+46,Zoe zen,8990.0,Casteljaloux 47700,2013.0,36562.0,0000000000,pro,"['zen', 'charge', 'rapide']",10456.0,-,2013.0
+47,Renault Zoe Life Type 2,13700.0,Saint-Martin-Lacaussade 33390,2016.0,1073.0,0776041488,pro,"['life', 'type', '2']",13731.0,-,2016.0
+48,Renault Zoe Life type 2,13200.0,Lormont 33310,2016.0,2000.0,0516066013,pro,"['life', 'type', '2']",13731.0,-,2016.0
+49,Renault Zoe Life type 2,18900.0,Villenave-d'Ornon 33140,2016.0,1500.0,0516066014,pro,"['life', 'type', '2']",13731.0,+,2016.0
+50,Renault zoe 100% electrique,8990.0,Reignac 33860,2014.0,24000.0,0647753157,pro,"['intens', 'charge', 'rapide']",11794.0,-,2014.0
+51,Renault Zoe Life type 2,14500.0,Bruges 33520,2016.0,2000.0,0516066011,pro,"['life', 'type', '2']",13731.0,+,2016.0
+52,Renault Zoe LIFE,12490.0,Pessac 33600,2015.0,10139.0,0531081450,pro,['life'],12258.0,+,2015.0
+53,Renault Zoe Life type 2,18900.0,Pessac 33600,2016.0,2000.0,0524449110,pro,"['life', 'type', '2']",13731.0,+,2016.0
+54,Renault Zoe Zen type 2,14700.0,Bruges 33520,2016.0,2500.0,0516066011,pro,"['zen', 'type', '2']",14207.0,+,2016.0
+55,Nosmoke electrique,11200.0,Arès 33740,2015.0,2200.0,0000000000,part,['intens'],12913.0,-,2015.0
+56,Renault zoe life type 2,14000.0,Bordeaux 33000,2016.0,6000.0,0000000000,part,"['life', 'type', '2']",13731.0,+,2016.0
+57,Zoe zen,9500.0,Bassens 33530,2013.0,39000.0,0000000000,part,"['zen', 'charge', 'rapide']",10456.0,-,2013.0
+58,Renault Zoe Life électrique nombreuses options,9490.0,33190,2014.0,24000.0,0000000000,part,"['life', 'charge', 'rapide']",11208.0,-,2014.0
+59,Zoé Intens,9500.0,Pau 64000,2013.0,46000.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+60,Renault Zoe Life Type 2,13490.0,Brignoles 83170,2016.0,10.0,0673895460,pro,"['life', 'type', '2']",13731.0,-,2016.0
+61,Zoe life charge rapide,9999.0,Vitrolles 13127,2015.0,16300.0,0621494561,pro,"['life', 'charge', 'rapide']",12424.0,-,2015.0
+62,Zoe zen charge rapide 5p,12990.0,Draguignan 83300,2015.0,4750.0,0687808813,pro,"['zen', 'charge', 'rapide']",12849.0,+,2015.0
+63,Renault Zoe Intens charge rapide,12900.0,La Valette-du-Var 83160,2015.0,8000.0,0484320215,pro,"['intens', 'charge', 'rapide']",13074.0,-,2015.0
+64,Renault Zoe INTENS,15590.0,Antibes 06600,2016.0,10.0,0422170122,pro,"['intens', 'gamme', '2017']",14989.0,+,2016.0
+65,Renault Zoe Life charge rapide,10850.0,Aix-en-Provence 13090,2014.0,7628.0,0805805802,pro,"['life', 'charge', 'rapide']",11208.0,-,2014.0
+66,Renault Zoe Life charge rapide,10350.0,Aix-en-Provence 13090,2014.0,7628.0,0805805802,pro,"['life', 'charge', 'rapide']",11208.0,-,2014.0
+67,Renault Zoe LIFE,11900.0,Marseille 13008,2015.0,3666.0,0422170199,pro,['life'],12258.0,-,2015.0
+68,Renault zoe intens charge rapide,12490.0,Fréjus 83600,2014.0,13243.0,0618402010,pro,"['intens', 'charge', 'rapide']",11794.0,+,2014.0
+69,Renault Zoe Zen,8990.0,Cavaillon 84300,2013.0,46145.0,0490789523,pro,"['zen', 'charge', 'rapide']",10456.0,-,2013.0
+70,Renault Zoe INTENS,11990.0,Cannes-la-Bocca 06150,2014.0,11269.0,0422170108,pro,"['intens', 'charge', 'rapide']",11794.0,+,2014.0
+71,Renault Zoe Intens,9900.0,La Seyne-sur-Mer 83500,2013.0,32154.0,0494110548,pro,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+72,Renault Zoe LIFE,11990.0,Antibes 06600,2015.0,7090.0,0422170122,pro,['life'],12258.0,-,2015.0
+73,Zoe zen société choc arriere droit faire offre,5600.0,Hyères 83400,2014.0,23000.0,0494385104,pro,"['zen', 'charge', 'rapide']",11591.0,-,2014.0
+74,renault ZOÉ intens,10000.0,Allauch 13190,2013.0,17000.0,0615222549,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+75,Renault zoe intens 3500km,12500.0,Marseille 13011,2014.0,3500.0,0000000000,part,"['intens', 'charge', 'rapide']",11794.0,+,2014.0
+76,Renault Zoe INTENS negociable,10000.0,Carqueiranne 83320,2013.0,20000.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0
+77,Renault Zoé,17000.0,Toulon 83000,2016.0,20.0,0000000000,part,"['edition', 'one', 'charge', 'rapide', 'gamme', '2017']",15898.0,+,2016.0
+78,ZOE Intens 2013,9200.0,Toulon 83000,2013.0,37500.0,0000000000,part,"['intens', 'charge', 'rapide']",10639.0,-,2013.0

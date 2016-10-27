@@ -50,6 +50,22 @@ def indicator(dataF):
     return dataF['discount_percent'].mean()
 
 
+nbPage = 5
+
+dellDisc = allDiscounts('dell', nbPage)
+acerDisc = allDiscounts('acer', nbPage)
+
+dellDiscPd = pd.DataFrame(dellDisc)
+acerDiscPd = pd.DataFrame(acerDisc)
+
+processDataFrame(dellDiscPd)
+processDataFrame(acerDiscPd)
+
+print()
+print('discount indicator dell: {:.3f}'.format(indicator(dellDiscPd)))
+print('discount indicator acer: {:.3f}'.format(indicator(acerDiscPd)))
+
+
 '''
 'FacetForm.SelectedFacets.Index': 0,
 'FacetForm.SelectedFacets.Index': 1,
@@ -86,18 +102,3 @@ ProductListTechnicalForm.Keyword=dell&
 page=1&_his_#_his_
 '''
 
-
-nbPage = 5
-
-dellDisc = allDiscounts('dell', nbPage)
-acerDisc = allDiscounts('acer', nbPage)
-
-dellDiscPd = pd.DataFrame(dellDisc)
-acerDiscPd = pd.DataFrame(acerDisc)
-
-processDataFrame(dellDiscPd)
-processDataFrame(acerDiscPd)
-
-print()
-print('discount indicator dell: {:.3f}'.format(indicator(dellDiscPd)))
-print('discount indicator acer: {:.3f}'.format(indicator(acerDiscPd)))
