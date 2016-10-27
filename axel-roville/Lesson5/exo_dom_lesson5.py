@@ -1,5 +1,6 @@
 from __future__ import division
-import pandas as pd, numpy as np
+import pandas as pd
+import numpy as np
 from multiprocessing import Pool
 from functools import partial
 import re
@@ -14,7 +15,7 @@ specialite = 'exe_spe'
 depassement = 'dep_mon'
 spe = 'SPECIALITE'
 spe_dpt = [specialite, departement]
-spe_dpt_dep = [specialite,departement,depassement]
+spe_dpt_dep = [specialite, departement, depassement]
 spe_dpt_dens = [specialite, departement, densite]
 
 
@@ -29,7 +30,7 @@ def extract_useful_cols(y, m):
     df = df[[depassement, cpam, specialite]]
     df[depassement] = df[depassement].map(str_to_float)
     df[departement] = df[df[depassement] > 0][cpam].map(lambda x: str(x)[:-1])
-    return df.drop(cpam,1).groupby(spe_dpt, sort=False).count().reset_index()
+    return df.drop(cpam, 1).groupby(spe_dpt, sort=False).count().reset_index()
 
 
 def nettoyer_fichiers_R(years, nb_months):
@@ -51,14 +52,15 @@ def parse_dpt(s):
 
 def nettoyer_fichiers_rpps():
     read_options = {
-        'sep':';',
-        'encoding':'utf8',
-        'skiprows':[i for i in range(1,23)]
+        'sep': ';',
+        'encoding': 'utf8',
+        'skiprows': [i for i in range(1, 23)]
     }
     df = pd.read_csv('in/rpps-medecins.csv', **read_options)
     df[departement] = df[spe].map(parse_dpt)
     df = df.set_index(departement)
-    df.drop(df.columns[[0,1,2,5,21,23,24,25,26,32,39]], 1, inplace=True)
+    cols = [0, 1, 2, 5, 21, 23, 24, 25, 26, 32, 39]
+    df.drop(df.columns[cols], 1, inplace=True)
 
     # pour rassembler les 2 corses:
     df = df.groupby(level=0, sort=False).mean()
@@ -78,7 +80,7 @@ def nettoyer_fichiers_rpps():
             i += 1
 
     pieces = pd.DataFrame({
-        departement:c_dpt, specialite:c_spe, densite:c_dens
+        departement: c_dpt, specialite: c_spe, densite: c_dens
     }).groupby(spe_dpt, sort=False)[densite].sum()
     pieces.to_csv('out/rpps-medecins-clean.csv', header=True)
 
@@ -86,11 +88,11 @@ def nettoyer_fichiers_rpps():
 def merge(depassements, densites):
     union = pd.merge(depassements, densites, on=spe_dpt, sort=False)
     union.to_csv('out/correlation_densite_depassement.csv', header=True)
-    corr = float(np.corrcoef(union[densite], union[depassement])[0,1])
-    print('Correlation entre la densité de medecin par specialite et '
-    'par departement et la pratique du dépassement d\'honoraires:', corr)
+    corr = float(np.corrcoef(union[densite], union[depassement])[0, 1])
+    print("Correlation entre la densité de medecin par specialite et "
+          "par departement et la pratique du dépassement d\'honoraires:", corr)
 
-    if plot:
+    if False:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.scatter(union[densite], union[depassement])
@@ -99,8 +101,6 @@ def merge(depassements, densites):
         plt.show()
 
 
-
-plot = False
 def main():
     t_start = time.time()
     print("Nettoyage des fichiers contenant les données de soin...")

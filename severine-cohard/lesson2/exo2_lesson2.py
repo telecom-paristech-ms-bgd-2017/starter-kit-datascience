@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Éditeur de Spyder
+
+Ceci est un script temporaire.
+"""
+
 
 
 import unittest
@@ -7,52 +14,54 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return string * n
+    return string *n
+
+
 
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
-def array_front9(n):
-    for n in n[:4]:
-        if n == 9:
-            return True
-    return False
-
+    def array_front9(nums):
+        for int in int [:4]:
+            if int ==9:
+                return true
+    return false
+    
+    
+    
+    
+    
 
 # Given a string, return the count of the number of times
 # that a substring length 2 appears in the string and also as
 # the last 2 chars of the string, so "hixxxhi" yields 1
 # (we won't count the end substring).
-
-    
 def last2(string):
-    count=0
-    for n in range(len(string)-2):
-        if string[n:n+2]==string[-2:]:
-            count+=1
-    return count
-
+   
+    
+    
+    
+    
+    
 
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the corresponding words.
-
-def length_words(words):
-    return map(len, words)
+    def length_words(words):
+        return map(len, words)
 
 
 # Write fizzBuzz programm
-def fizz_buzz(n):
-    if n % 15 == 0:
-        return 'FizzBuzz'
-    if n % 3 == 0:
-        return 'Fizz'
-    if n % 5 == 0:
-        return 'Buzz'
-    return n
+    def fizz_buzz(n):
+        if n % 15 == 0:
+            return 'FizzBuzz'
+            if n % 3 == 0:
+                return 'Fizz'
+            if n % 5 == 0:
+                return 'Buzz'
+        return n
 
 
 # Write a function that takes a number and returns a list of its digits.
-
 def number2digits(number):
     return map(int, list(str(number)))
 
@@ -60,14 +69,12 @@ def number2digits(number):
 # Write function that translates a text to Pig Latin and back.
 # English is translated to Pig Latin by taking the first letter of every word,
 # moving it to the end of the word and adding 'ay'
-
-def pigLatin(text):
-    l=text.split() 
-    m=[]
-    for i in l:
-        m.append(i[1:].lower()+i[0].lower()+"ay") 
-    p=' '.join(m)
-    return p.capitalize()
+def pig_latin(text):
+    pig = ''
+    words = text.split()
+    for word in words:
+        pig += word[1:] + word[0] + 'ay' + ' '
+    return pig[:-1].capitalize()
 
 
 # Here's our "unit tests".
@@ -114,3 +121,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
