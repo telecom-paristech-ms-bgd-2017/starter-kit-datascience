@@ -5,11 +5,9 @@
 
 ################################ SCRAP MEDICAMENTS ################################
 
-# Import packages & initialize variables
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-import csv
+import re
 
 keyword = 'ibuprofene'
 urlPost = 'http://base-donnees-publique.medicaments.gouv.fr/index.php#result'
@@ -33,4 +31,8 @@ response = requests.post(urlPost, data=data)
 soup = BeautifulSoup(response.text, 'html.parser')
 medic = soup.find_all('a', class_='standart')
 
-print(medic)
+for m in medic:
+	string = str(m)
+	regexp = r"(IBUPROFENE[A-Z ]*[0-9]+\s(%|mg), [a-zé ])+"
+	if re.findall(regexp, string) != []:
+		print(re.findall(regexp, string))
