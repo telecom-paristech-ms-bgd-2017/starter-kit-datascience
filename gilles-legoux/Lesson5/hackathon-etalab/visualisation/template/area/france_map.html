@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>France Map for JQVMap / Gaël Jaffredo</title>
+
+    <link href="jqvmap.css" media="screen" rel="stylesheet" type="text/css"/>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="jquery.vmap.js" type="text/javascript"></script>
+    <script src="jquery.vmap.france.js" type="text/javascript"></script>
+    <script src="colors.js" type="text/javascript"></script>
+    <script src="values.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#francemap').vectorMap({
+                map: 'france_fr',
+                hoverOpacity: 0.5,
+                hoverColor: "#EC0000",
+                backgroundColor: "#ffffff",
+                colors: colors,
+                borderColor: "#000000",
+                selectedColor: "#EC0000",
+                enableZoom: true,
+                showTooltip: true,
+                onRegionClick: function (element, code, region) {
+                    var message = 'Région : "'
+                            + region
+                            + '(' + code + '): '
+                            + values[code]
+                            + '"';
+                    alert(message);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="francemap" style="width: 500px; height: 500px;"></div>
+</body>
+</html>

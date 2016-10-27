@@ -52,7 +52,7 @@ class Scraping:
         for link in bs.find_all('a', class_='standart'):
             med = Scraping.Medicament()
             text = link.contents[0].strip()
-            regex = r'([A-Z]+) (\d+) ([a-z]+),(.*)'
+            regex = r'([A-Z ]+) (\d+) ([a-z]+),(.*)'
             match = re.search(regex, text)
             if match:
                 med.name = match.group(1)
