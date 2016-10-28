@@ -92,7 +92,7 @@ def merge(depassements, densites):
     print("Correlation entre la densité de medecin par specialite et "
           "par departement et la pratique du dépassement d\'honoraires:", corr)
 
-    if False:
+    if True:
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.scatter(union[densite], union[depassement])
@@ -112,11 +112,9 @@ def main():
     nettoyer_fichiers_rpps()
     print("Terminé en", (time.time()-t_start), 's\n')
 
-    t_start = time.time()
     print("Merge des données et calcul de la corrélation...")
     depassements = pd.read_csv('out/dep_par_spe_et_dpt.csv')
     densites = pd.read_csv('out/rpps-medecins-clean.csv')
     merge(depassements, densites)
-    print("Terminé en", (time.time()-t_start), 's\n')
 
 main()
