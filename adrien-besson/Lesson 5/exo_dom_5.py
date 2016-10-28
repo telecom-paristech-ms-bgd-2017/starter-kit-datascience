@@ -6,7 +6,26 @@ import re
 from pandas import DataFrame, Series
 
 regions = ['provence_alpes_cote_d_azur','aquitaine','ile_de_france']
-argus = {"INTENS TYPE 2" : 10174.,"INTENS":10662.,"LIFE":10131.,"LIFE TYPE 2":10185.,"ZEN":10478.,"ZEN TYPE 2":10531.}
+versions = [{"Version":"INTENS TYPE 2","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide+type+2-2013.html"}
+	,{"Version":"INTENS","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-intens+charge+rapide-2013.html"},
+	{"Version":"LIFE","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide-2013.html"},
+	{"Version":"LIFE TYPE 2","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-life+charge+rapide+type+2-2013.html"},
+	{"Version":"ZEN","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide-2013.html"},
+	{"Version":"ZEN TYPE 2","URL":"http://www.lacentrale.fr/cote-auto-renault-zoe-zen+charge+rapide+type+2-2013.html"}]
+
+def getArgusPrices():
+	dico = {}
+
+	for version in versions:
+		url = version['URL']
+
+		r = requests.get(url=url)
+		soup = BeautifulSoup(r.text,"html.parser")
+
+		nom = version['Version']
+		dico[nom] = float(soup.find_all(class_="bGrey9L")[0].text.strip().replace(" ","").replace("€",""))
+
+	return dico
 
 def getPropertiesOfCar(properties):
 	dico = {}
@@ -46,7 +65,7 @@ def getPropertiesOfCar(properties):
 				dico['Phone'] = m.group(0)
 	return dico
 
-def getData(article,region):
+def getData(article,region,argus):
 	pro = (len(article.find_all(class_="ispro")) > 0)
 
 	urlArticle = "http:" + article['href']
@@ -58,14 +77,17 @@ def getData(article,region):
 	dico = getPropertiesOfCar(propertiesArticle)
 	dico['Pro'] = pro
 	dico['Region'] = region
+	dico['Lien vers l\'annonce'] = urlArticle
+
 	if dico['Version'] == None:
 		dico['Argus'] = None
 	else:
 		dico['Argus'] = argus[dico['Version']]
+		dico['Prix plus haut que l\'Argus'] = dico['Prix'] > dico['Argus']
 
 	return dico
 
-def getArticlesForRegionAndPage(region,page):
+def getArticlesForRegionAndPage(region,page,argus):
 	url = "https://www.leboncoin.fr/voitures/offres/" + region + "/?o=" + str(page) + "&brd=Renault&mdl=Zoe"
 	r = requests.get(url=url)
 	soup = BeautifulSoup(r.text,"html.parser")
@@ -73,29 +95,31 @@ def getArticlesForRegionAndPage(region,page):
 	articles = soup.find_all(class_='list_item')
 	data = []
 
-	for item in map(lambda x: getData(x,region),articles):
+	for item in map(lambda x: getData(x,region,argus),articles):
 		data.append(item)
 	return data
 
-def getArticlesForRegion(region):
-	datas = getArticlesForRegionAndPage(region,1)
-	tmp = getArticlesForRegionAndPage(region,2)
+def getArticlesForRegion(region,argus):
+	datas = getArticlesForRegionAndPage(region,1,argus)
+	tmp = getArticlesForRegionAndPage(region,2,argus)
 
 	page = 2
 	while len(tmp) > 0:
 		datas += tmp
 		page += 1
-		tmp = getArticlesForRegionAndPage(region,page)
+
+		tmp = getArticlesForRegionAndPage(region,page,argus)
 
 	return datas
 
 def getArticles():
 	datas = []
+	argus = getArgusPrices()
 
-	for item in map(lambda x: getArticlesForRegion(x),regions):
+	for item in map(lambda x: getArticlesForRegion(x,argus),regions):
 		datas += item
 
-	return DataFrame(datas,columns=['Region','Prix','Version','Year','Km','Phone','Pro','Argus'])
+	return DataFrame(datas,columns=['Region','Prix','Version','Year','Km','Phone','Pro','Argus','Prix plus haut que l\'Argus','Lien vers l\'annonce'])
 
 def annonces():
 	annonces = getArticles()
