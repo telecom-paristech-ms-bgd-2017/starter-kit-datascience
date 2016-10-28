@@ -6,60 +6,47 @@ df = pd.read_csv("aliments.csv", sep='\t', header=0, dtype=str)
 
 def plot(ingredient):
 
-    sugar_df = df[['countries_fr', ingredient]].copy().dropna()
-    
+    sugar_df = df[['countries_fr', ingredient]].copy().dropna()    
     sugar_df[ingredient] = sugar_df[ingredient].astype(float)
-    
+    sugar_df = sugar_df[sugar_df[ingredient] > 0]
     sugar_df['countries_fr'] = sugar_df['countries_fr'].str.replace(
         "en:|fr:|es:|it:", "").str.lower()
     
-    countries = set()
-    for row in sugar_df['countries_fr'].str.split(','):
-        for country in row:
-            country = country.strip()
-            if country:
-                countries.add(country)
-    
-                
+    countries = set.union(*sugar_df.countries_fr.map(
+        lambda x: set(x.split(','))).values)
+    countries.remove('')
+                    
     replacements = {'emirato-arabes': 'émirats arabes unis',
                     'emiratos-arabes': 'émirats arabes unis',
                     'emirratos-arabes': 'émirats arabes unis',
                     'paris': 'france',
                     'polska': 'pologne',
                     'pozzallo-sicilia': 'italie',
-                    'république de chine': 'république populaire de chine'}
-    
+                    'république de chine': 'république populaire de chine',
+                    'åland' : 'pays-bas'}
+             
     for r in replacements.keys():
-       sugar_df['countries_fr'] = sugar_df['countries_fr'].map(
-           lambda x: x.replace(r, replacements[r]))
-       
-    countries = set()
-    for row in sugar_df['countries_fr'].str.split(','):
-        for country in row:
-            country = country.strip()
-            if country:
-                countries.add(country)
-    
+        if r in countries:
+            countries.remove(r)
+        sugar_df['countries_fr'] = sugar_df['countries_fr'].map(
+            lambda x: x.replace(r, replacements[r]))       
     countries = sorted(countries)
-            
-    sugar_dummies = pd.concat((sugar_df[[ingredient]], 
-                               sugar_df['countries_fr'].str.get_dummies(
-                                   sep=',')), axis=1)
-    
-    sugar_per_country = []
     
     for country in countries:
-        sugar_per_country.append(pd.DataFrame.prod(
-        sugar_dummies[[country, ingredient]], axis=1).sum(
-            ) / sugar_dummies[country].sum())
+        sugar_df[country] = sugar_df[ingredient][
+            sugar_df['countries_fr'].str.contains(country)]
+        if (sugar_df[country]!=0).sum() < 10:
+            del(sugar_df[country])
+            countries.remove(country)
+    sugar_df = sugar_df.fillna(0)
     
-    sugars = pd.DataFrame(
-        sugar_per_country, index=countries, columns=[ingredient]).sort_values(
-            by=ingredient, ascending=False)
+    mean_sugars = pd.DataFrame(sorted([sugar_df[country].sum() / (
+        sugar_df[country]!=0).sum() for country in countries], 
+                reverse=True), index=countries, columns=[ingredient])
     
-    sugars.head().plot(kind='bar')
+   
+    mean_sugars.head().plot(kind='bar')
+    plt.title('Average ingredient presence per country')
     plt.show()
     
 plot('sugars_100g')
-plot('fat_100g')
-plot('sodium_100g')
