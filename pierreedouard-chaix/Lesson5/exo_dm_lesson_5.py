@@ -155,18 +155,19 @@ for dep in rpps_2015_cube["Departement"].unique():
 pop.columns = ["Departement", "Bande", "Population"]
 pop_totale_dep = pop.groupby("Departement").sum()
 pop["Proportion par dep"] = pop.apply(lambda x: x["Population"] / float(pop_totale_dep["Population"][x["Departement"]]), axis = 1)
+pop["Pop par 100000"] = pop.apply(lambda x: x["Population"] / 100000.0, axis = 1)
 
 pop_med = pd.merge(pop, rpps_2015_cube, left_on = "Departement", right_on = "Departement", how = "left")
 
 # Corrélation entre "Pediatrie" et les enfants de moins de 15 ans ?
 pop_jeune = pop[pop["Bande"].isin(["0-4", "5-9", "10-14"])].groupby("Departement").sum()
 pop_jeune_med = pd.merge(pop_jeune, rpps_2015_cube[rpps_2015_cube["Specialite"] == "Pediatrie"], left_index = True, right_on = "Departement", how = "left")
-print pop_jeune_med[["Proportion par dep", "Densite"]].corr()
+print pop_jeune_med[["Pop par 100000", "Densite"]].corr()
 
 # Corrélation entre "Geriatrie" et les personnes de plus de 70 ans ?
 pop_vieux = pop[pop["Bande"].isin(["70-74", "75-79", "80-84", "85-89", "90-94", "95-99", "100+"])].groupby("Departement").sum()
 pop_vieux_med = pd.merge(pop_vieux, rpps_2015_cube[rpps_2015_cube["Specialite"] == "Geriatrie"], left_index = True, right_on = "Departement", how = "left")
-print pop_vieux_med[["Proportion par dep", "Densite"]].corr()
+print pop_vieux_med[["Pop par 100000", "Densite"]].corr()
 
 
 
