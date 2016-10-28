@@ -1,38 +1,31 @@
 import requests
 from bs4 import BeautifulSoup
 
-year = 2013
-
-result = requests.post('http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='+str(year)).text
-soup = BeautifulSoup(result, 'html.parser')
-print(soup.find_all(class_='libellepetit G')[1].parent.find_all(class_='montantpetit G')[2].text)
-souptest = soup.find_all(class_='libellepetit G')[1]
 
 def extractColumnsFromDOM(soup1, classname):
     listColumns = soup1.find_all(class_=classname)
     #print(listColumns)
     return listColumns
 
+
 def extractFiguresFromDOM(soup2, classname, figureColumn):
     figure = soup2.parent.find_all(class_=classname)[figureColumn]
-    print(figure.text)
+    # print(figure.text)
     return int(figure.text.replace(u'\xa0', '').replace(' ', ''))
+
 
 def convertFiguresColumns(val):
         dicoFigures = {1: 'Euros par habitant', 2: 'Moyenne de la strate'}
         if val in range(1, 3):
             return dicoFigures[val]
 
-def test():
+
+def classifyFigures(soup, classname, listSelected, endOfColumn):
     ColumnsDictionary = {}
-    listSelected = {'= A', '= B', '= C', '= D'}
-    classname = 'montantpetit G'
-    #figuresColumn = 1
-    #endOfColumn = 3
 
     for el in extractColumnsFromDOM(soup, 'libellepetit G'):
         if el.text[-3:] in listSelected:
-            for figuresColumn in range(1,3):
+            for figuresColumn in range(1,endOfColumn+1):
                 if el.text not in ColumnsDictionary:
                     figuresDictionary = {}
                     figuresDictionary[convertFiguresColumns(figuresColumn)] = extractFiguresFromDOM(el, classname, figuresColumn)
@@ -42,15 +35,30 @@ def test():
                         ColumnsDictionary[el.text][convertFiguresColumns(figuresColumn)] = extractFiguresFromDOM(el, classname, figuresColumn)
                     #else:
                      #   ColumnsDictionary[el.text][convertFiguresColumns(figuresColumn)] = extractFiguresFromDOM(el, classname, figuresColumn)
-            #figuresColumn += 1
-    print(ColumnsDictionary)
-    return
+    return ColumnsDictionary
 
 
 
+def getFiguresByYear():
+    listChamps = {'= A', '= B', '= C', '= D'}
+    classmontant = 'montantpetit G'
+    lastColumn = 2
+
+    path = 'http://alize2.finances.gouv.fr/communes/eneuro/detail.php?icom=056&dep=075&type=BPS&param=5&exercice='
+    dataSetCitiesAccount = {}
+
+    for year in range(2010, 2014):
+        soup = BeautifulSoup(requests.post(path + str(year)).text, 'html.parser')
+        if year not in dataSetCitiesAccount:
+            dataSetCitiesAccount[year] = classifyFigures(soup, classmontant, listChamps, lastColumn)
+
+        #print(dataSetCitiesAccount)
+    return dataSetCitiesAccount
 
 
 
+# print(soup.find_all(class_='libellepetit G')[1].parent.find_all(class_='montantpetit G')[2].text)
+# souptest = soup.find_all(class_='libellepetit G')[1]
 
 
 #===========================================================================

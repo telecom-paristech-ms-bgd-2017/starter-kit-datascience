@@ -21,7 +21,7 @@ To add your work to the repository:
 
 To avoid the war of pushes on master branch, create your own branch. You know this issue, you pulled but another user pushed before you just at this moment:
 
-> Of course, you can also make several commits in local, and push rarely to avoid this problem of priority. But create one branch is a good practice.
+> Of course, you can also make several commits in local, and push rarely to avoid this problem of priority. But creating a branch is a good practice.
 
 Create your branch from master:
 
@@ -46,9 +46,9 @@ $ git checkout master && git merge <firstname>-<lastname>
 That is to say, you go to master, then you merge \<firstname\>-\<lastname\>. If you can't go, create a stash see https://git-scm.com/docs/git-stash.
 
 > /!\ Here you merge \<firstname\>-\<lastname\> into master, above all don't merge master into \<firstname\>-\<lastname\>. 
-> And if you work directly on web interface of Github, pay attention to be on your branch and don't on master.
-> In summary, \<firstname\>-\<lastname\> should be included in master branch, but your branch should be never having
-> modifications from master.
+> And if you work directly on web interface of Github, pay attention to be on your branch and not on master.
+> In summary, \<firstname\>-\<lastname\> should be included in master branch, but your branch should never be modified
+> from master.
 
 Then push master:
 
