@@ -18,6 +18,12 @@ for type_zoe in ['intens', 'life', 'zen']:
 # Données des Zoé sur le bon coin et construction du dictionnaire
 data = {}
 
+def LastPage(url):
+    url_last_page = soup.find_all(class_='element page static link-like')[0].get("href")
+    reg = re.compile(r'\d')
+    LastPage = reg.search(url_last_page).group(0)
+    return int(LastPage)
+
 
 url = 'https://www.leboncoin.fr/voitures/offres/ile_de_france/?th=1&parrot=0&brd=Renault&mdl=Zoe'
 
@@ -74,9 +80,13 @@ for link in links :
         data[link]["prix_argus"] = prix_argus[2]
 
 df = pd.DataFrame.from_dict(data, orient='index')
-for i in range(len(df.index)):
-    df.ix[i,'titre_an'] = df.ix[i,'titre_an'].lower()
-    df.ix[i, 'type_zoe'] = df.ix[i, 'type_zoe'].lower()
+#for i in range(len(df.index)):
+    #df.ix[i,'titre_an'] = df.ix[i,'titre_an'].lower()
+    #df.ix[i, 'type_zoe'] = df.ix[i, 'type_zoe'].lower()
+df.titre_an.str.strip().lower()
+df.type_zoe.str.strip().lower()
 
 columns = ['price','prix_argus','km','year','type_zoe','type_owner']
 result_boncoin = df.to_csv(path_or_buf='/Users/mayliscotadze/starter-kit-datascience/maylis-cotadze/Lesson4/result2.csv', columns = columns)
+
+#soup.find_all(class_='element page static link-like')[0].get("href")

@@ -63,10 +63,10 @@ densite_exe_spe["key"] = densite_exe_spe["Departement"].astype(str) + "_" + dens
 
 analyse_annee = pd.DataFrame()
 
-for mois in range(1, 12):
+for mois in range(1, 13):
 	if mois < 10 : mois = "0"+str(mois)
 	else: mois = str(mois)
-
+	print mois
 	R2015mois = pd.read_csv("R2015/R2015"+mois+"_sanslib.csv", sep=";", decimal = ",", thousands = ".")
 
 	# Département à partir de cpam
@@ -105,29 +105,6 @@ analyse_annee_merge = analyse_annee.merge(densite_exe_spe, left_on = "key", righ
 # De plus, rajout manuel du mapping exe_spe 38 pour RPPS "Biologie médicale"
 analyse_annee_merge = analyse_annee_merge.dropna()
 
-# Calculer la corrélation entre "depassement" et "densité"
-analyse_annee_merge["Taux depassement"] = analyse_annee_merge["dep_mon"] / (analyse_annee_merge["dep_mon"] + analyse_annee_merge["rec_mon"])
-print analyse_annee_merge[["Densite", "Taux depassement"]].corr()
-def plot_spe(exe_spe):
-	data = analyse_annee_merge[analyse_annee_merge["exe_spe_x"] == exe_spe]
-	plt.figure()
-	plt.plot(data["Densite"], data["Taux depassement"], "xr")
-	plt.show()
-
-def plot_dep(dep):
-	data = analyse_annee_merge[analyse_annee_merge["Departement_x"] == dep]
-	plt.figure()
-	plt.plot(data["Densite"], data["Taux depassement"], "xr")
-	plt.show()
-
-# Quelle spécialité fait le plus de dépassement ?
-dep_par_spe = analyse_annee_merge.groupby("exe_spe_x")[["dep_mon", "rec_mon"]].sum()
-dep_par_spe["Taux depassement spe"] = dep_par_spe["dep_mon"] / (dep_par_spe["dep_mon"] + dep_par_spe["rec_mon"])
-
-# Dans quel département y a-t-il le plus de dépassements ?
-dep_par_dep = analyse_annee_merge.groupby("Departement_x")[["dep_mon", "rec_mon"]].sum()
-dep_par_dep["Taux depassement dep"] = dep_par_dep["dep_mon"] / (dep_par_dep["dep_mon"] + dep_par_dep["rec_mon"])
-
 # Il n'y a jamais de dépassement pour exe_spe = 99
 R2015mois[R2015mois["exe_spe"] == 99]["dep_mon"].unique() # Uniquement 0.0
 
@@ -148,25 +125,62 @@ def get_dep_pop(dep):
 
 pop = pd.DataFrame()
 for dep in rpps_2015_cube["Departement"].unique():
-	print(dep)
-	pop = pd.concat([pop, pd.DataFrame(get_dep_pop(dep))])
+	if(dep == "976"): break
+	else:
+		print(dep)
+		pop = pd.concat([pop, pd.DataFrame(get_dep_pop(dep))])
 # Mayotte (976) ne renvoie pas de données, mais c'est le dernier élément donc pop est complet
 
 pop.columns = ["Departement", "Bande", "Population"]
 pop_totale_dep = pop.groupby("Departement").sum()
 pop["Proportion par dep"] = pop.apply(lambda x: x["Population"] / float(pop_totale_dep["Population"][x["Departement"]]), axis = 1)
+pop["Pop par 100000"] = pop.apply(lambda x: x["Population"] / 100000.0, axis = 1)
 
 pop_med = pd.merge(pop, rpps_2015_cube, left_on = "Departement", right_on = "Departement", how = "left")
 
+
+
+############## RESULTATS
+# Q1
+# Calculer la corrélation entre "depassement" et "densité"
+analyse_annee_merge["Taux depassement"] = analyse_annee_merge["dep_mon"] / (analyse_annee_merge["dep_mon"] + analyse_annee_merge["rec_mon"])
+analyse_annee_merge = pd.merge(analyse_annee_merge, pop_totale_dep, left_on = "Departement_x", right_index = True)
+analyse_annee_merge["Densite medecins par pop"] = analyse_annee_merge["Densite"] * 100000.0 / analyse_annee_merge["Population"]
+# Au final ce que l'on calcule est la correlation entre a et b :
+# a ("Densite medecins par pop") = densité d'une spécialité donnée dans un département donné = nombre de médecins de cette spécialité dans le département / population du département
+# b ("Taux depassement") = proportion de dépassement pour une spécialité et un département donné = dépassements / (dépassement+ remboursements sécu)
+print analyse_annee_merge[["Densite medecins par pop", "Taux depassement"]].corr()
+
+def plot_spe(exe_spe):
+	data = analyse_annee_merge[analyse_annee_merge["exe_spe_x"] == exe_spe]
+	plt.figure()
+	plt.plot(data["Densite medecins par pop"], data["Taux depassement"], "xr")
+	plt.show()
+
+def plot_dep(dep):
+	data = analyse_annee_merge[analyse_annee_merge["Departement_x"] == dep]
+	plt.figure()
+	plt.plot(data["Densite medecins par pop"], data["Taux depassement"], "xr")
+	plt.show()
+
+# Quelle spécialité fait le plus de dépassement ?
+dep_par_spe = analyse_annee_merge.groupby("exe_spe_x")[["dep_mon", "rec_mon"]].sum()
+dep_par_spe["Taux depassement spe"] = dep_par_spe["dep_mon"] / (dep_par_spe["dep_mon"] + dep_par_spe["rec_mon"])
+
+# Dans quel département y a-t-il le plus de dépassements ?
+dep_par_dep = analyse_annee_merge.groupby("Departement_x")[["dep_mon", "rec_mon"]].sum()
+dep_par_dep["Taux depassement dep"] = dep_par_dep["dep_mon"] / (dep_par_dep["dep_mon"] + dep_par_dep["rec_mon"])
+
+#Q2
 # Corrélation entre "Pediatrie" et les enfants de moins de 15 ans ?
 pop_jeune = pop[pop["Bande"].isin(["0-4", "5-9", "10-14"])].groupby("Departement").sum()
 pop_jeune_med = pd.merge(pop_jeune, rpps_2015_cube[rpps_2015_cube["Specialite"] == "Pediatrie"], left_index = True, right_on = "Departement", how = "left")
-print pop_jeune_med[["Proportion par dep", "Densite"]].corr()
+print pop_jeune_med[["Pop par 100000", "Densite"]].corr()
 
 # Corrélation entre "Geriatrie" et les personnes de plus de 70 ans ?
 pop_vieux = pop[pop["Bande"].isin(["70-74", "75-79", "80-84", "85-89", "90-94", "95-99", "100+"])].groupby("Departement").sum()
 pop_vieux_med = pd.merge(pop_vieux, rpps_2015_cube[rpps_2015_cube["Specialite"] == "Geriatrie"], left_index = True, right_on = "Departement", how = "left")
-print pop_vieux_med[["Proportion par dep", "Densite"]].corr()
+print pop_vieux_med[["Pop par 100000", "Densite"]].corr()
 
 
 
