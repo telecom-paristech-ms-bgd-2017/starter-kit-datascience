@@ -1,0 +1,18 @@
+# Ignoring solutions
+basic/solution
+babynames/solution
+copyspecial/solution
+logpuzzle/solution
+
+# Ignoring example files
+basic/*.txt
+babynames/*.html
+copyspecial/*.txt
+copyspecial/*.jpg
+logpuzzle/puzzle_img
+
+# Ignoring IDE generated files
+.idea/
+*.iml
+LICENSE.txt
+NOTICE.txt
