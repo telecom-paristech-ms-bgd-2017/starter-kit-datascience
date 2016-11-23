@@ -1,6 +1,8 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from urllib.error import URLError
+import pandas as pd
+import numpy as np
 
 for date in range(2010, 2014):
     try:
@@ -18,4 +20,7 @@ for date in range(2010, 2014):
             u = name.get_text().replace('\xa0', ' ')
             lst.append(u)
             reverse_lst = lst[::-1]
-        print(reverse_lst[1:])
+            ar = np.asarray(reverse_lst[1::])
+        print(ar)
+        
+

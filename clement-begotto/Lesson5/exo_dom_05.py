@@ -48,8 +48,8 @@ def cote_argus(version_complete, type_2, date):
     url_cotation = 'http://www.lacentrale.fr/cote-auto-renault-zoe-<version>+charge+rapide+<type>-<date>.html'
     recherche_curr_cote = BeautifulSoup(requests.get(url_cotation.replace(
         '<version>', version_complete).replace('+<type>', type_2).replace('<date>', date)).text, 'html.parser')
-    cote = recherche_curr_cote.find(
-        'strong', class_='f24 bGrey9L txtRed pL15 mL15')
+    
+    cote = recherche_curr_cote.find('strong', class_='f24 bGrey9L txtRed pL15 mL15')
     return float(cote.text.strip()[:-1].replace(' ', '')) if version_complete != "NOT FOUND" else "NOT FOUND"
 
 # Main
@@ -60,16 +60,12 @@ regions = ['ile_de_france', 'aquitaine', 'provence_alpes_cote_d_azur']
 
 for region in regions:
     req_general_leboncoin = requests.get(url.replace('<region>', region))
-    recherche_general_leboncoin = BeautifulSoup(
-        req_general_leboncoin.text, 'html.parser')
+    recherche_general_leboncoin = BeautifulSoup(req_general_leboncoin.text, 'html.parser')
 
     for link in liens_voitures(recherche_general_leboncoin):
 
-        recherche_curr_leboncoin = BeautifulSoup(
-            requests.get("https:" + link['href']).text, 'html.parser')
-        table_extract = extract_prix_kilometrage_date(
-            recherche_curr_leboncoin, data_recherche)
-
+        recherche_curr_leboncoin = BeautifulSoup(requests.get("https:" + link['href']).text, 'html.parser')
+        table_extract = extract_prix_kilometrage_date(recherche_curr_leboncoin, data_recherche)
         version_complete, type_2 = extract_version(recherche_curr_leboncoin)
 
         data_recherche['Version'].append(version_complete)
@@ -77,10 +73,8 @@ for region in regions:
         data_recherche['Année-modèle'].append(table_extract[1])
         data_recherche['Kilométrage'].append(float(table_extract[2]))
         data_recherche['Région'].append(region.replace("_", ' '))
-        data_recherche['Vendeur'].append(type_vendeur(link))
-        data_recherche['Argus'].append(cote_argus(
-            version_complete, type_2, table_extract[1]))
-        data_recherche['Téléphone'].append(
-            extract_tel(recherche_curr_leboncoin))
+        data_recherche['Vendeur'].append( type_vendeur(link) )
+        data_recherche['Argus'].append( cote_argus(version_complete, type_2, table_extract[1]) )
+        data_recherche['Téléphone'].append( extract_tel(recherche_curr_leboncoin) )
 
-pd.DataFrame(data_recherche).to_csv('test.csv', sep=';')
+pd.DataFrame(data_recherche).to_csv('test.csv')
