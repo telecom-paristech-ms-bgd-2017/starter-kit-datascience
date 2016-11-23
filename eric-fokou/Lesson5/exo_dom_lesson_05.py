@@ -1,105 +1,92 @@
-import requests
-from bs4 import BeautifulSoup
-import re
 import pandas as pd
-import json
-from multiprocessing import Pool
-from functools import partial
-import time
 import numpy as np
+from pandas import Series, DataFrame
+import re
+import pdb
+import matplotlib.pyplot as plt
+from matplotlib import rc
+import seaborn as sns
+from pandas.tools.plotting import radviz, scatter_matrix
+from scipy.stats import gaussian_kde
+from os import mkdir, path
+import scipy.stats
+from scipy.stats import pearsonr
+from scipy.stats import norm
+%matplotlib inline
+###############################################################################
+# Plot initialization
 
-numProcesses = 4 # my number of cores
-run_type = 'Parallel' # Parallel or Sequential
+plt.close("all")
+rc('font', **{'family': 'sans-serif', 'sans-serif': ['Computer Modern Roman']})
+params = {'axes.labelsize': 12,
+          'font.size': 12,
+          'legend.fontsize': 12,
+          'xtick.labelsize': 10,
+          'ytick.labelsize': 10,
+          'text.usetex': True,
+          'figure.figsize': (8, 6)}
+plt.rcParams.update(params)
 
-medicament = 'IBUPROFENE'
-
-regex_IBUPROFENE = medicament+' ([A-Z ]+) (\d+) ?([\w%]+),([ \w]+)'
-
-requestURL = 'http://base-donnees-publique.medicaments.gouv.fr/index.php'
-
-
-def BuilParam(nomMedicament,page):
-    paramMedoc = {
-        'page':page,
-        'affliste':0,
-        'affNumero':0,
-        'isAlphabet':0,
-        'inClauseSubst':0,
-        'nomSubstances':'',
-        'typeRecherche':0,
-        'choixRecherche':'medicament',
-        'paginationUsed':0,
-        'txtCaracteres': nomMedicament,
-        'radLibelle':2,
-        'txtCaracteresSub': '',
-        'radLibelleSub':4
-     
-    }
-    return paramMedoc 
-
-
-def processPage(medicament,page):
-    
-    
-    paramMedoc = BuilParam(medicament,1)
-    requestResponse = requests.post(requestURL, paramMedoc).text
-    soup = BeautifulSoup(requestResponse, 'html.parser')
-    medicament_liste = soup.find_all("td", class_ = 'ResultRowDeno')
-    #print len(medicament_liste)
-    
-    medocs_ByPage = []
-    for med in medicament_liste:
-        #print med.find("a", class_ = 'standart').text.strip()
-        chaine_med = med.find("a", class_ = 'standart').text.strip()
-        match = re.search(regex_IBUPROFENE, chaine_med)
-        #print match.group(1), match.group(2), match.group(3), match.group(4)
-        try:
-            medocs = {}
-            medocs['nom'] = match.group(1).strip()
-            medocs['dose'] = match.group(2).strip()
-            medocs['unite'] = match.group(3).strip().strip()
-            medocs['forme'] = match.group(4).strip()
-            medocs_ByPage.append(medocs)
-        except AttributeError:
-                    print "Matching regex False"
-    return medocs_ByPage
-        
-        
-
-def processMedicament(medicament):
-    medicaments_feature = []
-    
-    page = 1
-    paramMedoc = BuilParam(medicament,page)
-    requestResponse = requests.post(requestURL, paramMedoc).text
-    soup = BeautifulSoup(requestResponse, 'html.parser')
-    page_liste = soup.find_all("a", class_ = 'standart', attrs={"onmouseover": "self.status='';return true"})
-    #print len(page_liste)
-    
-    if (run_type == 'Sequential'):
-        for page_number in np.arange(len(page_liste)+1)+1:
-            print 'page_number '+str(page_number)
-            medicaments_feature = medicaments_feature + processPage(medicament,page_number)
-    else:
-        pool = Pool(numProcesses)
-        func = partial(processPage, medicament)
-        medicaments_feature = pool.map(func, np.arange(len(page_liste)+1)+1)
-        pool.close()
-        pool.join()
-        flattenned_medocs_feature = [val for sublist in medicaments_feature for val in sublist] #
-        medicaments_feature = flattenned_medocs_feature
-    
-    print (len(medicaments_feature))
-    return medicaments_feature
-    
+sns.set_palette("colorblind")
+sns.axes_style()
+sns.set_style({'legend.frameon': True})
+color_blind_list = sns.color_palette("colorblind", 8)
+my_orange = color_blind_list[2]
+my_green = color_blind_list[1]
+my_blue = color_blind_list[0]
+my_purple = color_blind_list[3]
+###############################################################################
+dirname = "srcimages/"
+if not path.exists(dirname):
+    mkdir(dirname)
+imageformat = '.jpg'
 
 
-if __name__ == '__main__':
-    
-    start_time = time.time()
+def my_saving_display(fig, dirname, filename, imageformat):
+    """saving faster"""
+    dirname + filename + imageformat
+    image_name = dirname + filename + imageformat
+    fig.savefig(image_name)
 
-    medicaments_feature = processMedicament(medicament)
-    df_medicaments = pd.DataFrame(medicaments_feature, columns=['nom', 'dose', 'unite', 'forme'])
-    df_medicaments.to_csv('medicament_'+medicament+'.csv', index=False, encoding='utf-8')
-    print(
-        "--- Run type : {0}. Exec time (in s) : {1} ---".format(run_type, time.time() - start_time))
+print "df_depassement_honoraires\n"
+print df_depassement_honoraires.dtypes
+print df_depassement_honoraires.shape
+print 
+print "df_densite_medecins_specialite\n"
+print df_densite_medecins_specialite.dtypes
+print df_densite_medecins_specialite.shape
+
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['DEPASSEMENTS (euros)'])
+print(df_depassement_honoraires.shape)
+
+df_depassement_honoraires['SPECIALISTES'] = df_depassement_honoraires['SPECIALISTES'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+df_depassement_honoraires['DEPARTEMENT'] = df_depassement_honoraires['DEPARTEMENT'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+
+df_depassement_honoraires['SPECIALISTES'] = df_depassement_honoraires['SPECIALISTES'].str.extract('[\d]+- ([\w\s-]+)', expand=False)
+df_depassement_honoraires['DEPARTEMENT'] = df_depassement_honoraires['DEPARTEMENT'].str.extract('[\d]+- ([\w\s-]+)', expand=False)
+
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['SPECIALISTES'])
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['DEPARTEMENT'])
+df_depassement_honoraires
+
+df_depassement_honoraires = df_depassement_honoraires.set_index(['SPECIALISTES', 'DEPARTEMENT'])
+df_depassement_honoraires.ix[0:20]
+df_depassement_honoraires_clean = df_depassement_honoraires["DEPASSEMENTS (euros)"]
+df_depassement_honoraires_clean.to_csv('Data\df_depassement_honoraires.csv',header = True)
+
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['effectifs'])
+print(df_densite_medecins_specialite.shape)
+
+df_densite_medecins_specialite['zone_inscription'] = df_densite_medecins_specialite['zone_inscription'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+df_densite_medecins_specialite['specialite'] = df_densite_medecins_specialite['specialite'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+
+df_densite_medecins_specialite['zone_inscription'] = df_densite_medecins_specialite['zone_inscription'].str.extract('[\d]+ - ([\w\s-]+)', expand=False)
+
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['specialite'])
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['zone_inscription'])
+df_densite_medecins_specialite = df_densite_medecins_specialite.set_index(['specialite', 'zone_inscription'])
+df_densite_medecins_specialite_clean = df_densite_medecins_specialite["effectifs"]
+df_densite_medecins_specialite_clean.to_csv('Data\Medecin_clean.csv',header = True)
+df_densite_medecins_specialite_clean.ix[0:20]
+
+

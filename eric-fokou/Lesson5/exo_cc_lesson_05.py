@@ -1,73 +1,105 @@
-# -*- coding: utf8 -*-
-import pandas as pd
-import numpy as np
-from pandas import Series, DataFrame
+import requests
+from bs4 import BeautifulSoup
 import re
-import pdb
+import pandas as pd
+import json
+from multiprocessing import Pool
+from functools import partial
+import time
+import numpy as np
 
-#MERGE
-insee1 = pd.read_csv('base-cc-evol-struct-pop-2011.csv')
-insee2 = pd.read_csv('base-cc-rev-fisc-loc-menage-10.csv')
+numProcesses = 4 # my number of cores
+run_type = 'Parallel' # Parallel or Sequential
 
-def strip_corse(val):
-    if type(val) == int:
-        return val
-    if val == 'nan':
-        return -1
-    return int(re.sub('(A|B)', '0',val))
+medicament = 'IBUPROFENE'
 
-insee1['code insee'] = insee1['code insee'].apply(strip_corse)
-insee2['CODGEO'] = insee2['CODGEO'].apply(strip_corse)
+regex_IBUPROFENE = medicament+' ([A-Z ]+) (\d+) ?([\w%]+),([ \w]+)'
 
-
-#PIVOT
-releves = [
-         ['lundi','temperature',28]
-         ,['lundi','ensoleillement',4]
-         ,['lundi','pollution',5]
-         ,['lundi','pluie',100]
-         ,['mardi','temperature',28]
-         ,['mardi','ensoleillement',4]
-         ,['mardi','pollution',5]
-         ,['mardi','pluie',100]
-         ,['mercredi','temperature',28]
-         ,['mercredi','ensoleillement',4]
-         ,['mercredi','pollution',5]
-         ,['mercredi','pluie',100]
-         ,['jeudi','temperature',28]
-         ,['jeudi','ensoleillement',4]
-         ,['jeudi','pollution',5]
-         ,['jeudi','pluie',100]
-         ,['vendredi','temperature',28]
-         ,['vendredi','ensoleillement',4]
-         ,['vendredi','pollution',5]
-         ,['vendredi','pluie',100]
-         ]
-
-cities_data  = DataFrame(releves, columns=['day','observation','value'])
-cities_data_wide = cities_data.pivot('day','observation','value')
-cities_data_wide = cities_data.pivot('day','observation','value').reset_index()
-observations =[ u'ensoleillement', u'pluie', u'pollution', u'temperature']
-pd.melt(cities_data_wide, id_vars=['day'], value_vars=observations)
+requestURL = 'http://base-donnees-publique.medicaments.gouv.fr/index.php'
 
 
-#GROUP BY
+def BuilParam(nomMedicament,page):
+    paramMedoc = {
+        'page':page,
+        'affliste':0,
+        'affNumero':0,
+        'isAlphabet':0,
+        'inClauseSubst':0,
+        'nomSubstances':'',
+        'typeRecherche':0,
+        'choixRecherche':'medicament',
+        'paginationUsed':0,
+        'txtCaracteres': nomMedicament,
+        'radLibelle':2,
+        'txtCaracteresSub': '',
+        'radLibelleSub':4
+     
+    }
+    return paramMedoc 
 
 
-cameras = pd.read_csv('Camera.csv', sep=';')
-cameras = cameras.ix[1:]
-cameras_clean = cameras.set_index('Model').astype(float)
-cameras_clean = cameras_clean.rename(columns={u'Weight (inc. batteries)':'weight'})
+def processPage(medicament,page):
+    
+    
+    paramMedoc = BuilParam(medicament,1)
+    requestResponse = requests.post(requestURL, paramMedoc).text
+    soup = BeautifulSoup(requestResponse, 'html.parser')
+    medicament_liste = soup.find_all("td", class_ = 'ResultRowDeno')
+    #print len(medicament_liste)
+    
+    medocs_ByPage = []
+    for med in medicament_liste:
+        #print med.find("a", class_ = 'standart').text.strip()
+        chaine_med = med.find("a", class_ = 'standart').text.strip()
+        match = re.search(regex_IBUPROFENE, chaine_med)
+        #print match.group(1), match.group(2), match.group(3), match.group(4)
+        try:
+            medocs = {}
+            medocs['nom'] = match.group(1).strip()
+            medocs['dose'] = match.group(2).strip()
+            medocs['unite'] = match.group(3).strip().strip()
+            medocs['forme'] = match.group(4).strip()
+            medocs_ByPage.append(medocs)
+        except AttributeError:
+                    print "Matching regex False"
+    return medocs_ByPage
+        
+        
+
+def processMedicament(medicament):
+    medicaments_feature = []
+    
+    page = 1
+    paramMedoc = BuilParam(medicament,page)
+    requestResponse = requests.post(requestURL, paramMedoc).text
+    soup = BeautifulSoup(requestResponse, 'html.parser')
+    page_liste = soup.find_all("a", class_ = 'standart', attrs={"onmouseover": "self.status='';return true"})
+    #print len(page_liste)
+    
+    if (run_type == 'Sequential'):
+        for page_number in np.arange(len(page_liste)+1)+1:
+            print 'page_number '+str(page_number)
+            medicaments_feature = medicaments_feature + processPage(medicament,page_number)
+    else:
+        pool = Pool(numProcesses)
+        func = partial(processPage, medicament)
+        medicaments_feature = pool.map(func, np.arange(len(page_liste)+1)+1)
+        pool.close()
+        pool.join()
+        flattenned_medocs_feature = [val for sublist in medicaments_feature for val in sublist] #
+        medicaments_feature = flattenned_medocs_feature
+    
+    print (len(medicaments_feature))
+    return medicaments_feature
+    
 
 
-brand = cameras['Model'].apply(lambda x: x.split(' ')[0])
-cameras_clean['brand'] = brand
-cameras_clean.groupby('brand')['weight'].mean()
-cameras_clean.groupby('brand')[u'Max resolution', u'Low resolution', u'Effective pixels'].sum()
-cameras_clean.groupby('brand').agg({'weight': np.mean, 'Max resolution':np.sum})
-cameras_clean.groupby(lambda x: x.split(' ')[0]).agg({'weight': np.mean, 'Max resolution':np.sum})
+if __name__ == '__main__':
+    
+    start_time = time.time()
 
-def top_n(df, n=5, column="Max resolution"):
-    return df.sort(column,ascending=False)[:n]
-
-cameras_clean.groupby(lambda x: x.split(' ')[0]).apply(top_n)
+    medicaments_feature = processMedicament(medicament)
+    df_medicaments = pd.DataFrame(medicaments_feature, columns=['nom', 'dose', 'unite', 'forme'])
+    df_medicaments.to_csv('medicament_'+medicament+'.csv', index=False, encoding='utf-8')
+    print(
+        "--- Run type : {0}. Exec time (in s) : {1} ---".format(run_type, time.time() - start_time))
