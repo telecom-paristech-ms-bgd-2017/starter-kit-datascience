@@ -1,11 +1,9 @@
-# @ author : ZENAIDI Fares
-# coding = utf8
-
 from bs4 import BeautifulSoup
 import requests
 import numpy as np
 import json
 from pandas import DataFrame, Series
+import googlemaps
 # import multiprocessing from pool
 
 
@@ -31,31 +29,29 @@ def adapt_to_api_syntax(top_cities):
 
 
 ########################################################################################################################
-# Part II - Use the Google Map's Distance Matrix API                                                                   #
+# Part II - Use a Google Map's Distance Matrix API wrapper                                                             #
 ########################################################################################################################
-def get_distance_matrix():
-    top_cities = extract_top_cities(30)[:7]
-    adapted_top_cities = adapt_to_api_syntax(top_cities)  # Only the 7 biggest cities
+# Wrapper -> https://github.com/googlemaps/google-maps-services-python
+# i) Read from file the API_KEY
+#with open('Google_API_Key', mode='r') as f:
+#    api_key = f.read()
 
-    # i) Read from file the API_KEY
-    with open('Google_API_Key', mode='r') as f:
-        api_key = f.read()
+gmaps = googlemaps.Client(key='AIzaSyCHGkWQ86fKTvUNYvzuqGCzmSBUAW3BhpU')
 
-    # ii) Requests the Distance Matrix API
-    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins={}&destinations={}&keys={}' \
-          .format(adapted_top_cities, adapted_top_cities, api_key)
+villes = ['Paris','Lille','Marseille','Lyon','Strasbourg','Nantes','Nice','Bordeaux','Toulouse']
 
-    r = requests.get(url)
-    res = json.loads(r.text)  # Convert the json-response into a dictionary of key-value pairs
-    df_distances = DataFrame(index=top_cities, columns=top_cities)  # DF modeling the distance matrix
+distances = gmaps.distance_matrix(villes, villes)['rows']
+print(len(distances))
+INDICATOR = 'duration'
+TYPE_INDICATOR = 'value'
 
-    for idx1, line in enumerate(res['rows']):
-        for idx2, column in enumerate(line['elements']):
-            df_distances[top_cities[idx1]][top_cities[idx2]] = column['distance']['text']
+clean_distances = []
+for row in distances:
+  clean_distances.append(map(lambda x: x[INDICATOR][TYPE_INDICATOR], row['elements']))
 
-    print(df_distances)
+print(len(clean_distances))
+#clean_distances = map(lambda row: map(lambda x: x[INDICATOR][TYPE_INDICATOR], row['elements']) , distances)
 
-
-get_distance_matrix()
-
-
+df = DataFrame(clean_distances,index=villes,columns=villes)
+print(df)
+#df.to_csv(INDICATOR + '.csv')
