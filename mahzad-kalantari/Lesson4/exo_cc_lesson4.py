@@ -1,27 +1,28 @@
+# encoding: utf-8
 
-from bs4 import BeautifulSoup
-import requests
-import json
 import pandas as pd
-import numpy as np
-import googlemaps
-from pandas import DataFrame, Series
+from urllib.request import urlopen
+import json
 
+data = pd.read_csv('villes.csv')
 
-#@ MahzadK October 2016
+data_out = pd.DataFrame(columns=['Départ', 'Arrivée', 'Distance'])
 
-ville1 =  "paris"
-ville2 =  "nantes"
+url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
+api_key = 'AIzaSyA4EYDHrnYQMADmfVsrlxA07mweSTWnkzs'
+destinations = ''
 
-key =  "AIzaSyA4EYDHrnYQMADmfVsrlxA07mweSTWnkzs"
-gmaps = googlemaps.Client(key=key)
-villes =  ['Paris', 'Marseille', 'Lyon']
+for reci in data.values:
+    for recj in data.values:
+        if recj[0] != reci[0]:
+            query = url + 'origins=' + reci[0]
+            query += '&destinations=' + recj[0] +'&mode=bicycling&language=fr-FR&'
+            query += '&key=' + api_key
+            response = json.loads(urlopen(query).read().decode('utf-8')))
+            data_out.append({
+                'Départ': reci[0],
+                'Arrivée': recj[0],
+                'Distance': response['rows'][0]['elements'][0]['distance']['value']
+            })
 
-distance = gmaps.distance_matrix(villes, villes)['rows']
-
-dis=[]
-for row in distances
-
-#resjson = json.loads(distance).keys()
-
-print(distance)
+print (data_out)
