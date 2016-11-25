@@ -1,0 +1,5 @@
+Python est un langage de programmation très polyvalent et modulaire, qui est utilisé aussi bien pour écrire des applications comme YouTube, que pour traiter des données scientifiques. Par conséquent, il existe de multiples installations possibles de Python. L’utilisateur débutant peut donc se sentir dérouté par l’absence d’une référence unique pour Python scientifique. Nous conseillons donc un logiciel unique pour la formation, la suite scientifique Anaconda développée par l’entreprise Continuum. Anaconda rassemble tout le nécessaire pour l’enseignement de Python scientifique: le langage Python et ses modules scientifiques.
+
+En particulier, Anaconda fournit un environnement de travail adapté à l’enseignement et au calcul scientifique, spyder, que nous utiliserons pour la formation.
+
+eN PARTICULIER, aNANCONDA FOURNIT UN enVIROnnemenT De trVAIL ADapté à l'ENSEIGNEMENT ET au Calcul SCIENtiFIque, SPYDER, que NOUS utiliSERONS pOUR la FORMATion.
