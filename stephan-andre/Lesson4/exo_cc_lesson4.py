@@ -4,16 +4,29 @@ Created on Fri Oct 14 15:10:42 2016
 
 @author: Stephan
 """
+from bs4 import BeautifulSoup
 import requests
-from bs4 import beautifulSoup
-import numpy as np
+import json
 import pandas as pd
-import json, urllib
-url = "http://www.toutes-les-villes.com/villes-population.html"
-df = pd.read_csv(url, sep=r"\s+", names=u_cols, na_values='NA')
+import numpy as np
 
-orig_coord = orig_lat, orig_lng
-dest_coord = dest_lat, dest_lng
-url = "http://maps.googleapis.com/maps/api/distancematrix/json?origins={0}&destinations={1}&mode=driving&language=en-EN&sensor=false".format(str(orig_coord),str(dest_coord))
-result= simplejson.load(urllib.urlopen(url))
-driving_time = result['rows'][0]['elements'][0]['duration']['value']
+#distances entre les 30 villes les plus peuplées de France
+def get_distance(ville_origine, ville_destination):
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + ville_origine + '&destinations=' + ville_destination + '&language=fr-FR&key=AIzaSyA2hd2XS6kZr6sUL0eTdYWCfNnoY22QFuE'
+    jsonData = requests.get(url)
+    jsonToPython = json.loads(jsonData.text)
+    temp = jsonToPython['rows'][0]
+    temp2 = temp['elements'][0]
+    dist = temp2['distance']['value']
+    return dist
+
+villes = ['Paris','Marseille','Lyon','Toulouse','Nice','Nantes','Strasbourg','Montpellier','Bordeaux','Lille','Rennes','Reims','Le Havre','Saint-Etienne','Toulon','Grenoble','Dijon','Nîmes','Angers','Villeurbanne','Le Mans','Aix-en-Provence','Clermont-Ferrand','Brest','Limoges','Tours','Amiens','Perpignan','Metz']
+
+distance_matrice = np.zeros((len(villes), len(villes)))
+
+for i in range(len(villes)):
+    for j in range(len(villes)):
+        distance_matrice[i][j] = get_distance(villes[i], villes[j])
+        
+matrice = pd.DataFrame(distance_matrice, columns = villes, index = villes)
+matrice.to_csv('dvilles.csv', sep=';', encoding='utf-8')
