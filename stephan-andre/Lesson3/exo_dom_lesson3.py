@@ -53,4 +53,4 @@ df = pd.DataFrame(data = dico, index = None)
 result = df.sort_values('Average Stars', ascending = False)
 
 print(result)
-
+result.to_csv('github_most_active_users.csv', sep=';', encoding='utf-8')
