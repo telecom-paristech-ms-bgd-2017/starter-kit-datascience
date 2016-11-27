@@ -3,17 +3,12 @@
 Created on Thu Oct  6 13:35:28 2016
 
 @author: lorraine
-"""
 
-#import urllib.request as ur
-#from github3 import login, GitHub
-#from getpass import getpass, getuser
-#import sys
+"""
 
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import numpy as np
 import json
 
 
@@ -47,19 +42,10 @@ def getFamousGithubContributorsFromDOM(url):
     users_name = extractDataForPage(soup)
     return users_name
 
-
 # Get stars count for each user
-#myTOKEN_old = '444b643ec7e9aba15ace4d1f3e89372155621d63' # let's get this in that url ==> https://github.com/settings/tokens/new
-#fv4 = login(token=myTOKEN)
-myTOKEN = '9b4f0745253b59146dedce03b922b97742d39c2e'
+myTOKEN = '9d6c2ac83fce8ee1f72722f28bac1e26a0b4e1b2'
 PAGE = 1
-
-def getAllReposForASingleUser(user_name):    
-  user_repos = json.loads(requests.get("https://api.github.com/users/" + user_name + "/repos?page=" + str(PAGE), auth=(user_name, myTOKEN)).text)
   
-  return user_repos
-  
-
 
 def getStarsNumberForAllUser():
     
@@ -67,14 +53,17 @@ def getStarsNumberForAllUser():
     star_count = 0
     repo_count = 0
     temp = []
+
     users_name = getFamousGithubContributorsFromDOM(GITHUB_URL)
+    print("[user name, " + "number of repositories, "+ "number of stars, "+ "mean stars per repo]")
     if(len(users_name) > 0):
-        for user in users_name:
-            user_repos_list = getAllReposForASingleUser(user)
-            #print(len(user_repos_list))
+        for user in users_name[0:]:
+            results = requests.get("https://api.github.com/users/" + user + "/repos?page=" + str(PAGE), auth=(user, myTOKEN))
+            user_repos_list = json.loads(results.text)   
+            
             if(len(user_repos_list) > 0):
                 for repo in user_repos_list:
-                    star_count += repo["stargazers_count"]
+                    star_count += repo['stargazers_count']
                     repo_count += 1
                 
                 temp = [user, repo_count, star_count]
@@ -82,15 +71,12 @@ def getStarsNumberForAllUser():
                     temp.append(star_count / repo_count)
                 else:
                     temp.append(0)
+                print(temp)
                 user_repoCount_starCount.append(temp)
-    
 
     top_contributors_df = pd.DataFrame(user_repoCount_starCount)
-    
     top_contributors_df.columns = ["user name","number of repositories", "number of stars", "mean stars per repo"]
+    print(top_contributors_df)
+    top_contributors_df.to_csv('top_contributors_github_metrics_API_TOKEN_'+myTOKEN+'.csv')    
     
-    print(top_contributors_df.head())
-    
-    
-
 getStarsNumberForAllUser()  
