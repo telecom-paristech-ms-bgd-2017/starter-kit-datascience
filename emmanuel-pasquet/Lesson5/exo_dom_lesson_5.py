@@ -117,5 +117,3 @@ plt.plot(np.arange(1, 102), medecins['Generalistes'] / 20, 'k')
 plt.legend(loc='upper left')
 plt.text(6, 15, r'correlation: $0,23$', fontsize=15)
 plt.show()
-
-
