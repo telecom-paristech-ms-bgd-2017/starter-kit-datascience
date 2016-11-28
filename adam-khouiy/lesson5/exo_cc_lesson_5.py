@@ -24,9 +24,8 @@ param = {'page':'1',
 'txtCaracteresSub':'',
 'radLibelleSub':'4'}
 
-#\s([\w\s\]+)\s(\d+)\s?([a-zA-Z%]+) ,([\w\sé]+)
 
-#(^(\w)+\s)[0-9]+\s?[a-z]+[és]
+
 
 resultat = requests.post(url, param)
 html = resultat.content
