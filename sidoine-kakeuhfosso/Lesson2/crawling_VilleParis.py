@@ -21,9 +21,9 @@ def results(res,x,y):
   params[" Moyenne de la strate "]=y
 
   for key in params:
-    print key,params[key], "\n"
+    print (key,params[key], "\n")
 
-  return(params.viewitems())
+  return(params.items)
 
 
 
