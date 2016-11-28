@@ -1,50 +1,38 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import re
-%matplotlib inline
 
+#Importing the file
 df = pd.read_csv('aliments.csv', delimiter="\t", error_bad_lines=False)
 
-df.shape
+liste = df.columns.values.tolist()
+x=[]
+for s in liste :
+    if "fat" in s :
+        x.append(s)
+    elif "sugar" in s :
+        x.append(s)
+    elif "ose" in s:
+        x.append(s)
 
-df.columns
+#Creating data_list
+liste_bad =  ['code', 'product_name', 'generic_name', 'categories', 'packaging', 'origins',
+              'manufacturing_places', 'purchase_places', 'brands',
+              'stores', 'countries', 'ingredients_text', 'traces', 'main_category_fr'] + x
 
-my_columns = ['code', 'product_name', 'generic_name',
-              'categories', 'origins', 'manufacturing_places', 'purchase_places', 'brands',
-              'stores', 'countries', 'ingredients_text', 'traces', 'main_category_fr',
-              'sugars_100g', 'sucrose_100g', 'glucose_100g', 'fructose_100g', 'fat_100g']
-aliments_df = df[my_columns]
+data = df[liste_bad]
 
-aliments_df = aliments_df.dropna(subset=['sugars_100g'])
+#Regroupement par certaines catégories
+data["metric"] = np.mean(data[x], axis = 0)
+worst_aliments = data.sort_values(["metric"], ascending = False)
 
-aliments_df['sugars_100g'].value_counts(sort=True)
+data['fat_100g'].value_counts()
+fat_aliments = data['fat_100g'].value_counts() > 100
+fat_aliments.value_counts()
+dir = fat_aliments.sort_values(ascending = True).index
+aliments = data[data['fat_100g'].isin(dir)]
 
-a = aliments_df[aliments_df['sugars_100g'] < 400]
-plt.plot(aliments_df[aliments_df['sugars_100g'] < 400]
-         ['sugars_100g'].value_counts(sort=True))
-plt.show()
-
-
-pd.qcut(aliments_df['sugars_100g'], 5).value_counts()
-
-aliments_df.groupby('brands')[['code', 'product_name', 'sugars_100g']].count(
-).sort('sugars_100g', ascending=False)
-
-aliments_df.groupby('categories')[['code', 'product_name', 'sugars_100g']].count(
-).sort('sugars_100g', ascending=False)
-
-aliments_df.set_index('product_name')
-
-for col in my_columns:
-    print()
-    print(aliments_df[col].describe())
-
-aliments_df.head(100)
-
-aliments_df.columns = map(str.lower, aliments_df)
-aliments_df.head(100)
-
-products_salty = aliments_df[
-    'ingredients_text'].str.contains('SEL', regex=True)
+grouped = data.groupby(['brands'])[liste_bad].mean()
+classement = aliments[aliments['brands'] .isin(['Simply', 'Carrefour', 'Auchan'])]
+classement.groupby(['brands','fat_100g'])['code'].count()
+classement.groupby(['brands','fat_100g'])['code'].count()/classement.groupby('brands')['code'].count()
