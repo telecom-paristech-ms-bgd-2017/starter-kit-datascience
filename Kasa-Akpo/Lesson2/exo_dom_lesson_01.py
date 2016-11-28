@@ -42,8 +42,9 @@ tab = []
     return len(tab))
 
 #write fizbuzz programm
-def fizbuzz():
-  return
+ def main():
+ +    fizbuzz()
+      unittest.main()
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):

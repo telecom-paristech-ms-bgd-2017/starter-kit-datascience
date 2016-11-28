@@ -26,10 +26,8 @@ depensesAssuranceM['region'] = depensesAssuranceM.iloc[:, 1].astype(int)
 depensesAssuranceM['dep_mon'] = depensesAssuranceM.iloc[:, 2].str \
                                 .replace('.', '').str.replace(',', '.').astype(float)
 
-# regCentime = re.compile('[0-9]{1,3},[0-9]{3}')
-
 # On somme les dépassements d'honoraires
-densiteMedecins = densiteMedecins.rename(columns={'SPECIALITE':'region'})
+densiteMedecins = densiteMedecins.rename(columns={'SPECIALITE': 'region'})
 depensesParRegion = depensesAssuranceM.groupby(['region'])['dep_mon'].sum()
 
 depensesParRegionClean = pd.DataFrame()
@@ -40,8 +38,8 @@ depensesParRegionClean['dep_mon'] = depensesParRegion['dep_mon']
 
 # Fusion des deux tables
 # On a le montant des honoraires par region et les densités de médecins spé
-depensesEtDensiteParRegion = pd.merge(depensesParRegionClean, densiteMedecins,\
-                                        how='outer', on='region')
+depensesEtDensiteParRegion = pd.merge(depensesParRegionClean, densiteMedecins,
+                                      how='outer', on='region')
 
 subData = depensesEtDensiteParRegion  # .iloc[:,1:]
 subData = subData.dropna(axis=0)
@@ -52,18 +50,17 @@ print(subData.corr()['dep_mon'])
 
 
 ##### GET THE MIN MAX #####
-#if subData['dep_mon'] == subData['dep_mon'].min():
- #   depassementMin = subData['dep_mon'].index
 
-#print("La somme du dépassement d'honoraire la plus faible est : "\
- #       +str(subData['dep_mon'].min()))
+print("La somme du dépassement d'honoraire la plus faible est : " \
+      + str(subData['dep_mon'].min()))
 
+print("La somme du dépassement d'honoraire la plus fort est : " \
+      + str(subData['dep_mon'].max()))
 
 
 # On remarque que le département 11 (Aude) est celui avec le plus de dépassements
 # Le département 6 (Alpes-Maritimes) est celui où il y en a le moins
-subData.iloc[4:6, :]
-print()
+
 # Pour presque toutes les spécialités, la densité est la plus faible pour
 # le département faisant le moins de dépassement
 
@@ -98,17 +95,20 @@ soup = BeautifulSoup(result.text, 'html.parser')
 
 km2ParDep = []
 for element in soup.find_all('tr'):
-    oneLine = []
-    if element != [] and len(element) != 0:
-        if re.search(r'([0-9]{2,3}|2[A|B])', element.find_all(class_='column-4')[0].text) is not None:
+    if len(element) > 0 and element.find_all(class_='column-4') != []:
+        if re.search(r'([0-9]{2,3}|2[A|B])', element.find_all(class_='column-4')[0].text):
+            oneLine = []
             oneLine.append(re.search(r'([0-9]{2,3}|2[A|B])',element
-                            .find_all(class_='column-4')[0].text).group(0))
+                           .find_all(class_='column-4')[0].text).group(0))
             oneLine.append(element.find_all(class_='column-5')[0].text
-                                        .replace('\xa0', '').replace(' ', ''))
+                           .replace('\xa0', '').replace(' ', ''))
         km2ParDep.append(oneLine)
-print(km2ParDep)
 
-#Pour éviter le crawling a chaque fois
+
+km2ParDepDF = pd.DataFrame(km2ParDep)
+km2ParDepDF.columns = [['departement', 'densité pop']]
+print(km2ParDepDF)
+# Pour éviter le crawling a chaque fois
 # faire une fonction qui créé un fichier cache si il n'existe pas déjà
 
 # Work in progress
