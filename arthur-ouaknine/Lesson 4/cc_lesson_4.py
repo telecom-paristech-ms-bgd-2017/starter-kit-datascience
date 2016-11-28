@@ -30,6 +30,5 @@ distances = gmaps.distance_matrix(villes,villes)['rows']
 clean_distances = []
 for row in distances:
     clean_distances.append(map(lambda x: int(x['distance']['text'].replace(' km','').replace(' m','').replace(',','')), row['elements']))
-    
-dfDistances = DataFrame(clean_distances,index=villes,columns=villes)
 
+dfDistances = DataFrame(clean_distances,index=villes,columns=villes)
