@@ -1,0 +1,35 @@
+run exo_cc_lesson_06.py
+aliments
+aliments.columns
+aliments.columns[60:1000]
+aliments['packaging']
+aliments['packaging'].value_counts()
+aliments['packaging'].value_counts()>30
+aliments_with_packaging = aliments['packaging'].value_counts()>30
+aliments_with_packaging[aliments_with_packaging]
+packaging_to_keep = aliments_with_packaging[aliments_with_packaging]
+packaging_to_keep
+len(packaging_to_keep)
+aliments[aliments['packaging'].isin(packaging_to_keep)]
+aliments[aliments['packaging'].isin(packaging_to_keep)]
+packaging_to_keep
+packaging_to_keep[:,0]
+packaging_to_keep[]
+packaging_to_keep[0]
+packaging_to_keep[1]
+aliments[aliments['packaging'].isin(packaging_to_keep)]
+packaging_to_keep['packaging']
+packaging_to_keep.describe
+packaging_to_keep[0]
+packaging_to_keep[0,0]
+packaging_to_keep.index
+aliments[aliments['packaging'].isin(packaging_to_keep.index)]
+
+run exo_cc_lesson_06.py
+aliments['cat_sugars'] = pd.qcut(aliments['sugars_100g'],5,labels=['a', 'b', 'c', 'd', 'e'])
+aliments['cat_sugars'].value_counts()
+aliments['cat_sugars'] = pd.cut(aliments['sugars_100g'],5,labels=['a', 'b', 'c', 'd', 'e'])
+aliments['cat_sugars'].value_counts()
+%history
+
+

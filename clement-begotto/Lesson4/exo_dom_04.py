@@ -20,10 +20,9 @@ mean_stars['name'] = users
 mean_stars_list = []
 for user in users:
     print('Exploring ' + user + '...')
-    curr_github_repositories = requests.get(
-        'http://api.github.com/users/' + user + '/repos', params=params)
+    curr_github_repositories = requests.get('http://api.github.com/users/' + user + '/repos', params=params)
     i, curr_mean_stars = 0, 0
-    # Exploring repositories for current user
+    
     for repos in curr_github_repositories.json():
         curr_mean_stars += repos['stargazers_count']
         i += 1

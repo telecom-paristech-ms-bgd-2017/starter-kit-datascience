@@ -7,100 +7,105 @@ Created on Tue Oct 18 23:26:10 2016
 
 #Renault Zoé
 
-from bs4 import BeautifulSoup
 import requests
-import pandas as pd
+from bs4 import BeautifulSoup
+from pandas import DataFrame, Series
 import re
 
-def getContentMain(region, page):
-    result = requests.get("https://www.leboncoin.fr/voitures/offres/" + region + "/?o=" + str(page) + "&brd=Renault&mdl=Zoe")
-    soup = BeautifulSoup(result.text, 'html.parser')
-    return soup
-''' 
+regions = ['ile_de_france','provence_alpes_cote_d_azur','aquitaine']
+pages = [1, 2]
+
+def get_data(region,page):
+ 
+    url = requests.get('https://www.leboncoin.fr/voitures/offres/' + region + '/?o=' + str(page) + '&brd=Renault&mdl=Zoe')
+    soup = BeautifulSoup(url.text,'html.parser')
+    
     links = []
-    list_cars= map(lambda x: 'https:' + x['href'], soup.find_all(class_ = "list_item"))
+    
+    list_cars= map(lambda x: 'https:' + x['href'] , soup.find_all(class_="list_item"))
     for link in list_cars:
         links.append(link)
 
-    result2 = requests.get(link)
-    soup2 = BeautifulSoup(result2.text, 'html.parser')
-    return soup, soup2 
-'''
-    
+    return links
 
-
-#def extractDataFromDOMMain(soup, soup2):
-def extractDataFromDOMMain(soup):  
+def get_item_content(link):
     
-    modele = []
-    res_str = soup.find_all(class_="item_title")
-    for element in res_str:        
-        if 'zen' in str(element).lower():
-            modele.append('zen')
-        elif 'intens' in str(element).lower():
-            modele.append('intens')
-        elif 'life' in str(element).lower():
-            modele.append('life')
-        else:
-            modele.append('NA')
-    
-    pro = []  
-    res_str2 = soup.find_all(class_="item_infos")
-    for element2 in res_str2:       
-        if '(pro)' in str(element2).lower():
-            pro.append('pro')   
-        else:
-            pro.append('NA')
-    
-    return modele, pro
-            
-'''    dico = {}
-    car_properties = soup2.find_all(class_='property')
+    dico = {}
+    result = requests.get(link)
+    soup = BeautifulSoup(result.text, 'html.parser')
+    car_properties = soup.find_all(class_='property')
 
     for car_property in car_properties:
         if car_property.text.lower() == 'prix':
+
             value = car_property.parent.find(class_='value').text.strip()
             regex = re.search('(\d* *\d*),?(\d*)', value)
             if regex == None:
-                dico['Prix'] = 'NA'
+                dico['Prix'] = None
             else:
                 dico['Prix'] = float(regex.group(1).replace(' ',''))
-            
-    prix = ()
-    prix.append(dico.values())
-'''            
+#________________________________________________________
+#m = re.match(r"(\w+) (\w+)", "Isaac Newton, physicist")
+#m.group(0)       # The entire match
+#'Isaac Newton'
+#m.group(1)       # The first parenthesized subgroup.
+#'Isaac'
+#m.group(2)       # The second parenthesized subgroup.
+#'Newton'
+#m.group(1, 2)    # Multiple arguments give us a tuple.
+#('Isaac', 'Newton')
+#________________________________________________________
 
+        if car_property.text.lower() == 'année-modèle':
+            value = car_property.parent.find(class_='value').text.strip()
+            dico['Année'] = int(value)
 
+        if car_property.text.lower() == 'kilométrage':
+            value = car_property.parent.find(class_='value').text.strip()
+            regex = re.search('(\d* \d*)', value)
+            if regex == None:
+                dico['Km'] = None
+            else:
+                dico['Km'] = float(regex.group(1).replace(' ',''))
 
-def DataFrameModelePro(modele, pro):
-    df = pd.DataFrame([modele, pro])
+        if car_property.text.lower() == 'description :':
+            value = car_property.parent.find_all(class_='value')[0].text.strip()
+            regex = re.search('(0|\+33)[1-9]([-. ]?[0-9]{2}){4}',value)
+            if regex == None:
+                dico['Phone'] = None
+            else:
+                dico['Phone'] = regex.group(0)
 
-    return df
+            regex = re.search('(LIFE|INTENS|ZEN)',value.upper())
+            if regex == None:
+                dico['Version'] = None
+            else:
+                dico['Version'] = regex.group(0).strip()
+
+    isPro = (len(soup.find_all(class_="ispro")) > 0)
+    if isPro == True:
+        dico['Pro'] = 'Véhicule professionnel'
+    else:
+        dico['Pro'] = 'Véhicule particulier'
     
+    return dico
+    
+def get_All_content(links):
+    liste = []
+    
+    for link in links:
+        liste.append(get_item_content(link))
+    return DataFrame(liste)
 
-region = ['ile_de_france', 'provence_alpes_cote_d_azur', 'aquitaine']    
-for regions in region:
-    for page in range(1):
-        (data) = getContentMain(regions, page)
-        (result1, result2) = extractDataFromDOMMain(data)
-        df = DataFrameModelePro(result1, result2) 
-#        (data, data1) = getContentMain(regions, page)
-#        (result1, result2, result3) = extractDataFromDOMMain(data, data1)
-#        df = DataFrameModelePro(result1, result2, result3)         
-        print(df)
-        df.to_csv("RenaultZoe.csv", index = False)
-
-'''
-pattern_year = "[0-9]{4}"
-re_year = re.compile(pattern_year)
-pattern_km = "[0-9]{1,20}"
-re_km = re.compile(pattern_km)
-pattern_city = "[A-Z._ %+-]{1,100}"
-re_city = re.compile(pattern_city, flags=re.IGNORECASE)
-pattern_type = "(zen|life|intens)"
-re_type = re.compile(pattern_type, flags = re.IGNORECASE)
-pattern_phone = "([+0-9]{11}|[0-9]{10})"
-re_phone = re.compile(pattern_phone)
+def generate_csv(dataframe):
+    dataframe.to_csv("Renault Zoé.csv")
 
 
-'''
+all_links = []
+
+for region in regions:
+    for page in pages:
+        all_links += get_data(region,page)
+
+listeCars = get_All_content(all_links)
+print(listeCars)

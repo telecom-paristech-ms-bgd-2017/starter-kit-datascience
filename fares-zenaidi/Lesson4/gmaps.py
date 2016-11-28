@@ -1,5 +1,5 @@
 # @ author : ZENAIDI Fares
-# coding = utf 8
+# coding = utf8
 
 from bs4 import BeautifulSoup
 import requests
@@ -57,3 +57,5 @@ def get_distance_matrix():
 
 
 get_distance_matrix()
+
+
