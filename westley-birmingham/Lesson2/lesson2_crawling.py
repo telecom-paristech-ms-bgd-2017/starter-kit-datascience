@@ -46,7 +46,7 @@ def getAllMetricsForArtist(artist):
   for page in range(1, MAX_PAGE + 1):
     all_videos_artist = requests.get('https://www.youtube.com/results?search_query=' + artist + '&page=' + str(page))
     soup_artist = BeautifulSoup(all_videos_artist.text, 'html.parser')
-    list_video_artist = map(lambda x: x['href'] , soup_artist.find_all(class_="yt-uix-tile-link"))
+    list_video_artist = map(lambda x: x['href'], soup_artist.find_all(class_="yt-uix-tile-link"))
     for link in list_video_artist:
       if 'watch' in link:
         metrics = computeIndicatorForPage('https://www.youtube.com' + link )

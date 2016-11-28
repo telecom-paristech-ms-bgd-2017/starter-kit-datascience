@@ -1,38 +1,48 @@
+# @Author : BENSEDDIK Mohammed
+
 import requests
 from bs4 import BeautifulSoup
 
-url = "http://www.cdiscount.com/search/10/oridnateur+dell.html#_his_"
 
-req = requests.get(url)
-
-soup = BeautifulSoup(req.text, 'html.parser')
+product_brands = ['dell', 'hp', 'acer']
 
 
-def find_price_barre(soup):
-    liste_prix_ori = []
-    liste_prix_barre = []
-    liste_nom_ordi = []
-    prix_barre = soup.find_all(class_='prdtPrSt')
-    noms_ordi = soup.find_all(class_='prdtBTit')
-    prix_ori = soup.find_all('span', {'class': 'price'})
-
-    for elmt in prix_barre:
-        liste_prix_barre.append(elmt.text)
-    for elmt in noms_ordi:
-        liste_nom_ordi.append(elmt.text)
-    for elmt in prix_ori:
-        liste_prix_ori.append(elmt.text)
-
-    return len(liste_nom_ordi), len(liste_prix_ori), len(liste_prix_barre)
-
-print(find_price_barre(soup))
-
-original_price = soup.find_all('div', class_='prdTprice')
+def get_soup(url):
+    request = requests.get(url)
+    return BeautifulSoup(request.text, 'html.parser')
 
 
-prix_barre = soup.find_all(class_='prdtPrSt')
-nom_ordi = soup.find_all(class_='prdtBTit')
+def find_price_index(brand_product):
+    url = 'http://www.cprice_index.com/search/10/' + brand_product + '.html#_his_'
+    soup = get_soup(url)
+    tiles = soup.findAll("div", {"class": "prdtBloc"})
+    price_index = 0.0
+    sum_new_price = 0.0
+    sum_old_price = 0.0
+    for tile in tiles:
+        for old_price in tile.findAll("div", {"class": "prdtPrSt"}):
+            new_price = tile.findAll("span", {"class": "price"})[
+                0].text.replace(u"\u20AC", ',')
+            new_price = new_price.replace('\'', '')
+            new_price = new_price.replace(',', '.')
+            new_price = float(new_price)
+            try:
+                old_price = old_price.text
+                old_price = old_price.replace(',', '.')
+                old_price = old_price.replace('\'', '')
+                old_price = float(old_price)
+            except ValueError:
+                old_price = new_price
 
-print(nom_ordi.text)
-print(prix_barre[0].text)
-print(original_price)
+        sum_new_price = sum_new_price + new_price
+        sum_old_price = sum_old_price + old_price
+        price_index = round((sum_new_price / sum_old_price) * 100, 2)
+    return(price_index)
+
+
+def print_result(brand_product):
+    print('price_index index for : ' + brand_product +
+          ' is : ' + str(find_price_index(brand_product)))
+
+for brand in product_brands:
+    print_result(brand)
