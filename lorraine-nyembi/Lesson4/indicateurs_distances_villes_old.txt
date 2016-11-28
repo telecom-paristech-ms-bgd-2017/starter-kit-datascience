@@ -1,0 +1,42 @@
+,Paris,Marseille,Lyon,Toulouse,Nice,Nantes,Strasbourg,Montpellier,Bordeaux,Lille
+Paris,0,25242,15345,22511,30288,13135,16034,24444,19487,8239
+Marseille,25331,0,10703,14035,7691,31415,26022,7005,21381,31447
+Lyon,15472,10754,0,17887,15800,22341,16053,10857,18768,21588
+Toulouse,22658,13889,17751,0,18935,18778,32930,8891,8744,29599
+Nice,30518,7998,15891,19223,0,36603,29673,12193,26569,36634
+Nantes,13174,31248,22144,18685,36295,0,27725,26250,11762,20115
+Strasbourg,15910,25963,16241,32789,29324,27697,0,26066,32729,17580
+Montpellier,24683,6869,10731,8791,11915,26172,26050,0,16138,31624
+Bordeaux,19468,21160,18601,8597,26207,11742,32748,16162,0,26409
+Lille,8310,31613,21716,29538,36659,20162,17571,31471,26514,0
+
+
+
+import googlemaps
+#from datetime import datetime
+#import pandas as pd
+from bs4 import BeautifulSoup
+import requests
+#import numpy as np
+#import pandas as pandas
+#from pandas import DataFrame, Series
+
+MY_API_KEY = 'AIzaSyBssSgXreMk6aVrlF8YVc1JzSEAWDfW-4c'  # distance API google maps
+
+'''
+INDICATOR = 'distances'
+TYPE_INDICATOR = 'text'
+gmaps = googlemaps.Client(key=MY_API_KEY)
+villes = ['bordeaux','paris','pau','lille']
+distances =  gmaps.distances_matrix(villes, villes)['rows']
+clean_distances = []
+
+for row in distances:
+    clean_distances.append(map(lambda x : x[INDICATOR][TYPE_INDICATOR], row['elements']))
+df = pd.DataFrame(clean_distances, index=villes, column=villes)
+df.to_csv(INDICATOR + '_Villes_de_France.csv')
+
+clean_distances = (map(lambda row : map(lambda x : x[INDICATOR][TYPE_INDICATOR], row['elements']), distances))
+
+
+'''
