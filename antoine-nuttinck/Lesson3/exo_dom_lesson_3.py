@@ -17,7 +17,7 @@ def getBestContributors():
     soup = BeautifulSoup(req.text, 'html.parser')
     names = {}
 
-    for contributor in soup.find('tbody').find_all('tr'):  # .next_sibling
+    for contributor in soup.find('tbody').find_all('tr'):
         username = str(contributor.a).split('>')[1] \
                        .replace('</a', '') \
                        .strip()
@@ -27,13 +27,18 @@ def getBestContributors():
 
 
 def stargazers_avg(username):
-    my_token = ''
+    with open('API_GitHub.txt', 'r') as APIfile:
+        my_token = APIfile.read().replace('\n', '')
+
     rq_headers = {'Authorization': 'token %s' % my_token}
+    # api_url = 'https://api.github.com/users/{}/repos'.format(username)
     api_url = 'https://api.github.com/users/' + username + '/repos'
     r = requests.get(api_url, headers=rq_headers)
     stars = []
     if(r.ok):
         all_repos = json.loads(r.text or r.content)
+
+        # peut être parallléliser avec pool.map()
         for repo in all_repos:
             stars.append(repo['stargazers_count'])
         return np.mean(stars)

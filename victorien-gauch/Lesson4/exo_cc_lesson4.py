@@ -28,6 +28,7 @@ for row in distances:
 
 
 df = DataFrame(clean_distances,index=cities,columns=cities)
+df.to_csv("distances.csv")
 print(df)
 
 

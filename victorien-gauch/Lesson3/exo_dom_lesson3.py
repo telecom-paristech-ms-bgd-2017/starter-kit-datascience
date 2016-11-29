@@ -17,9 +17,10 @@ def getLine(soup):
 users = getData()
 
 def getStars(id_user):
-	headers = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'token 00b8ef9071701762a1b4625c13498410751d015d'}
+	headers = {'Accept' : 'application/vnd.github.damage-preview','Authorization': 'token 73b534f3494396659e2e9732bf5f8b201664efc8'}
 	url = requests.get('https://api.github.com/users/' + str(id_user) + '/repos',headers=headers)
 	content = url.json()
+	
 	count = 0
 
 	if len(content) != 0:
