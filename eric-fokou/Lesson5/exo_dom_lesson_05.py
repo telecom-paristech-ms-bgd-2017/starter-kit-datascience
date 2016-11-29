@@ -1,172 +1,173 @@
 
+# coding: utf-8
 
-import scipy
-import numpy as np
+# ### Hackathon
+
+# *** Peut-on établir un lien entre la densité de médecins par spécialité  et par territoire et la pratique du dépassement d'honoraires ? ***
+# 
+# ***Est-ce  dans les territoires où la densité est la plus forte que les médecins  pratiquent le moins les dépassement d'honoraires ? ***
+# 
+# ***Est ce que la densité de certains médecins / praticiens est corrélé à la densité de population pour certaines classes d'ages (bebe/pediatre, personnes agées / infirmiers etc...) ?***
+
+# In[222]:
+
 import pandas as pd
+import numpy as np
+from pandas import Series, DataFrame
+import re
+import pdb
 import matplotlib.pyplot as plt
+from matplotlib import rc
 import seaborn as sns
+from pandas.tools.plotting import radviz, scatter_matrix
+from scipy.stats import gaussian_kde
+from os import mkdir, path
+import scipy.stats
+from scipy.stats import pearsonr
+from scipy.stats import norm
+get_ipython().magic(u'matplotlib inline')
+###############################################################################
+# Plot initialization
+
+plt.close("all")
+rc('font', **{'family': 'sans-serif', 'sans-serif': ['Computer Modern Roman']})
+params = {'axes.labelsize': 12,
+          'font.size': 12,
+          'legend.fontsize': 12,
+          'xtick.labelsize': 10,
+          'ytick.labelsize': 10,
+          'text.usetex': True,
+          'figure.figsize': (8, 6)}
+plt.rcParams.update(params)
+
+sns.set_palette("colorblind")
+sns.axes_style()
+sns.set_style({'legend.frameon': True})
+color_blind_list = sns.color_palette("colorblind", 8)
+my_orange = color_blind_list[2]
+my_green = color_blind_list[1]
+my_blue = color_blind_list[0]
+my_purple = color_blind_list[3]
+###############################################################################
+dirname = "srcimages/"
+if not path.exists(dirname):
+    mkdir(dirname)
+imageformat = '.jpg'
 
 
-
-if 1:
-    dataFrame_final_r2015 = pd.read_csv('density.csv', delimiter=',',skiprows=3,header=1)
-    print dataFrame_final_r2015
-    print "dataFrame_final_r2015"
-    #raw_input()
-
-file_name_honoraires = 'depass.csv'
-df_depass = pd.read_csv(file_name_honoraires, delimiter=',', header = 0)
-print df_depass
-print "df_depass"
-#raw_input()
+def my_saving_display(fig, dirname, filename, imageformat):
+    """saving faster"""
+    dirname + filename + imageformat
+    image_name = dirname + filename + imageformat
+    fig.savefig(image_name)
 
 
-print list(df_depass.columns.values)
-#raw_input()
-print '\n\n'
-print list(dataFrame_final_r2015.columns.values)
+# *** loading of data ***
 
-import Levenshtein
-string1 = 'dsfjksdjs'
-string2 = 'dsfiksjsd'
-print Levenshtein.distance(string1, string2)
+# In[223]:
 
-#speciality=
+depassement_honoraires = "Data/Honoraires_totaux_des_professionnels_de_sante_par_departement_en_2013.xls"
+densite_medecins_specialite = "Data/Medecins.csv"
+
+df_depassement_honoraires = pd.read_excel(depassement_honoraires, sheetname=2, na_values='nc',encoding='utf-8')
+df_densite_medecins_specialite = pd.read_csv(densite_medecins_specialite,encoding='utf-8')
 
 
-col_dens=list(dataFrame_final_r2015.columns.values)
-print col_dens
+# *** affichage du schema ***
+
+# In[224]:
+
+print "df_depassement_honoraires\n"
+print df_depassement_honoraires.dtypes
+print df_depassement_honoraires.shape
+print 
+print "df_densite_medecins_specialite\n"
+print df_densite_medecins_specialite.dtypes
+print df_densite_medecins_specialite.shape
 
 
-#extraction de chaque specialité
-print '\n coltitle \n '
-for col_title in col_dens:
-    print col_title
-print '\n coltitle \n'
-#print df_depass['SpĂ©cialistes']
-s = df_depass.ix[:,0]
-print s
+# ### Traitement des donnees dépassement d'honoraires
 
-df_dens=dataFrame_final_r2015
-grouped_by_specialty_depass=df_depass.groupby(s)
+# ***suppression des valeurs null***
 
-#     grouped = df.groupby(get_nb_type, axis=0)
-print '\n trope lent'
+# In[225]:
 
-for key, item in grouped_by_specialty_depass:
-    densities_per_speciality=[]
-    ratio_depass_per_speciality=[]
-    
-    #print key
-    specialty_depass=key
-
-    
-
-    dist_lev=[Levenshtein.distance(key, spec_dens) for spec_dens in col_dens]
-    #print np.min(dist_lev)
-    #print departmt_depass
-    #, "\n\n"
-    M=np.min(dist_lev)
-    spec_de_df_dens_le_plus_proche=[string2 for string2 in col_dens if M==Levenshtein.distance(key, string2) ]
-    #print spec_de_df_dens_le_plus_proche
-    
-    #raw_input()
-    if len(spec_de_df_dens_le_plus_proche)==1:
-        specialty_dens=spec_de_df_dens_le_plus_proche[0]
-
-        for departmt_depass in grouped_by_specialty_depass.get_group(key)['DEPARTEMENT']:
-            print specialty_depass+'        *******************    '+ departmt_depass
-
-            #dist=
-            dist_lev=[Levenshtein.distance(departmt_depass, string2) for string2 in df_dens['SPECIALITE']]
-            # print np.min(dist_lev)
-            # print departmt_depass
-            #, "\n\n"
-            M=np.min(dist_lev)
-            lestr_de_df_dens_le_plus_proche=[string2 for string2 in df_dens['SPECIALITE'] if M==Levenshtein.distance(departmt_depass, string2) ]
-            #print lestr_de_df_dens_le_plus_proche
-            if len(lestr_de_df_dens_le_plus_proche)==1:
-                #on a bien trouvé un seul champ departement qui matche ce qui existe dans density et depasssement
-                departmt_dens=lestr_de_df_dens_le_plus_proche[0]
-                #departmt_depass
-                
-                #print key
-                # print "\n grouped_by_specialty_depass(key) \n"
-                #print grouped_by_specialty_depass.get_group(key)
-                gb=grouped_by_specialty_depass.get_group(key)
-                # print gb.loc[gb['DEPARTEMENT']==departmt_depass]
-                # print "print gb.loc[gb['DEPARTEMENT']==departmt_depass]"
-                right_depart_right_spec_depass=gb.loc[gb['DEPARTEMENT']==departmt_depass]
-
-                if (right_depart_right_spec_depass['DEPASSEMENTS (Euros)']!='nc').all() :
-                    s = pd.to_numeric(right_depart_right_spec_depass['DEPASSEMENTS (Euros)'].str.replace(' ', '').str.replace(',', ''))
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['DEPASSEMENTS (euros)'])
+print(df_depassement_honoraires.shape)
 
 
+# In[226]:
 
-                    # print s
-                    # print np.float(s)
-                    depassement=np.float(s)
-                    # print 'lalala'
-                    #raw_input()
-
-                    #print np.float(right_depart_right_spec_depass['DEPASSEMENTS (Euros)'].replace(',',''))
-                    # print "right_depart_right_spec_depass['DEPASSEMENTS (Euros)']"
-                    # print np.float(right_depart_right_spec_depass['HONORAIRES SANS DEPASSEMENT (Euros)'].replace(',',''))
-                    # print "right_depart_right_spec_depass['HONORAIRES SANS DEPASSEMENT (Euros)']"
-                    s = pd.to_numeric(right_depart_right_spec_depass['HONORAIRES SANS DEPASSEMENT (Euros)'].str.replace(' ', '').str.replace(',', ''))
-                    hon_sans_depassement=np.float(s)
-                    if hon_sans_depassement*1.0+depassement!=0.0:
-                        taux=depassement/(hon_sans_depassement*1.0+depassement)
-                        # print taux
-                        # print "taux"
-                        #print 'key'
-                        #raw_input()
-                        ########################## depassement on cherche le depassement correspondant fait au dessus
-                        ##### ci dessous on cherche la densité correspondante!
-
-                        # print df_dens.loc[ df_dens['SPECIALITE']==departmt_dens]
-                        # print "df_dens.loc[ df_dens['SPECIALITE']==departmt_dens]"
-                        ligne_correcte_dens=df_dens.loc[ df_dens['SPECIALITE']==departmt_dens]
-                        # print specialty_dens
-
-                        density=np.float(pd.to_numeric(ligne_correcte_dens[specialty_dens]))
-
-                        densities_per_speciality.append(density)
-                        ratio_depass_per_speciality.append(taux)
-    if len(densities_per_speciality)>2:
-        #and len(ratio_depass_per_speciality)>1:
-        r_pears=scipy.stats.pearsonr(densities_per_speciality,ratio_depass_per_speciality)
-
-        fig = plt.figure(figsize=(8, 6))
-        #plt.hist(cinq_cent_samples, bins=25, normed=True, align='mid')
-        plt.plot(densities_per_speciality,ratio_depass_per_speciality,linestyle='None',marker='*')
-        #sns.kdeplot(cinq_cent_samples, shade=True, color="b")
-
-        #sns.kdeplot(panda_array_meres, shade=True, color='#9932cc')
+df_depassement_honoraires
 
 
-        data= specialty_dens
-        udata=data.decode("utf-8")
-        specialty_dens_asciidata=udata.encode("ascii","ignore")
-        #print specialty_dens_asciidata
+# *** nettoyage des champs SPECIALISTES et  DEPARTEMENT***
 
-        data= specialty_depass
-        udata=data.decode("utf-8")
-        specialty_depass_asciidata=udata.encode("ascii","ignore")
-        #print specialty_depass_asciidata
+# In[227]:
 
-        #    plt.title(' taux de depassement VS densite \n autre lgne'+ ' \n dens spec: '+specialty_dens+' \n depass spec :' +specialty_depass )
-        plt.title(' taux de depassement VS densite'+ ' \n dens spec: '+specialty_dens_asciidata+' \n depass spec :' +specialty_depass_asciidata+' \n Pearson R = '+np.round(r_pears[0],5).__str__() +\
-                  '\n p_value = '+np.round(r_pears[1],5).__str__() + '\n R >80%  '+(r_pears[0]>0.8).__str__())
+df_depassement_honoraires['SPECIALISTES'] = df_depassement_honoraires['SPECIALISTES'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+df_depassement_honoraires['DEPARTEMENT'] = df_depassement_honoraires['DEPARTEMENT'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
 
-        print 'comparer aux valeurs critiques : http://www.life.illinois.edu/ib/203/Fall%2009/PEARSONS%20CORRELATION%20COEFFICIENT%20TABLE.pdf'
+df_depassement_honoraires['SPECIALISTES'] = df_depassement_honoraires['SPECIALISTES'].str.extract('[\d]+- ([\w\s-]+)', expand=False)
+df_depassement_honoraires['DEPARTEMENT'] = df_depassement_honoraires['DEPARTEMENT'].str.extract('[\d]+- ([\w\s-]+)', expand=False)
 
 
-        ax = plt.gca()
-        ax.legend_ = None
-        #DONNEES - Densite de medecins pour 100.000 habitants
-        plt.xlabel('densite de medecins pour 100.000 habitants'), plt.ylabel('depassement/(sans depass + depass)')
-        plt.tight_layout()
-        plt.show()
+# In[228]:
+
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['SPECIALISTES'])
+df_depassement_honoraires = df_depassement_honoraires.dropna(subset=['DEPARTEMENT'])
+df_depassement_honoraires
+
+
+# In[229]:
+
+df_depassement_honoraires = df_depassement_honoraires.set_index(['SPECIALISTES', 'DEPARTEMENT'])
+df_depassement_honoraires.ix[0:20]
+df_depassement_honoraires_clean = df_depassement_honoraires["DEPASSEMENTS (euros)"]
+df_depassement_honoraires_clean.to_csv('Data\df_depassement_honoraires.csv',header = True)
+
+
+# In[230]:
+
+#df_depassement_honoraires_clean.plot(kind='pie', subplots=True, figsize=(20, 15))
+
+
+# ### Traitement des donnees densite medecins specialite 
+
+# *** suppression des valeurs null ***
+
+# In[231]:
+
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['effectifs'])
+print(df_densite_medecins_specialite.shape)
+
+
+# In[232]:
+
+df_densite_medecins_specialite
+
+
+# *** nettoyage des champs SPECIALISTES et zone_inscription ***
+
+# In[233]:
+
+df_densite_medecins_specialite['zone_inscription'] = df_densite_medecins_specialite['zone_inscription'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+df_densite_medecins_specialite['specialite'] = df_densite_medecins_specialite['specialite'].apply(lambda x: unicodedata.normalize('NFKD', x).encode('ASCII', 'ignore'))
+
+df_densite_medecins_specialite['zone_inscription'] = df_densite_medecins_specialite['zone_inscription'].str.extract('[\d]+ - ([\w\s-]+)', expand=False)
+
+
+# In[234]:
+
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['specialite'])
+df_densite_medecins_specialite = df_densite_medecins_specialite.dropna(subset=['zone_inscription'])
+df_densite_medecins_specialite = df_densite_medecins_specialite.set_index(['specialite', 'zone_inscription'])
+df_densite_medecins_specialite_clean = df_densite_medecins_specialite["effectifs"]
+df_densite_medecins_specialite_clean.to_csv('Data\Medecin_clean.csv',header = True)
+df_densite_medecins_specialite_clean.ix[0:20]
+
+
+# In[ ]:
+
 
 
