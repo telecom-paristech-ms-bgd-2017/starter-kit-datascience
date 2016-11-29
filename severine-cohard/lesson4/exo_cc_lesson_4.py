@@ -2,6 +2,7 @@
 
 # pour les 30 plus grandes villes de France, calculer les distances des unes aux autres
 
+
 import googlemaps
 import json
 from datetime import datetime
