@@ -33,6 +33,9 @@ def getFiguresForCityWithURL(url):
     return figures_city
 
 def getFiguresForCity(year_min, year_max, id_commmune, id_departement):
+    """
+    Gets values for city 
+    """
     # Getting values for city
     for year in range(year_min, year_max + 1):
         print("*** Résultats pour l'année " + str(year) + " en euros/hab, et en moyenne de la strate")

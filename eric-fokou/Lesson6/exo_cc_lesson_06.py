@@ -1,153 +1,139 @@
-import requests
-import ijson
-import json
-import csv
-import oauth2 as oauth
-import time
-from urllib2 import urlopen, Request
-import operator
+
+# coding: utf-8
+
+# In[126]:
+
 import pandas as pd
-from collections import OrderedDict
-from datetime import date
-import urllib2
-from bs4 import BeautifulSoup
 import numpy as np
-import re
 from pandas import Series, DataFrame
-import scipy
-import matplotlib
+import re
+import pdb
+from datetime import datetime
+from dateutil.parser import parse
 import matplotlib.pyplot as plt
-import seaborn as sns
+from numpy.random import randn
 import statsmodels.api as sm
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn import linear_model
-from multiprocessing import Pool
-import sklearn
-from sklearn import preprocessing
 
 
-
+# In[127]:
 
 aliments = pd.read_csv('aliments.csv', delimiter='\t')
-aliments = aliments.set_index('product_name')
+
+#aliments['packaging'].value_counts()
+
+#aliments['brands'].value_counts()
+#aliments['packaging'].dropna()
+aliments['packaging'].count()
+aliments['packaging'].value_counts()
+(aliments['packaging'].value_counts() > 30)[:5]
 
 
-print aliments["sugars_100g"].value_counts()>2
-print type(aliments)
-plot_sugars=0
-if plot_sugars:
-     fig = plt.figure(figsize=(8, 6))
-     
-     aliments["sugars_100g"].plot(kind='hist')
-     plt.show()
-#print aliments.pivot()#.stack().value_counts()
-#print aliments["sugars_100g"]>100
-print aliments[aliments["sugars_100g"]>100]["sugars_100g"]
-
-#150g d'eau <-> 15 cl
-#
-#33cl de coca <-> 35 g de sucre
-#330g de coca <-> 35 g de sucre
-#100g de coca <->100*35/330 g de sucre ?
+# In[128]:
 
 
-result = aliments.sort(['sugars_100g'], ascending=[ 0])
-print result['sugars_100g'][0:1000]
-#le coca c'est
-print 100*35/330
-raw_input()
-
-#print aliments.value_counts()
-#print "aliments.value_counts()"
-#raw_input()
-print scipy.array(list(aliments.columns.values))
-print "columns"
-raw_input()
+aliments_with_packaging = aliments['packaging'].value_counts() > 30
+print aliments_with_packaging.shape
+aliments_with_packaging_limit = aliments_with_packaging[aliments_with_packaging]
+print aliments_with_packaging_limit.shape
 
 
-#le but est de trouver les aliments les plus gras, les plus sucré, les plus salé
-#évidemment il faut calculer l'écart type et le sigma
+# ### Donc on conserve les aliments avec les emballages les plus utilisés
 
-aliments_with=aliments['packaging'].value_counts()>30
-pack_to_keep=aliments_with[aliments_with].index
+# In[129]:
 
-#calculer le nombre de valeurs differentes dans différentes
-
-print aliments
-print "vendrediii2"
-#trier par  sugars_100g' 'sucrose_100g'
-# 'glucose_100g'
+print aliments['packaging'].shape
+aliments = aliments[aliments['packaging'].isin(aliments_with_packaging_limit.index)]
+print aliments['packaging'].shape
 
 
-#trier par 'fat_100g'
-# 'saturated-fat_100g'
+# In[130]:
 
-# print aliments['sugars_100g'].value_count()
-# raw_input()
-
-print "\n &&&&&&&&&  aliments('sugars_100g')"
-#result = df.sort(['A', 'B'], ascending=[1, 0])
-result = aliments.sort(['sugars_100g'], ascending=[ 0])
-print result[['sugars_100g']]
-#print result[['product_name','sugars_100g']]
-print "\n &&&&&&&&& ````````````````````````"
-
-print result[['countries']]
-
-df=result.groupby(['countries'])['sugars_100g'].mean()
-
-#print df
-result['mean_sugars_per_country'] = df #Series(np.random.randn(sLength), index=df1.index)
-result3 = result.sort(['mean_sugars_per_country'], ascending=[ 0]).groupby(['countries'])
-result4 = result.groupby(['countries'])
-#.sort(['mean_sugars_per_country'], ascending=[ 0])
-#result4 = result.groupby(['countries']).sort(['mean_sugars_per_country'], ascending=[ 0])
-print result3
-
-raw_input()
+aliments['stores'].value_counts()[:5]
 
 
-df = pd.read_csv('aliments.csv',
-                 delimiter="\t", error_bad_lines=False)
+# In[131]:
 
-df.shape
-
-df.columns
-
-my_columns = ['code', 'product_name', 'generic_name',
-              'categories', 'origins', 'manufacturing_places', 'purchase_places', 'brands',
-              'stores', 'countries', 'ingredients_text', 'traces', 'main_category_fr',
-              'sugars_100g', 'sucrose_100g', 'glucose_100g', 'fructose_100g', 'fat_100g']
-aliments_df = df[my_columns]
-
-aliments_df = aliments_df.dropna(subset=['sugars_100g'])
-
-aliments_df['sugars_100g'].value_counts(sort=True)
-
-a = aliments_df[aliments_df['sugars_100g'] < 400]
-plt.plot(aliments_df[aliments_df['sugars_100g'] < 400]
-         ['sugars_100g'].value_counts(sort=True),marker='*',linestyle='None')
-plt.show()
+aliments['nutrition_grade_fr'].value_counts()
 
 
-pd.qcut(aliments_df['sugars_100g'], 5).value_counts()
+# In[132]:
 
-aliments_df.groupby('brands')[['code', 'product_name', 'sugars_100g']].count(
-).sort('sugars_100g', ascending=False)
+battle = aliments[aliments['stores'].isin(['Carrefour','Auchan','Leclerc'])]
+battle.iloc[:5]['stores']
 
-aliments_df.groupby('categories')[['code', 'product_name', 'sugars_100g']].count(
-).sort('sugars_100g', ascending=False)
 
-aliments_df.set_index('product_name')
+# In[133]:
 
-for col in my_columns:
-    print()
-    print(aliments_df[col].describe())
+battle.groupby(['stores','nutrition_grade_fr'])['code'].count()
 
-aliments_df.head(100)
 
-aliments_df.columns = map(str.lower, aliments_df)
-aliments_df.head(100)
+# In[134]:
 
-products_salty = aliments_df[
-'ingredients_text'].str.contains('SEL', regex=True)
+battle.groupby('stores')['code'].count()
+
+
+# In[135]:
+
+battle.groupby(['stores','nutrition_grade_fr'])['code'].count()/battle.groupby('stores')['code'].count()
+
+
+# In[137]:
+
+aliments.columns[50:70]
+
+
+# In[141]:
+
+aliments[u'lactose_100g'].count()
+
+
+# In[144]:
+
+aliments[u'lactose_100g'].unique()
+
+
+# In[145]:
+
+aliments[u'sugars_100g'].count()
+
+
+# In[147]:
+
+aliments[u'sugars_100g'].value_counts()[:10]
+
+
+# In[150]:
+
+# Quantile-based discretization function
+aliments['cat_sugars'] = pd.qcut(aliments[u'sugars_100g'],5)
+aliments['cat_sugars'][:10]
+
+
+# In[151]:
+
+aliments['cat_sugars'] = pd.qcut(aliments[u'sugars_100g'],5,labels=['a','b','c','d','e'])
+aliments['cat_sugars'][:10]
+
+
+# In[152]:
+
+aliments['cat_sugars'].value_counts()
+
+
+# In[155]:
+
+# The cut function can be useful for going from a continuous variable to a categorical variable. 
+# For example, cut could convert ages to groups of age ranges
+aliments['cat_sugars_cut'] = pd.cut(aliments[u'sugars_100g'],5,labels=['a','b','c','d','e'])
+aliments['cat_sugars_cut'][:10]
+
+
+# In[156]:
+
+aliments['cat_sugars_cut'].value_counts()
+
+
+# In[ ]:
+
+
+
