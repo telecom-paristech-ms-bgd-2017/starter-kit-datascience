@@ -1,0 +1,171 @@
+serie;l_serie
+111111;C Omnipraticiens
+111112;C Spécialistes
+111113;C Neuropsychiatres
+111114;C Dentistes
+111115;C Sages-femmes
+111116;C Spécifique des Cardiologues
+111117;C autres
+111118;C bilan
+111119;Rémunération suivi personnes âgées
+111119A;Rémunération suivi personnes âgées C
+111119B;Rémunération suivi personnes âgées V
+111121;V Omnipraticiens
+111122;V Spécialistes
+111123;V Neuropsychiatres
+111124;V Dentistes
+111125;V Sages-femmes
+111126;V autres
+111127;V MD
+111131;Actes en K
+111132;Actes en K E
+111133;Actes en KC, KCC
+111134;Forfaits chirurgicaux
+1111351;Actes de chirurgie ADC
+1111352;Actes d'obstétrique ACO
+1111353;Actes d'anesthésie ADA
+1111354;Actes d'écographie ADE
+111136;Actes techniques médicaux ATM
+1111411;Z Radiodiagnostic-gastro-entérologues
+1111412;Z Rhumato-pneumologues
+1111413;Z autres médecins
+1111414;Z Dentistes
+111142;Actes en ZN
+111144;Actes en ZM
+111145;Actes d'imagerie ADI
+111151;SCM Soins conservateurs des stomatologues
+111152;PRO Prothèses dentaires des stomatologues
+111153;ORT Orthodontie des stomatologues
+11116;Actes en P (Anatomo-cyto-pathologistes)
+11117;Honoraires de surveillance
+111181;Indemnités de déplacement (I.D.)
+111182;Indemnités kilométriques (I.K.)
+111183;Autres frais de déplacement
+111191;Forfait de surveillance thermal
+111192;Pratiques complémentaires en K
+1111A;Actes en SF
+1111C;Forfait médecin référent
+1111D;IRMN
+1111E;Scanner
+1111F;Rémunération sur objectifs de santé publique
+1111G;Majoration pour garde et astreinte
+1111H;Forfait optant centre de santé
+1111I;Actes en KMB
+1111J;Forfait Tomographie
+1111K;Forfait Consommable
+1111L;Participation forfaitaire des généralistes
+1111M;Participation forfaitaire des spécialistes
+1111N;Honoraires IVG ville et médicamenteuse
+1111O;Contrats de bonne pratique
+1111Q;Permanence des soins
+1111R;Rémunération médecin traitant
+1111S;Forfait zone déficitaire
+1111T;Participation assuré
+1111U;Examen de suivi de grossesse
+1111V;Examen de suivi postnatal
+1111W;Rémunération médecins SOPHIA
+1111X;Différentiel médecin traitant/médecin référent
+1111Y1;Options démographie médecins
+1111Y2;Options santé solidarité territoire
+1111Y3;Options démographie sages-femmes
+1111Y4;Rémunération Praticiens territoriaux Médecine Générale
+1111Z;Autres honoraires du secteur privé
+111211;Actes en D
+111212;Actes en DC
+11122;SC Soins conservateurs
+11123;SPR Prothèses dentaires
+11124;TO Orthodontie
+111270;Option démographie chirurgiens dentistes
+114111;SFI soins infirmiers des sages femmes
+1141121;AMI soins infirmiers
+1141122;AIS Actes infirmiers de soins
+1141123;DSI Démarche de soins infirmiers
+1141124;Contrat santé solidarité
+1141125;Contrat incitatif infirmiers
+1141131;AMK masseurs-kinésithérapeutes
+1141132;AMC masseurs-kinés en établissement
+1141134;AMS actes de kinésithérapie ostéo-articulaire
+1141135;Option démographique masseurs-kinésithérapeutes
+114114;AMO orthophonistes
+1141141;Option démographie orthophonistes
+114115;AMY orthoptistes
+114116;AMP pédicures
+114117;Actes des pédicures podologues pour les diabétiques
+11412;Total frais de déplacement des auxiliaires médicaux
+114141;Contrats de santé publique des infirmiers
+114143;Contrats de bonnes pratiques des Masseurs-kinésithérapeutes
+114144;Contrats de bonnes pratiques des Orthophonistes et Orthoptistes
+11415;Franchises auxiliaires
+11421;Actes en B (B,BP, BR et ADU)
+114221;Actes en KB
+114222;Actes en PB
+114223;Actes en TB, KDU
+11423;Frais de déplacement des Laboratoires
+11424;Forfaits filières et réseaux des Laboratoires
+11425;Participations forfaitaires des Laboratoires
+114261;Contrats de santé publique des laboratoires
+114262;Contrats de bonnes pratiques des laboratoires
+114311;Médicaments remboursés à 35%
+114312;Médicaments remboursés à 65%
+114313;Médicaments remboursés à 80%
+114314;Médicaments remboursés à 100%
+114315;Médicaments délivrés par pharmacie hospitalière
+114316;Médicaments remboursés à 30%
+114319;Médicaments remboursés à 15%
+114324;Vaccins grippe er ROR
+114326;Médicaments IVG
+114327;Permanence pharmaceutique
+114328;Rémunération sur objectifs des pharmaciens
+11433;Franchises médicaments
+11435;Plan personnalisé de santé pharmaciens
+1144;Produits d'origine humaine
+11451;Appareils et Matériels de traitement et pansements
+11452;Optique
+11453;Orthèses
+114541;Appareils de surdité
+114542;Prothèses externes non orthopédiques
+114543;Prothèses oculaires et faciales
+114544;Podo orthèse
+114545;Orthoprothèse
+114551;Prothèses internes inertes
+114552;Prothèses internes actives
+11456;Véhicule pour handicapés
+11457;Autres frais LPP
+1146;CACOS Pharmacie/LPP
+1151;Forfait étabissement. en Cures thermales
+11521;Frais de déplacement pour cures thermales
+115221;Frais de transport d'Ambulance
+115222;Frais de transport de VSL
+115223;Frais de transport de TAXI
+115224;Autres frais de transport
+115225;Indemnité de garde ambulancière
+115226;Vehicule personnel
+115227;SMUR
+11523;Contrat bonnes pratiques transporteurs
+11524;Franchises transports
+1153;Participations forfait. non individualisées
+1154;Autres prestations diverses
+1155;Prestations diverses filières et réseaux
+11611;Indemnités journalières normales et temps partiel de moins de 3 mois
+11612;Indemnités journalières normales et temps partiel de plus de 3 mois
+11621;Indemnités journalières majorées de moins de 3 mois
+11622;Indemnités journalières majorées de plus de 3 mois
+11631;Indemnités journalières réduites de moins de 3 mois
+11632;Indemnités journalières réduites de plus de 3 mois
+1165;Indemnités journalières - Maternité
+1166;Autres prestations en espèces - Maternité
+1167;Allocation accompagnement fin de vie
+11711;Invalidité-Avantages de base
+11721;Invalidité-Allocation supplémentaire
+11731;Invalidité-Majoration tierce personne
+118;Capital Décès
+11911;Rentes Assurés
+11912;Rentes Ayants droit
+1192;Rachats de rentes obligatoires
+1193;Rachats de rentes facultatives
+1194;Transfert de capitaux constitutif de rente
+11A;Charges d'expertise
+11B;Préjudice amiante
+11C;Ticket modérateur ALD 31
+11D;Ticket modérateur ALD 32
+11F;Remboursements de soins à l'étranger
