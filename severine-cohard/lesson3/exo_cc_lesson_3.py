@@ -18,7 +18,7 @@ def getMetrics(marque, page):
         else:
             prix_depart.append(float(e.text.replace(',', '.')))
 
-    for i in range(0, len(final_price)):
+    for i in range(0, len(prix_def)):
         if prix_depart[i] == 0:
             prix_depart[i] = prix_def[i]
 
