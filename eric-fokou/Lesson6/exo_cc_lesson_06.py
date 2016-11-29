@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import requests
 import ijson
 import json
@@ -33,23 +32,6 @@ aliments = pd.read_csv('aliments.csv', delimiter='\t')
 aliments = aliments.set_index('product_name')
 
 
-
-#corrigé --> column 0-40
-#---> dropna
-#--->value_counts() ----> cleaner la donnée
-#.index
-#.isin( biduele.index)
-#panda percent by group
-#pd.qcut(df,number_of_cuts)
-#read csv
-#lire la doc de pandas
-
-
-#Note
-
-#If you have a Series where lots of elements are repeated (i.e. the number of unique elements in the Series is a lot smaller than the length of the Series), it can be faster to convert the original Series to one of type category and then use .str.<method> or .dt.<property> on that. The performance difference comes from the fact that, for Series of type category, the string operations are done on the .categories and not on each element of the Series.
-
-########################################################################
 print aliments["sugars_100g"].value_counts()>2
 print type(aliments)
 plot_sugars=0
@@ -121,16 +103,7 @@ result4 = result.groupby(['countries'])
 #.sort(['mean_sugars_per_country'], ascending=[ 0])
 #result4 = result.groupby(['countries']).sort(['mean_sugars_per_country'], ascending=[ 0])
 print result3
-#print result4
-#df=result.groupby(['countries'])['sugars_100g'].mean()
-# country * 
 
-
-#print result
-#raw_input()
-
-
-#print scipy.array(list(aliments.columns.values))
 raw_input()
 
 
