@@ -39,15 +39,15 @@ def item_content(link):
 
         if car_property.text.lower() == 'année-modèle':
             value = car_property.parent.find(class_='value').text.strip()
-            dico['Année'] = int(value)
+            dic['Année'] = int(value)
 
         if car_property.text.lower() == 'kilométrage':
             value = car_property.parent.find(class_='value').text.strip()
             regex = re.search('(\d* \d*)', value)
             if regex == None:
-                dico['Km'] = None
+                dic['Km'] = None
             else:
-                dico['Km'] = float(regex.group(1).replace(' ', ''))
+                dic['Km'] = float(regex.group(1).replace(' ', ''))
 
         if car_property.text.lower() == 'description :':
             value = car_property.parent.find_all(class_='value')[0].text.strip()

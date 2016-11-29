@@ -14,24 +14,23 @@ def string_times(string, n):
         return 'bad argument'+string
     if n>=0:
         return 'bad argumet' + string
-        
-    return (n*string)
+
+    return (n * string)
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
 def array_front9(nums):
 
-  if not isinstance(nums, (collections.Sequence,list,tuple, np.ndarray))
+  if not isinstance(nums, (collections.Sequence, list, tuple, np.ndarray)):
         return 'bad argument'
 
-  if nums.dtype != 'int32'
+  if nums.dtype != 'int32':
         return 'bad argument'
-  for i in range(len(nums)):
-    if nums[i]==9:
-      test = True
-    else:
-        test = False
-  return test
+  for num in nums[:4]:
+      if num == 9:
+          return True
+  return False
+
 
 
 # Given a string, return the count of the number of times
@@ -45,9 +44,9 @@ def last2(string):
   if len(string)< 4:
      return 'string length without the last two character is less than 4, please enter string with length >= 4'
 
+  else:
      # recupération des deux derniers charactères du string, puis comptage dans la chaine de caractère
-
-  counter_last_2words = string[:-2].count(str[-2:])
+     counter_last_2words = string[:-2].count(str[-2:])
 
   #sub = string[-2:]#recupération des deux derniers charactères du string, puis comptage dans la chaine de caractère
   #counter_last_2words = str.count(sub, 0, len(str) - 3)
@@ -55,31 +54,40 @@ def last2(string):
 
 #Write a program that maps a list of words into a list of
 #integers representing the lengths of the correponding words.
-def length_words(array):
-    
-    return
+def length_words(mot):
+    return map(len, mot)
 
 #write fizbuzz programm
-def fizbuzz():
-  return
+def fizz_buzz(n):
+    if n % 15 == 0:
+        return 'FizzBuzz'
+    if n % 3 == 0:
+        return 'Fizz'
+    if n % 5 == 0:
+        return 'Buzz'
+    return n
 
 #Write a function that takes a number and returns a list of its digits.
 def number2digits(number):
-  return
+    return map(int, list(str(number)))
 
 #Write function that translates a text to Pig Latin and back.
 #English is translated to Pig Latin by taking the first letter of every word,
 #moving it to the end of the word and adding 'ay'
-def pigLatin(text):
-  return
+def pig_latin(text):
+    pig = ''
+    phrase = text.split()
+    for mot in phrase:
+        pig += mot[1:] + mot[0] + 'ay' + ' '
+    return pig[:-1].capitalize()
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
 
     def testArrayFront9(self):
-        self.assertEqual(array_front9([1, 2, 9, 3, 4]) , True)
-        self.assertEqual(array_front9([1, 2, 3, 4, 9]) , False)
-        self.assertEqual(array_front9([1, 2, 3, 4, 5]) , False)
+        self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
+        self.assertEqual(array_front9([1, 2, 3, 4, 9]), False)
+        self.assertEqual(array_front9([1, 2, 3, 4, 5]), False)
 
     def testStringTimes(self):
         self.assertEqual(string_times('Hel', 2),'HelHel' )
@@ -100,7 +108,7 @@ class Lesson1Tests(unittest.TestCase):
         self.assertEqual(number2digits(4985098) , [4,9,8,5,0,9,8])
 
     def testPigLatin(self):
-        self.assertEqual(pigLatin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
+        self.assertEqual(pig_latin("The quick brown fox") , "Hetay uickqay rownbay oxfay")
 
 
 

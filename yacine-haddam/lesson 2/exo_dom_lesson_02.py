@@ -13,17 +13,17 @@ def ExtractFromTd(td_all):
     for i in range(0, len(td_all)):
         try:
             if td_all[i]['class'] == ['libellepetit', 'G']:
-                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0')
+                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0', '')
                 print("\n  " + td_all[i].text + " est de " + td_all[i - 1].text.replace('\xa0',
                                                                                         '') + " euros par habitant\n")
 
             if td_all[i]['class'] == ['libellepetit']:
-                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0')
+                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0', '')
                 print("     " + td_all[i].text + " est de " + td_all[i - 1].text.replace('\xa0',
                                                                                          '') + " euros par habitant")
 
             if (td_all[i]['class'] == ['libellepetitIi']) or (td_all[i]['class'] == ['libellepetitiI']):
-                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0')
+                param[td_all[i].text] = td_all[i - 1].text.replace('\xa0', '')
                 print("            " + td_all[i].text + " est de " + td_all[i - 1].text.replace('\xa0',
                                                                                                 '') + " euros par habitant")
 

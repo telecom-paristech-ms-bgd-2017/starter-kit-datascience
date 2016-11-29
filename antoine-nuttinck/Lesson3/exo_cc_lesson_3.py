@@ -1,35 +1,36 @@
 import requests
+import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 
 
 def extractPrice(html_code):
-    res = html_code.replace(u'</sup>', '') \
+
+    if html_code:
+        res = html_code[0].text.replace(u'</sup>', '') \
             .replace(u'</span>', '') \
             .replace(u'€', '.') \
             .replace(u',', '.')
 
-    if res == '':
-        return float(0)
+        if (res == ''):
+            return float(0)
+        else:
+            return float(res)
     else:
-        return float(res)
+        return float(0)
 
 
-def extractDiscounts(soup, classname):
+def extractDiscounts(soup):
     parent = soup.find_all(class_='prdtBZPrice')
-    new_prices = []
-    old_prices = []
+    discounts = []
     for par in parent:
-        price_children = par.findChildren(class_='price')
-        for pc1 in price_children:
-            new_prices.append(extractPrice(pc1.text))
-        prdtPrSt_children = par.findChildren(class_='prdtPrSt')
-        for pc2 in prdtPrSt_children:
-            old_prices.append(extractPrice(pc2.text))
-
-    discounts = [new_prices[i] / old_prices[i] - 1
-                 if old_prices[i] != 0 else 0.0
-                 for i in range(len(old_prices))]
+        new_price = extractPrice(par.findChildren(class_='price'))
+        old_price = extractPrice(par.findChildren(class_='prdtPrSt'))
+        if new_price > 200.0:  # eliminer tout ce qui ne peut pas être un ordi
+            if old_price == 0:
+                discounts.append(0.0)
+            else:
+                discounts.append(new_price / old_price - 1)
 
     return discounts
 
@@ -37,14 +38,13 @@ def extractDiscounts(soup, classname):
 def computeIndicatorForPage(url):
     req = requests.get(url)
     soup = BeautifulSoup(req.text, 'html.parser')
-    # title = soup.title.text
-    discounts = extractDiscounts(soup, 'price')
+    discounts = extractDiscounts(soup)
 
-    return discounts  # np.mean(discounts)
+    return discounts
 
 
-def getMostDiscountedPC():
-    marques = ['acer', 'dell']
+def getPCDiscounts(brds):
+
     incompleted_url = "http://www.cdiscount.com/search/10/ordinateur+"
     url_p2 = ".html?TechnicalForm.SiteMapNodeId=0&TechnicalForm." \
         + "DepartmentId=10&TechnicalForm.ProductId=&hdnPageType=Search" \
@@ -52,15 +52,24 @@ def getMostDiscountedPC():
         + "&TechnicalForm.LazyLoading.ProductSheets=False&NavigationForm." \
         + "CurrentSelectedNavigationPath=0&page="
     url_end = "&_his_"
-    discountPerPage = {}
+    discountPerBrand = {}
     MAX_PAGE = 5
-    for m in marques:
-        discountPerPage[m] = []
+    for m in brds:
+        discountPerBrand[m] = []
         for page in range(1, MAX_PAGE + 1):
-            discountPerPage[m].append(
-                 computeIndicatorForPage(incompleted_url + m +
-                                         url_p2 + str(page) + url_end))
+            discountPerBrand[m].extend(
+                computeIndicatorForPage(incompleted_url + m + url_p2 +
+                                        str(page) + url_end))
 
-    return discountPerPage
+    return discountPerBrand
 
-print(getMostDiscountedPC())
+
+results = getPCDiscounts(['acer', 'dell'])
+BestDiscounts = pd.DataFrame()
+for brand, discount in results.items():
+    BestDiscounts[brand] = pd.Series([np.mean(discount), np.min(discount)],
+                                     index=['mean', 'max'])
+
+print("Le tableau ci-dessous résume les réductions proposées par chacune" +
+      " des marques :")
+print(BestDiscounts)

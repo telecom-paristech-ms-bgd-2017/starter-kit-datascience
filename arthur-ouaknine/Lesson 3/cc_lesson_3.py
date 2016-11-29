@@ -79,6 +79,7 @@ def appelEtAffichage():
             prixBase = lookingForChildren("prdtPrSt",contenuTotal)
             prixBase = cleanList(prixBase)
             prixNouveau = cleanList(prixNouveau)
-            tauxDeRemiseMoyen[marque].append(calculTauxRemiseMoyen(prixBase, prixNouveau)) 
+            tauxDeRemiseMoyen[marque].append(calculTauxRemiseMoyen(prixBase, prixNouveau))
     print(computeTheMeanOfRate(tauxDeRemiseMoyen))
 
+appelEtAffichage()
