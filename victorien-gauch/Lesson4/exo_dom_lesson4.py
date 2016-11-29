@@ -78,7 +78,7 @@ def get_All_content(links):
 	return DataFrame(liste)
 
 def generate_csv(dataframe):
-	dataframe.to_csv("Renault Zoé.csv")
+	dataframe.to_csv("Renault Zoé.csv", encoding='utf-8')
 
 
 all_links = []
