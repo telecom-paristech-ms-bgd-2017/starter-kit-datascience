@@ -11,7 +11,7 @@ import re
 from bs4 import BeautifulSoup
 
 pages = [1]
-medicaments = ["ibuprofene"] #levothyroxime
+medicaments = ["ibuprofene", "levothyroxine"]
 search_url = "http://base-donnees-publique.medicaments.gouv.fr/index.php"
 for medoc in medicaments:
     for p in pages:
@@ -36,11 +36,18 @@ for medoc in medicaments:
         req = requests.post(search_url, data=params_post)
         soup = BeautifulSoup(req.text, 'html.parser')
         raw_res = list(soup.find_all(class_="standart"))
-        pattern = medoc.upper() + '\s([\w\s]+)\s(\d+)\s?([a-zA-Z%]+), ([\w\sé])'
-        regex = re.compile(pattern)
-        all_medocs = list(map(lambda l: regex.findall(l.string), raw_res[:-3]))
-    
-    # pb de regex ???
-    medicament_df = pd.Series(all_medocs).str.extract('\s([\w\s]+)\s(\d+)\s?([a-zA-Z%]+), ([\w\sé])', expand=True)
 
-print(medicament_df) # 
+        pattern = medoc.upper() + '\s([\w\s]+)\s(\d+)\s?(\D+), ([\w\sé])'
+        regex = re.compile(pattern)
+
+        all_medocs = list(map(lambda l: regex.findall(l.string)[0],
+                              raw_res[:-3]))
+
+    medicaments_df = pd.DataFrame(all_medocs,
+                                  columns=['name',
+                                           'factory',
+                                           'quantity',
+                                           'type'])
+
+    print(medicaments_df)
+    medicaments_df.to_csv(medoc + "_listOfProducts.csv")
