@@ -14,19 +14,27 @@ import unittest
 # that is n copies of the original string.
 
 def string_times(string, n):
-    return string *n
+    if (n > 0):
+        return string *n
+    else:
+        return string
 
 
 
 
 # Given an array of ints, return True if one of the first 4 elements
 # in the array is a 9. The array length may be less than 4.
-    def array_front9(nums):
-        for int in int [:4]:
-            if int ==9:
-                return true
-    return false
-    
+def array_front9(nums):
+   if len(nums) >= 4:
+      if 9 in nums[:4]:
+         return True
+      else:
+         return False
+   else:
+      if (9 in nums):
+         return True
+      else:
+         return False
     
     
     
@@ -37,7 +45,12 @@ def string_times(string, n):
 # the last 2 chars of the string, so "hixxxhi" yields 1
 # (we won't count the end substring).
 def last2(string):
-   
+    last_2 = string[-2:]
+    compteur = 0
+    for i in [0, string[len.string] - 1]:
+        if string[i] + string[i + 1] == last_2:
+            compteur += 1
+    return compteur
     
     
     
@@ -46,19 +59,19 @@ def last2(string):
 
 # Write a program that maps a list of words into a list of
 # integers representing the lengths of the corresponding words.
-    def length_words(words):
-        return map(len, words)
+def length_words(array):
+    return list(map(lambda x: len(x), array))
 
 
 # Write fizzBuzz programm
-    def fizz_buzz(n):
-        if n % 15 == 0:
-            return 'FizzBuzz'
-            if n % 3 == 0:
-                return 'Fizz'
-            if n % 5 == 0:
-                return 'Buzz'
-        return n
+def fizz_buzz(n):
+    if n % 15 == 0:
+        return 'FizzBuzz'
+    if n % 3 == 0:
+        return 'Fizz'
+    if n % 5 == 0:
+        return 'Buzz'
+    return n
 
 
 # Write a function that takes a number and returns a list of its digits.
@@ -121,4 +134,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
 

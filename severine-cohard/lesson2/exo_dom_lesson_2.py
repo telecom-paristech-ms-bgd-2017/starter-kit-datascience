@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 # In[7]:
@@ -8,20 +7,9 @@ from bs4 import BeautifulSoup
 
 
 def extractData(departement,commune,year):
-
-    r3= requests.post("http://alize2.finances.gouv.fr/communes/eneuro/tableau.php",{'ICOM':'commune','DEP':departement,
-                                                                                'TYPE':'BPS','PARAM':'0',
-                                                                                'dep':'','reg':'',
-                                                                                'nomdep':'',
-                                                                                'moysst':'','exercice':'',
-                                                                                'param':'','type':'',
-                                                                                'siren':'','comm':'0',
-                                                                                'EXERCICE':year})
-    soup = BeautifulSoup(j.text, 'html.parser')
+    r3= requests.post("http://alize2.finances.gouv.fr/communes/eneuro/tableau.php",{'ICOM':'commune','DEP':departement,'EXERCICE':year})
+    soup = BeautifulSoup(r3.text, 'html.parser')
     cells = soup.findAll('td', {"class" : "libellepetit"})
-
-
-
     for cell in cells:
         list=[]
         if (cell.string.strip () == "TOTAL DES PRODUITS DE FONCTIONNEMENT = A"):
@@ -29,7 +17,6 @@ def extractData(departement,commune,year):
             print("******* TOTAL DES PRODUITS DE FONCTIONNEMENT = A "+" Departement= "+departement+" Année = "+year+ "******")
             while (sibling):
             #En milliers d'Euros	En euros par habitant	Moyenne de la strate
-         
                 listData.append(sibling.string.replace(u'\xa0',''))
                 sibling = sibling.findNextSibling ()
             print ("En euros par habitant = "+ listData[1])

@@ -4,35 +4,13 @@ Created on Thu Oct  6 13:35:28 2016
 
 @author: lorraine
 
-L'objectif est de générer un fichier de données sur le prix des Renault Zoé
-sur le marché de l'occasion en Ile de France, PACA et Aquitaine. 
-
-Vous utiliserezleboncoin.fr comme source. Le fichier doit être propre et 
-contenir les infos suivantes : version ( il y en a 3), année, kilométrage, 
-prix, téléphone du propriétaire, est ce que la voiture est vendue par un 
-professionnel ou un particulier.
-
-Vous ajouterez une colonne sur le prix de l'Argus du modèle que vous 
-récupérez sur ce site http://www.lacentrale.fr/cote-voitures-renault-zoe--2013-.html.
-
-Les données quanti (prix, km notamment) devront être manipulables
-(pas de string, pas d'unité).
-Vous ajouterez une colonne si la voiture est plus chere ou moins chere que sa cote moyenne.
-
-https://www.npmjs.com/package/leboncoin-api
 """
 
-
-#import urllib.request as ur
-#from github3 import login, GitHub
-#from getpass import getpass, getuser
-#import sys
 
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 import numpy as np
-import json
 
 
 # Get from generic url to search all Renault Zoe sales in regions Ile-de-france, Aquitaine and PACA
@@ -43,13 +21,60 @@ MODELE = 'Zoe'
 REGIONS = ['provence_alpes_cote_d_azur', 'ile_de_france', 'aquitaine']
 PAGES = 2
 
+def clearData(s, typePrix):   # si typePrix = True, s est un prix, sinon s est le kilométrage
+   
+    for caracter in s: 
+        if(typePrix == True):
+            if caracter ==' ':
+                s = s.replace(' ','')
+            if caracter =='€':
+                s = s.replace('€','')
+          #  s = int(s)
+        else:
+            for caracter in s:
+                if caracter ==' ':
+                    s = s.replace(' ','')
+                if caracter =='K':
+                    s = s.replace('K','')
+                if caracter =='M':
+                    s = s.replace('M','')
+    return s
 
 
-#jsonObj = json.loads(requests.get(GITHUB_URL))
+def completeCarFeatures(paramAllCarIds):
 
-#s = str(SOUP.text)
-#user_repos_list = json.loads(s.format())
-def getCarsIDUnitary(paramRegion,paramMarque, paramModele, paramTypeRecherche):
+  #df3 = getALLCarsID()
+  allCarIds = paramAllCarIds #df3['ID voiture']
+  sizeTab = len(allCarIds)
+  KILOMETRAGES_ = np.zeros(sizeTab)
+  PRIX_ = np.zeros(sizeTab)
+  ANNEES_=  np.zeros(sizeTab)
+  
+  for i in range(1, len(allCarIds)):
+   
+     result = requests.get('https://www.leboncoin.fr/voitures/'+str(allCarIds[i])+'.htm?ca=12_s')
+     soup = BeautifulSoup(result.text, 'html.parser')
+         
+     MONTANT = soup.find_all(class_='value')
+     annee = MONTANT[4].get_text()
+     ANNEES_[i] = int(float(annee))
+    
+     prix = MONTANT[0].get_text()
+     prix = clearData(prix, True)
+     PRIX_[i] = int(prix) 
+     
+     kilometrage = MONTANT[5].get_text()
+     kilometrage = clearData(kilometrage, False)  
+     KILOMETRAGES_[i] = int(kilometrage)
+     
+             
+  #df = pd.DataFrame({ 'Kilometrage':KILOMETRAGES,'Annee':ANNEES,'Prix':PRIX, 'ID voiture':allCarIds})
+
+  #df.to_csv('donnees_voitures_largus.csv')
+  return KILOMETRAGES_, ANNEES_, PRIX_
+
+# Recherche de données de voitures par région, marque, modèle par particulier ou professionnel 
+def getDataUnitary(paramRegion,paramMarque, paramModele, paramTypeRecherche):
 
     # LOC is used for local variables that contains function parameters   
     # Variable definition and affectation
@@ -60,7 +85,7 @@ def getCarsIDUnitary(paramRegion,paramMarque, paramModele, paramTypeRecherche):
     LOC_RECHERCHE = paramTypeRecherche
     CAR_ID = dirty_car_id = []
     for PAGE in range(1,PAGES):
-        print(PAGE)
+        
         if (LOC_RECHERCHE == 0):
             
             URL_PROFESSIONNEL = 'https://www.leboncoin.fr/voitures/offres/' \
@@ -85,157 +110,51 @@ def getCarsIDUnitary(paramRegion,paramMarque, paramModele, paramTypeRecherche):
                     info_from_li_tag = (li_tag.contents[1].get('data-info')).replace(':','')
                     info_from_li_tag = info_from_li_tag.replace(',','')
                     dirty_car_id.append(info_from_li_tag.split()[5])
-                    #print(CAR_ID)
+                   
             for i in range(len(dirty_car_id)):
                 CAR_ID[i] = dirty_car_id[i].replace('"', '')
         else:
             print('Veuillez renseigner le type de recherche: Particulier = %d, Professionnel = %d' %(0, 1))
-        #print(MAIN_CONTENT)
-              
-    return CAR_ID
-
-
-def getALLCarsID():
-
-    ALL_CAR_ID = getCarsIDUnitary(REGIONS[0], MARQUE, MODELE, 0)  #PACA PARTICULIER
-    ALL_CAR_ID = np.concatenate((ALL_CAR_ID, getCarsIDUnitary(REGIONS[1], MARQUE, MODELE, 0)), axis=0)  #IDF PARTICULIER
-    ALL_CAR_ID = np.concatenate((ALL_CAR_ID, getCarsIDUnitary(REGIONS[2], MARQUE, MODELE, 0)), axis=0)  #AQUITAINE PARTICULIER
-    SIZE_PART = len(ALL_CAR_ID)
-    RECHERCHE_ARRAY = np.repeat(np.array(['Particulier']), SIZE_PART)
-
-    ALL_CAR_ID = np.concatenate((ALL_CAR_ID, getCarsIDUnitary(REGIONS[0], MARQUE, MODELE, 1)), axis=0)  #PACA PROFESSIONNEL
-    ALL_CAR_ID = np.concatenate((ALL_CAR_ID, getCarsIDUnitary(REGIONS[1], MARQUE, MODELE, 1)), axis=0)  #IDF PROFESSIONNEL
-    ALL_CAR_ID = np.concatenate((ALL_CAR_ID, getCarsIDUnitary(REGIONS[2], MARQUE, MODELE, 1)), axis=0)  #AQUITAINE PROFESSIONNEL
-    SIZE_TOTAL = len(ALL_CAR_ID)
-    SIZE_PART = SIZE_TOTAL - SIZE_PART
-    RECHERCHE_ARRAY = np.concatenate((RECHERCHE_ARRAY, np.repeat(np.array(['Professionnel']), SIZE_PART)), axis=0)
-
-    MARQUE_ARRAY = np.repeat([MARQUE], SIZE_TOTAL)
-    MODELE_ARRAY = np.repeat([MODELE], SIZE_TOTAL)
-    MY_DICO = {'marques' : MARQUE_ARRAY, 'modele': MODELE_ARRAY,
-              'ID voiture': ALL_CAR_ID, 'type recherche': RECHERCHE_ARRAY}
-
-    DF = pd.DataFrame(MY_DICO)
-    DF.to_csv('donnees_voitures_leBonCoin.csv')
-
-    print(DF)
-
-    return DF
-getALLCarsID()
-
-
-
-#tab = ['1035061660','990711542','988625609']
-def completeCarFeatures():
-#tab = ['1035061660','990711542','988625609']
-
-  df3 = getALLCarsID()
-  tab = df3['ID voiture']
-  print(tab)
     
-  ANNEES = KILOMETRAGES = PRIX = []
-       
-  REGION = ['Paris']
-  PARAMETRES = ['Kilometrage','Annee','Prix']
-  for variable in tab:
-        result = requests.get('https://www.leboncoin.fr/voitures/'+str(variable)+'.htm?ca=12_s')
-        soup = BeautifulSoup(result.text, 'html.parser')
-         
-    
-        titre = soup.find_all(class_='no-border')
-        titre = titre[0].get_text()
-        titre = titre[14:21]
-        if (titre == 'Renault'):
-            montant = soup.find_all(class_='value')
-            prix = montant[0].get_text()
-            annee = montant[4].get_text()
-            for elt in prix:
-                if elt ==' ':
-                    prix = prix.replace(' ','')
-                if elt =='€':
-                    prix = prix.replace('€','')
-            prix = int(prix)
-            kilometrage = montant[5].get_text()
-            for elt1 in kilometrage:
-                if elt1 ==' ':
-                    kilometrage = kilometrage.replace(' ','')
-                if elt1 =='K':
-                    kilometrage = kilometrage.replace('K','')
-                if elt1 =='M':
-                    kilometrage = kilometrage.replace('M','')  
-            ANNEES.append(int (annee))
-            KILOMETRAGES.append(int(kilometrage))
-            PRIX.append(int(prix))          
-            l_1 = []
-            for i in range (len(KILOMETRAGES)):
-                l_1.append([KILOMETRAGES[i],ANNEES[i],PRIX[i]])
-            REGION = REGION * len(KILOMETRAGES)  
-            df = pd.DataFrame(l_1, index=REGION, columns=PARAMETRES)
-  return df
+    KILOMETRAGES = ANNEES =  PRIX = []
+    KILOMETRAGES, ANNEES, PRIX = completeCarFeatures(CAR_ID)
 
-#print(completeCarFeatures())
-"""
+    if (LOC_RECHERCHE == 0):
+        type_recherche = "PARTICULIER"
+    if (LOC_RECHERCHE == 1):
+         type_recherche = "PROFESSIONNEL"
+    df = pd.DataFrame({'region': LOC_REGION, 'kilometrage':KILOMETRAGES, 'annee':ANNEES, 'prix': PRIX, 'marque' : LOC_MARQUE, 'modele': LOC_MODELE,
+              'ID voiture': CAR_ID, 'type recherche': type_recherche})
+    #df.to_csv('donnees_voitures_leBonCoin.csv')
+
+   # print(df)
+               
+    return  df
+
+
+def getALLCarsData():
+
+    ALL_CAR_ID = pd.DataFrame()
+    df1 = getDataUnitary(REGIONS[0], MARQUE, MODELE, 0)  #PACA PARTICULIER
+    df2 = getDataUnitary(REGIONS[1], MARQUE, MODELE, 0)  #IDF PARTICULIER
+    df3 = getDataUnitary(REGIONS[2], MARQUE, MODELE, 0) #AQUITAINE PARTICULIER
+
+    df4 = getDataUnitary(REGIONS[0], MARQUE, MODELE, 1)  #PACA PROFESSIONNEL
+    df5 = getDataUnitary(REGIONS[1], MARQUE, MODELE, 1) #IDF PROFESSIONNEL
+    df6 = getDataUnitary(REGIONS[2], MARQUE, MODELE, 1)  #AQUITAINE PROFESSIONNEL
+
+    ALL_CAR_ID = pd.concat([df1, df2, df3, df4, df5, df6])
+
+    ALL_CAR_ID = ALL_CAR_ID.set_index(np.arange( ALL_CAR_ID.region.count()))
+    ALL_CAR_ID.to_csv('donnees_voitures_leBonCoin_argus.csv')
+#
+    print(ALL_CAR_ID)
 
     
-#DF_ID =  getALLCarsID()
-#CARS_ID = DF_ID['ID voiture']
-#CAR_REGION = DF_ID['ID voiture']
     
-#VERSIO = KILOMETRE = REGION = []
-    
-#for car_id in CARS_ID:
-#1036839788
-dirty_data_2 = []
-
-PRIX = ANNEE = KM = VERSION = REGION = ''
-RESULTS_ = requests.get('https://www.leboncoin.fr/voitures/1006686148.htm?ca=21_s')
-CAR_SOUP = BeautifulSoup(RESULTS_.text, 'html.parser')
-#print(CAR_SOUP)
-PHONE_DIRTY_CONTENT = CAR_SOUP.find_all(class_='phone_number font-size-up')
-GLOBAL_DESC = CAR_SOUP.find_all('body')#(class_='ua_FIR')
-for desc in GLOBAL_DESC:
-    info_from_body = ((desc.find_all('script'))[2].contents[0])#replace(':', '')
-    #print(info_from_body.find('km'))
-    #info_from_body = info_from_body.replace(',','')
-    #dirty_data_2.append(info_from_body.split())
-    dirty_data_2 = np.append(dirty_data_2, info_from_body.split())
-    PRIX = dirty_data_2[103] #ok
-    ANNEE = dirty_data_2[112] #ok
-    KM = dirty_data_2[50] #OK
-    VERSION = dirty_data_2[91] #ok
-    REGION = dirty_data_2[52] #OK
-    try:
-        print(info_from_body.index('km'))
-    except ValueError:
-        pass
-    #print((dirty_data_2))#, dirty_data_2[90], dirty_data_2[104], dirty_data_2[113], dirty_data_2[122])
-    print('prix %s annee %s km %s version %s region %s' % (PRIX, ANNEE, KM, VERSION, REGION))
-    
-    #info_from_body = ((desc.find_all('script'))[2].contents[0]).replace('var utag_data = ', '')
-    #print(str(info_from_body))
-    #print(info_from_body.replace('var utag_data = ', ''))
-    #print(type(ast.literal_eval(str(info_from_body))))
-
-"""                    #print(CAR_ID)
-#for i in range(len(dirty_car_id)):
-#   CAR_ID[i] = dirty_car_id[i].replace('"', '')
-#   
-#print(DIRTY_DATA[2].contents[0].replace(':',''))
+getALLCarsData()
 
 
-#jsonObj = json.loads(requests.get('https://www.leboncoin.fr/voitures/1036839788.htm?ca=21_s').text)
-#print (jsonObj)
-#s = str(SOUP.text)
-#user_repos_list = json.loads(s.format())
+#df_carFeaturesPart2 = completeCarFeatures()
 
-#print(GLOBAL_DESC)
-"""
-for content in PHONE_DIRTY_CONTENT:
-    ALL_A_TAG = content.find_all('a')
-    
-    #print(PHONE_DIRTY_CONTENT)    
-    for a_tag in ALL_A_TAG:
-        info_from_a_tag = (a_tag)#.contents[0].get('href').text)#.replace(' ','')
-     #   print(info_from_a_tag)
-            
-"""        
+#allCarFeatures = df_carFeaturesPart2.merge(df_carFeaturesPart1)

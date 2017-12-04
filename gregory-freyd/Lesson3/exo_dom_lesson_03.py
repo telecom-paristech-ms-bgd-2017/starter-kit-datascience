@@ -4,7 +4,10 @@ import json
 import numpy as np
 
 def getTopContributors(limit):
-    # Returns list of the top Github contriutor logins
+    """
+    Returns list of top Github contributor logins
+    ie. a Top X where X is provided as parameter
+    """
     all_contributors_request = requests.get("https://gist.github.com/paulmillr/2657075")
     all_contributors_soup = BeautifulSoup(all_contributors_request.text, 'html.parser')
     list_contributors_table = all_contributors_soup.find_all('tbody')
@@ -17,6 +20,10 @@ def getTopContributors(limit):
     return contributor_logins
 
 def rankContributors(list_contributor_logins):
+    """
+    Computes contributors (star) ranking based on the
+    average number of star associated to their repositories
+    """
     token_from_user = input('token :')
     connection_string = {'Authorization': 'token ' + token_from_user}
     baseUrl = 'https://api.github.com'

@@ -5,34 +5,41 @@ import time
 import pandas as pd
 import re
 import os
+from os import walk
 
+path = "../sources/"
 
-url_base = 'https://www.data.gouv.fr/s/resources/depenses-d-assurance-maladie-hors-prestations-hospitalieres-donnees-nationales/20160913-134543/N201607.csv'
+# url_base = 'https://www.data.gouv.fr/s/resources/depenses-d-assurance-maladie-hors-prestations-hospitalieres-donnees-nationales/20160913-134543/N201607.csv'
+
 #   df.columns = ['act_coe',	'act_dnb',	'asu_nat',	'cpl_cod',	'dep_mon',	'exe_spe',	'exe_spe1',	'exe_stj1',
 #              'l_asu_nat',	'l_cpl_cod',	'l_exe_spe',	'l_exe_spe1 ',	'l_exe_stj1',	'l_pre_spe',
 #              'l_pre_spe1',	'l_pre_stj1',	'l_prs_nat',	'l_serie',	'pre_spe',	'pre_spe1',	'pre_stj1',
 #              'prs_nat',	'rec_mon',	'rem_date',	'rem_mon ',	'rem_tau',	'serie',	'sns_date']
 
 
-#url_base = 'N201607.csv'
-path_tab5 = '/Users/Wes/Desktop/Hackathon/rpps-medecins-tab5_30211942070628.csv'
-path_tab7 = '/Users/Wes/Desktop/Hackathon/rpps-medecins-tab7_31092067859498.csv'
-path_tab5b = '/Users/Wes/Desktop/Hackathon/rpps-medecins-tab5_31101614232043.csv'
-path_tab_r1 = '/Users/Wes/Desktop/Hackathon/R2015_sans_lib/R201501_sanslib.CSV'
-path_desc = '/Users/Wes/Desktop/Hackathon/descriptif_table_R.xls'
-path_tab_n7 = '/Users/Wes/Desktop/Hackathon/N201607.csv'
+
+for f in reversed(next(walk(path))[2]):
+    print(f)
+
+path_tab5 = 'rpps-medecins-tab5_30211942070628.csv'
+path_tab7 = 'rpps-medecins-tab7_31092067859498.csv'
+path_tab5b = 'rpps-medecins-tab5_31101614232043.csv'
+path_tab_r1 = 'R2015_sans_lib/R201501_sanslib.CSV'
+path_desc = 'descriptif_table_R.xls'
+path_tab_n7 = 'N201607.csv'
+
 #df = pd.read_csv(url_base, delimiter=';', index_col=False, header=1, skip_blank_lines=True, na_values=["NA"])
 
-df_r1 = pd.read_csv(path_tab_r1, sep=';', na_values=["NA"], encoding='latin-1', nrows=100)
-df_n7 = pd.read_csv(path_tab_n7, sep=';', na_values=["NA"], encoding='latin-1', nrows=100)
+# df_r1 = pd.read_csv(path + path_tab_r1, sep=';', na_values=["NA"], encoding='latin-1', nrows=100)
+# df_n7 = pd.read_csv(path + path_tab_n7, sep=';', na_values=["NA"], encoding='latin-1', nrows=100)
 
 #   Import Description
-df_desc_pre_spe = pd.read_excel(path_desc, sheetname=10)
+# df_desc_pre_spe = pd.read_excel(path_desc, sheetname=10)
 
-df_r1[['cpam', 'pre_spe', 'pre_spe1', 'dep_mon']][:5]
-df_desc_pre_spe[['pre_spe', 'l_pre_spe']]
+# df_r1[['cpam', 'pre_spe', 'pre_spe1', 'dep_mon']][:5]
+# df_desc_pre_spe[['pre_spe', 'l_pre_spe']]
 
-df_n7[:5]
+# df_n7[:5]
 
 
 

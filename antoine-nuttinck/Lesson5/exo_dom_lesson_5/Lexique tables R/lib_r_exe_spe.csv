@@ -1,0 +1,49 @@
+exe_spe;l_exe_spe
+1;01-TOTAL Omnipraticiens
+2;02-total Anesthésiologie - Réanimation chirurgicale
+3;03-Pathologie cardio-vasculaire
+4;04-TOTAL Chirurgie
+5;05-Dermatologie et vénérologie
+6;06-TOTAL Radiologie
+7;07-TOTAL Gynécologie
+8;08-Gastro-entérologie et hépatologie
+9;09-TOTAL Médecine interne
+11;11-Oto-rhino laryngologie
+12;12-TOTAL Pédiatrie
+13;13-Pneumologie
+14;14-Rhumatologie
+15;15-Ophtalmologie
+17;17-TOTAL Psychiatrie
+18;18-TOTAL Stomatologie
+19;19-TOTAL Chirurgie dentaire
+21;21-Sages-femmes
+24;24-Infirmier
+26;26-Masseur-kinésithérapeute
+27;27-Pédicure podologue
+28;28-Orthophoniste
+29;29-Orthoptiste
+30;30-TOTAL Laboratoire
+31;31-Médecine physique et de réanimation
+32;32-Neurologie
+34;34-Gériatrie
+35;35-Néphrologie
+36;36-Chirurgie dentaire spécialistes
+37;37-Anatomie-cytologie-pathologique
+38;38-Médecin biologiste
+42;42-Endocrinologie
+50;50-Pharmacie indifférenciée
+55;55-Ambulancier
+56;56-Taxi
+57;57-Autre transporteur
+59;99-Spécialité Inconnue
+60;60-Titre I, titre II ch. 4, titre IV société
+61;61-Titre I, titre II chapitre 4, titre IV artisan
+62;62-Titre I, titre II chapitre 4, titre IV association
+63;63-Titre II, chapitre. I orthèses
+64;64-Titre II, chapitre. 2 optique médicale
+65;65-Titre II, chapitre. 3 audioprothèses
+67;67-Titre II, chapitre. 6 podo-orthèses
+68;68-Titre II, chapitre. 7 ortho-prothèses
+80;80-Santé publique et Médecine Sociale
+92;92-Centre de santé
+99;00-Sans objet

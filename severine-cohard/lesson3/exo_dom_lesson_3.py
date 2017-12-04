@@ -28,8 +28,8 @@ def get_names(token):
     if article:
         table = article.find("table")
         if table:
-            for a_node in table.findAll("a"):
-                url = a_node.attrs['href']
+            for node in table.findAll("a"):
+                url = node.attrs['href']
                 if url.startswith(base_Git_hub_url):
                     results.append(url[len(base_Git_hub_url):])
     return results
@@ -64,7 +64,7 @@ def sort_users_by_starred_repos(token):
 # returns the token as a string.
 # The oAuth token must, for example, be obtained via "https://github.com/settings/tokens" and saved in a file locally.
 def load_oauth_token(filename):
-    with open(filename, 'r') as file:
+    with open(filename, 'w') as file:
         token = file.readline().strip()
         return token
 

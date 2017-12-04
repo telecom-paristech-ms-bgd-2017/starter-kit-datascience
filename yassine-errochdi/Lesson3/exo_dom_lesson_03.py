@@ -35,7 +35,7 @@ def contributor_stars(contributeur):
 
 def api_get_repos(contributeur):
         url = 'https://api.github.com/users/' + contributeur + '/repos'
-        resp = .get(url, params=token)
+        resp = requests.get(url, params=token)
         if resp.status_code != 200:
             print('json.loads')
             print(json.loads(resp.text)['message'])
@@ -57,6 +57,8 @@ rows = soup.select('#readme table tr')[1:]
 
 #Liste des contributeurs
 contributeurs = [r.select('td:nth-of-type(1) > a')[0].text for r in rows]
+#
+print("Liste des contributeurs...")
 print(contributeurs)
 print(len(contributeurs))
 

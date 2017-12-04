@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 
 def computeOriginalPrice(original_price_soup):
+    """
+    Returns original price without discount
+    from soup containing price
+    """
     if original_price_soup is None or original_price_soup == "":
         return 0
     else:
@@ -11,10 +15,18 @@ def computeOriginalPrice(original_price_soup):
     return float(res_str)
 
 def computePrice(price_soup):
+    """
+    Returns discounted price
+    from soup containing price
+    """
     res_str = price_soup.text.replace(u'\xa0', '').replace(u'\N{euro sign}', ".")
     return float(res_str)
 
 def getMeanDiscount(computer_brand):
+    """
+    Returns average discount rate
+    for a computer brand
+    """
     all_metrics = []
     MAX_PAGE = 1
     sum_original_prices = 0
@@ -35,6 +47,10 @@ def getMeanDiscount(computer_brand):
                 original_price = discount_price
             sum_original_prices = sum_original_prices + original_price
             sum_discount_prices = sum_discount_prices + discount_price
+            # ratio includes also prices of products on which no discount is
+            # applied, in this case original_price = discount_price
+            # the average discount ratio is considered on the complete
+            # product offering of computers from the brand
     return (1 - sum_discount_prices / sum_original_prices)
 
 mean_discount_acer = getMeanDiscount('acer')
